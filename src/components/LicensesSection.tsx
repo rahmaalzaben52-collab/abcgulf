@@ -61,29 +61,25 @@ const DEFAULT_LICENSE_EN: Record<
   string,
   { title: string; defaultTitleAr: string }
 > = {
-  'lic-saudi-01': {
-    defaultTitleAr: 'ترخيص الإنتاج المرئي والمسموع — السعودية',
-    title: 'Audiovisual Production Permit — Saudi Arabia',
+  'lic-oman-cr': {
+    defaultTitleAr: 'شهادة السجل التجاري — سلطنة عُمان',
+    title: 'Commercial Registration Certificate — Oman',
   },
-  'lic-oman-01': {
-    defaultTitleAr: 'تصريح التصوير والإنتاج الفني — عُمان',
-    title: 'Filming & Media Permit — Oman',
+  'lic-oman-economic': {
+    defaultTitleAr: 'شهادة ترخيص الأنشطة الاقتصادية والإنتاج الفني',
+    title: 'Economic Activities & Media Production License — Oman',
   },
-  'lic-kuwait-01': {
-    defaultTitleAr: 'رخصة الإنتاج الإعلامي والبرامج — الكويت',
-    title: 'Broadcast Production License — Kuwait',
+  'lic-oman-permit-barka': {
+    defaultTitleAr: 'رخصة الأنشطة التجارية والإنتاج الفني — بركاء',
+    title: 'Commercial & Media Production Permit — Barka',
   },
-  'lic-uae-01': {
-    defaultTitleAr: 'رخصة الإنتاج السينمائي والتجاري — الإمارات',
-    title: 'Cinema & Commercial License — UAE',
+  'lic-oman-tax': {
+    defaultTitleAr: 'البطاقة الضريبية الرسمية — سلطنة عُمان',
+    title: 'Official Tax Card — Sultanate of Oman',
   },
-  'lic-erbil-01': {
-    defaultTitleAr: 'رخصة الإنتاج الإعلامي والمرئي — أربيل',
-    title: 'Audiovisual Media License — Erbil',
-  },
-  'lic-erbil-02': {
-    defaultTitleAr: 'السجل التجاري المعتمد — أربيل',
-    title: 'Certified Commercial Registration — Erbil',
+  'lic-oman-chamber': {
+    defaultTitleAr: 'شهادة عضوية غرفة تجارة وصناعة عُمان',
+    title: 'Oman Chamber of Commerce & Industry Certificate',
   },
 };
 

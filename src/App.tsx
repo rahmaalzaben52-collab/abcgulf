@@ -51,7 +51,7 @@ export default function App() {
   });
   const [cloudLicenses, setCloudLicenses] = useState<LicenseRecord[]>(() => {
     const stored = loadStoredConfig();
-    return stored.licenses ?? DEFAULT_LICENSES;
+    return stored.licenses && stored.licenses.length > 0 ? stored.licenses : DEFAULT_LICENSES;
   });
   // True when admin has saved data → always use cloudLicenses for display
   const [localLicensesEdited, setLocalLicensesEdited] = useState<boolean>(() => {
@@ -143,7 +143,8 @@ export default function App() {
   }, []);
 
   // Displayed licenses: cloud/edited data, or DEFAULT_LICENSES if nothing saved yet
-  const displayedLicenses = localLicensesEdited ? cloudLicenses : DEFAULT_LICENSES;
+  const displayedLicenses =
+    cloudLicenses && cloudLicenses.length > 0 ? cloudLicenses : DEFAULT_LICENSES;
 
   const navigateToSection = useCallback((sectionId: string) => {
     setActiveSection(sectionId);
