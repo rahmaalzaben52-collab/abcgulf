@@ -13,7 +13,6 @@ import {
   ChevronRight,
   SlidersHorizontal,
   Globe,
-  Lock,
 } from 'lucide-react';
 import {
   sanitizeExternalUrl,
@@ -375,16 +374,6 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                 </button>
               </>
             )}
-            <button
-              type="button"
-              data-testid="admin-portal-btn"
-              onClick={onOpenAdminAuth}
-              aria-label={lang === 'en' ? 'Admin Portal' : 'دخول الإدارة'}
-              title={lang === 'en' ? 'Admin Portal' : 'دخول الإدارة'}
-              className="p-1.5 rounded-md text-[#4B5563] hover:text-[#DFAF5A] transition-colors cursor-pointer"
-            >
-              <Lock className="w-3.5 h-3.5" />
-            </button>
           </div>
         </div>
       </footer>
