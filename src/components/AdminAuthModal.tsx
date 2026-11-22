@@ -25,7 +25,7 @@ interface AdminAuthModalProps {
   lang: Language;
   isAdmin: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (pin: string) => void;
   onSignOut: () => void;
   onOpenCustomizer?: () => void;
 }
@@ -61,10 +61,11 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
       return;
     }
 
-    if (verifyAdminPin(pinInput)) {
+    const enteredPin = pinInput.trim();
+    if (verifyAdminPin(enteredPin)) {
       setPinInput('');
       setErrorMsg(null);
-      onSuccess();
+      onSuccess(enteredPin);
     } else {
       setErrorMsg(
         isEn
