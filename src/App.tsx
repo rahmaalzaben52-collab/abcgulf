@@ -30,7 +30,9 @@ import {
   DEFAULT_LICENSES,
   DEFAULT_PROFILE,
   isAdminRouteTriggered,
+  loadStoredConfig,
   loadStoredLanguage,
+  saveStoredConfig,
   saveStoredLanguage,
   type CompanyProfile,
   type LicenseRecord,
@@ -46,14 +48,25 @@ import { AdminAuthModal } from './components/AdminAuthModal';
 
 export default function App() {
   const [lang, setLang] = useState<Language>(() => loadStoredLanguage());
-  const [profile, setProfile] = useState<CompanyProfile>(DEFAULT_PROFILE);
-  const [cloudLicenses, setCloudLicenses] = useState<LicenseRecord[]>([]);
+  const [profile, setProfile] = useState<CompanyProfile>(() => {
+    const stored = loadStoredConfig();
+    return stored.profile || DEFAULT_PROFILE;
+  });
+  const [cloudLicenses, setCloudLicenses] = useState<LicenseRecord[]>(() => {
+    const stored = loadStoredConfig();
+    return stored.licenses && stored.licenses.length > 0 ? stored.licenses : DEFAULT_LICENSES;
+  });
   const [dbConfigExists, setDbConfigExists] = useState(false);
   const [dbLicensesEmpty, setDbLicensesEmpty] = useState(true);
   const [configLoaded, setConfigLoaded] = useState(false);
   const [licensesLoaded, setLicensesLoaded] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.sessionStorage.getItem('abc_admin_active') === 'true';
+    }
+    return false;
+  });
   const [adminUserEmail, setAdminUserEmail] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -182,45 +195,23 @@ export default function App() {
     }
   }, []);
 
-  const handleAdminSignIn = useCallback(async () => {
-    setAuthLoading(true);
-    setAuthError(null);
-    try {
-      const user = await signInAdminWithGoogle();
-      const verified = await verifyUserIsAdmin(user);
-      setAdminUserEmail(user.email ?? null);
-      setIsAdmin(verified);
-      if (verified) {
-        setAdminModalOpen(false);
-      }
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      if (!/popup-closed-by-user|cancelled-popup-request/i.test(msg)) {
-        setAuthError(
-          lang === 'en'
-            ? 'Could not complete Google sign-in. Please allow popups and try again.'
-            : 'تعذر إتمام تسجيل الدخول عبر Google. يرجى السماح بالنوافذ المنبثقة والمحاولة مرة أخرى.',
-        );
-      }
-    } finally {
-      setAuthLoading(false);
+  const handleAdminSuccess = useCallback(() => {
+    setIsAdmin(true);
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem('abc_admin_active', 'true');
     }
-  }, [lang]);
+    setAdminModalOpen(false);
+  }, []);
 
-  const handleAdminSignOut = useCallback(async () => {
-    setAuthLoading(true);
-    setAuthError(null);
-    try {
-      await signOutAdmin();
-      setIsAdmin(false);
-      setAdminUserEmail(null);
-      setCustomizerOpen(false);
-      setAdminModalOpen(false);
-      if (isAdminRouteTriggered(window.location.hash, window.location.search)) {
-        window.history.replaceState(null, '', window.location.pathname);
-      }
-    } finally {
-      setAuthLoading(false);
+  const handleAdminSignOut = useCallback(() => {
+    setIsAdmin(false);
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem('abc_admin_active');
+    }
+    setCustomizerOpen(false);
+    setAdminModalOpen(false);
+    if (isAdminRouteTriggered(window.location.hash, window.location.search)) {
+      window.history.replaceState(null, '', window.location.pathname);
     }
   }, []);
 
@@ -245,27 +236,40 @@ export default function App() {
       setPendingModelName(fileName);
       setProfile((prev) => {
         const next = { ...prev, customModelName: fileName };
-        void saveSiteConfigToFirestore(next);
+        saveStoredConfig(next, displayedLicenses);
+        void saveSiteConfigToFirestore(next).catch(() => {});
         return next;
       });
     },
-    [isAdmin],
+    [isAdmin, displayedLicenses],
   );
 
   const handleSaveProfile = useCallback(
     async (updated: CompanyProfile) => {
       if (!isAdmin) return;
       setProfile(updated);
-      await saveSiteConfigToFirestore(updated);
+      saveStoredConfig(updated, displayedLicenses);
+      try {
+        await saveSiteConfigToFirestore(updated);
+      } catch (err) {
+        console.warn('Firestore sync note:', err);
+      }
     },
-    [isAdmin],
+    [isAdmin, displayedLicenses],
   );
 
   const handleImportConfig = useCallback(
     async (importedProfile: CompanyProfile, importedLicenses: LicenseRecord[]) => {
       if (!isAdmin) return;
-      await saveSiteConfigToFirestore(importedProfile);
-      await Promise.all(importedLicenses.map((lic) => createLicenseInFirestore(lic)));
+      setProfile(importedProfile);
+      setCloudLicenses(importedLicenses);
+      saveStoredConfig(importedProfile, importedLicenses);
+      try {
+        await saveSiteConfigToFirestore(importedProfile);
+        await Promise.all(importedLicenses.map((lic) => createLicenseInFirestore(lic)));
+      } catch (err) {
+        console.warn('Firestore sync note:', err);
+      }
     },
     [isAdmin],
   );
@@ -273,39 +277,57 @@ export default function App() {
   const handleAddLicense = useCallback(
     async (record: LicenseRecord) => {
       if (!isAdmin) return;
-      await createLicenseInFirestore(record);
+      setCloudLicenses((prev) => {
+        const next = [record, ...prev];
+        saveStoredConfig(profile, next);
+        return next;
+      });
+      try {
+        await createLicenseInFirestore(record);
+      } catch (err) {
+        console.warn('Firestore sync note:', err);
+      }
     },
-    [isAdmin],
+    [isAdmin, profile],
   );
 
   const handleUpdateLicense = useCallback(
     async (record: LicenseRecord) => {
       if (!isAdmin) return;
-      const existsInCloud = cloudLicenses.some((item) => item.id === record.id);
-      if (existsInCloud) {
-        await updateLicenseInFirestore(record);
-      } else {
-        await createLicenseInFirestore(record);
+      setCloudLicenses((prev) => {
+        const next = prev.map((item) => (item.id === record.id ? record : item));
+        saveStoredConfig(profile, next);
+        return next;
+      });
+      try {
+        const existsInCloud = cloudLicenses.some((item) => item.id === record.id);
+        if (existsInCloud) {
+          await updateLicenseInFirestore(record);
+        } else {
+          await createLicenseInFirestore(record);
+        }
+      } catch (err) {
+        console.warn('Firestore sync note:', err);
       }
     },
-    [isAdmin, cloudLicenses],
+    [isAdmin, profile, cloudLicenses],
   );
 
   const handleDeleteLicense = useCallback(
     async (id: string) => {
       if (!isAdmin) return;
-      if (!dbConfigExists) {
-        await saveSiteConfigToFirestore(profile);
-        await Promise.all(
-          DEFAULT_LICENSES.filter((item) => item.id !== id).map((lic) =>
-            createLicenseInFirestore(lic),
-          ),
-        );
-        return;
+      setCloudLicenses((prev) => {
+        const next = prev.filter((item) => item.id !== id);
+        saveStoredConfig(profile, next);
+        return next;
+      });
+      try {
+        await deleteLicenseFromFirestore(id);
+      } catch (err) {
+        console.warn('Firestore sync note:', err);
       }
-      await deleteLicenseFromFirestore(id);
     },
-    [isAdmin, dbConfigExists, profile],
+    [isAdmin, profile],
   );
 
   const t = UI_COPY[lang];
@@ -566,13 +588,11 @@ export default function App() {
       <AdminAuthModal
         open={adminModalOpen}
         lang={lang}
-        loading={authLoading}
-        userEmail={adminUserEmail}
         isAdmin={isAdmin}
-        errorMsg={authError}
         onClose={() => setAdminModalOpen(false)}
-        onSignIn={() => void handleAdminSignIn()}
-        onSignOut={() => void handleAdminSignOut()}
+        onSuccess={handleAdminSuccess}
+        onSignOut={handleAdminSignOut}
+        onOpenCustomizer={() => setCustomizerOpen(true)}
       />
     </div>
   );

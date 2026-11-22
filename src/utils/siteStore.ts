@@ -569,3 +569,27 @@ export function isAdminRouteTriggered(hash: string, search: string): boolean {
   const params = new URLSearchParams(search.startsWith('?') ? search : `?${search}`);
   return params.get('admin') === '1' || params.get('mode') === 'admin';
 }
+
+const ADMIN_PIN_KEY = 'abc_admin_pin_code';
+export const DEFAULT_ADMIN_PIN = '2030';
+
+export function getStoredAdminPin(): string {
+  if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_ADMIN_PIN;
+  return window.localStorage.getItem(ADMIN_PIN_KEY) || DEFAULT_ADMIN_PIN;
+}
+
+export function setStoredAdminPin(newPin: string): boolean {
+  if (typeof window === 'undefined' || !window.localStorage) return false;
+  try {
+    window.localStorage.setItem(ADMIN_PIN_KEY, newPin.trim());
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function verifyAdminPin(pin: string): boolean {
+  const current = getStoredAdminPin();
+  return pin.trim() === current.trim();
+}
+
