@@ -66,6 +66,15 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
     }
     setErrors({});
     setSubmittedData({ name: res.data.name, email: res.data.email });
+
+    // Open the user's mail client with the form data pre-filled
+    const toEmail = profile.contact.email;
+    const mailSubject = encodeURIComponent(res.data.subject);
+    const mailBody = encodeURIComponent(
+      `${lang === 'ar' ? 'الاسم' : 'Name'}: ${res.data.name}\n${lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}: ${res.data.email}\n\n${res.data.message ?? message.trim()}`
+    );
+    window.location.href = `mailto:${toEmail}?subject=${mailSubject}&body=${mailBody}`;
+
     setName('');
     setEmail('');
     setSubject('');

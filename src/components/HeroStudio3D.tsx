@@ -7,7 +7,6 @@ import {
   Camera,
   ChevronDown,
   ChevronUp,
-  RotateCw,
   RotateCcw,
   Upload,
 } from 'lucide-react';
@@ -82,7 +81,6 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
   const mountRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [autoRotate, setAutoRotate] = useState(true);
   const [webglError, setWebglError] = useState(false);
   const [modelStatus, setModelStatus] = useState<{ kind: 'loaded' | 'error'; fileName?: string } | null>(
     null,
@@ -544,12 +542,6 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
     }
   }, [pendingModelBuffer, customModelName]);
 
-  const handleAutoRotateToggle = () => {
-    const next = !autoRotate;
-    setAutoRotate(next);
-    setAutoRotateRef.current?.(next);
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -612,21 +604,6 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
       {/* Clean minimal control bar (Auto-rotate & admin upload) without any camera presets or hide button */}
       <div className="absolute bottom-4 inset-x-4 lg:inset-x-auto lg:end-8 z-25 flex items-center justify-end max-w-[94%] mx-auto pointer-events-auto">
         <div className="flex items-center gap-1 rounded-xl bg-[#14161D]/95 border border-white/12 px-2 py-1.5 shadow-2xl">
-          <button
-            type="button"
-            onClick={handleAutoRotateToggle}
-            aria-pressed={autoRotate}
-            aria-label={dockCopy.rotate}
-            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              autoRotate
-                ? 'bg-white/10 text-[#F6DDA7]'
-                : 'text-[#9CA3AF] hover:text-white hover:bg-white/6'
-            }`}
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            <span>{dockCopy.rotate}</span>
-          </button>
-
           {isAdmin && (
             <>
               <button
