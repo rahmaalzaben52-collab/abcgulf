@@ -191,9 +191,9 @@ export const DEFAULT_PROFILE: CompanyProfile = {
   },
   socials: {
     youtube: 'https://youtube.com/@gulf0productions?si=_3G6i9O9mBo8zEbU',
-    instagram: 'https://www.instagram.com/abcgulfproductions',
-    linkedin: 'https://www.linkedin.com/company/abcgulfproductions',
-    facebook: 'https://www.facebook.com/abcgulfproductions',
+    instagram: '',
+    linkedin: '',
+    facebook: '',
   },
 };
 

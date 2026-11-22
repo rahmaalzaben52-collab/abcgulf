@@ -327,72 +327,25 @@ export const StudioCustomizerModal: React.FC<StudioCustomizerModalProps> = ({
             </div>
           </div>
 
-          {/* YouTube & Social Links */}
+          {/* YouTube Channel Link */}
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-[#F8F9FA] border-b border-white/8 pb-2">
-              {isEn ? 'YouTube & Social Media Links' : 'قناة اليوتيوب وحسابات التواصل الاجتماعي'}
+              {isEn ? 'YouTube Channel Link' : 'رابط قناة اليوتيوب'}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="cfg-yt" className="block text-xs text-[#A9AFBE] mb-1">
-                  {isEn ? 'YouTube Channel URL' : 'رابط قناة اليوتيوب (YouTube)'}
-                </label>
-                <input
-                  id="cfg-yt"
-                  type="url"
-                  dir="ltr"
-                  value={draft.socials.youtube}
-                  onChange={(e) =>
-                    setDraft({ ...draft, socials: { ...draft.socials, youtube: e.target.value } })
-                  }
-                  className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-sm font-code text-white text-left focus:border-[#DFAF5A] focus:outline-none"
-                />
-              </div>
-              <div>
-                <label htmlFor="cfg-ig" className="block text-xs text-[#A9AFBE] mb-1">
-                  {isEn ? 'Instagram URL' : 'رابط إنستغرام (Instagram)'}
-                </label>
-                <input
-                  id="cfg-ig"
-                  type="url"
-                  dir="ltr"
-                  value={draft.socials.instagram}
-                  onChange={(e) =>
-                    setDraft({ ...draft, socials: { ...draft.socials, instagram: e.target.value } })
-                  }
-                  className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-sm font-code text-white text-left focus:border-[#DFAF5A] focus:outline-none"
-                />
-              </div>
-              <div>
-                <label htmlFor="cfg-li" className="block text-xs text-[#A9AFBE] mb-1">
-                  {isEn ? 'LinkedIn URL' : 'رابط لينكدإن (LinkedIn)'}
-                </label>
-                <input
-                  id="cfg-li"
-                  type="url"
-                  dir="ltr"
-                  value={draft.socials.linkedin}
-                  onChange={(e) =>
-                    setDraft({ ...draft, socials: { ...draft.socials, linkedin: e.target.value } })
-                  }
-                  className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-sm font-code text-white text-left focus:border-[#DFAF5A] focus:outline-none"
-                />
-              </div>
-              <div>
-                <label htmlFor="cfg-fb" className="block text-xs text-[#A9AFBE] mb-1">
-                  {isEn ? 'Facebook URL' : 'رابط فيسبوك (Facebook)'}
-                </label>
-                <input
-                  id="cfg-fb"
-                  type="url"
-                  dir="ltr"
-                  value={draft.socials.facebook}
-                  onChange={(e) =>
-                    setDraft({ ...draft, socials: { ...draft.socials, facebook: e.target.value } })
-                  }
-                  className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-sm font-code text-white text-left focus:border-[#DFAF5A] focus:outline-none"
-                />
-              </div>
+            <div>
+              <label htmlFor="cfg-yt" className="block text-xs text-[#A9AFBE] mb-1">
+                {isEn ? 'YouTube Channel URL' : 'رابط قناة اليوتيوب (YouTube)'}
+              </label>
+              <input
+                id="cfg-yt"
+                type="url"
+                dir="ltr"
+                value={draft.socials.youtube}
+                onChange={(e) =>
+                  setDraft({ ...draft, socials: { ...draft.socials, youtube: e.target.value } })
+                }
+                className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-sm font-code text-white text-left focus:border-[#DFAF5A] focus:outline-none"
+              />
             </div>
           </div>
 

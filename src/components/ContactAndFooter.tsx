@@ -6,9 +6,6 @@ import {
   Send,
   CheckCircle2,
   Youtube,
-  Instagram,
-  Linkedin,
-  Facebook,
   ChevronLeft,
   ChevronRight,
   SlidersHorizontal,
@@ -78,10 +75,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
 
   const socialItems = [
     { name: 'YouTube', url: profile.socials.youtube, icon: Youtube },
-    { name: 'Instagram', url: profile.socials.instagram, icon: Instagram },
-    { name: 'LinkedIn', url: profile.socials.linkedin, icon: Linkedin },
-    { name: 'Facebook', url: profile.socials.facebook, icon: Facebook },
-  ];
+  ].filter((item) => Boolean(item.url));
 
   return (
     <>
