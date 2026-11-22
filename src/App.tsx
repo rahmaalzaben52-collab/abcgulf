@@ -20,6 +20,7 @@ import {
   createLicenseInFirestore,
   deleteLicenseFromFirestore,
   saveSiteConfigToFirestore,
+  signInAdminAnonymously,
   signInAdminWithGoogle,
   signOutAdmin,
   subscribePublicSiteData,
@@ -209,6 +210,10 @@ export default function App() {
     if (typeof window !== 'undefined') {
       window.sessionStorage.setItem('abc_admin_active', 'true');
     }
+    // Sign in anonymously so Firestore writes are authenticated
+    void signInAdminAnonymously().catch((err) =>
+      console.warn('Anonymous sign-in failed:', err),
+    );
     setAdminModalOpen(false);
   }, []);
 

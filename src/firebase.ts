@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
+  signInAnonymously,
   signInWithPopup,
   signOut,
   type User,
@@ -108,6 +109,16 @@ export async function signInAdminWithGoogle(): Promise<User> {
 
 export async function signOutAdmin(): Promise<void> {
   await signOut(auth);
+}
+
+/**
+ * Sign in anonymously so Firestore writes are authenticated.
+ * Called right after the admin successfully enters the PIN code.
+ */
+export async function signInAdminAnonymously(): Promise<void> {
+  if (!auth.currentUser) {
+    await signInAnonymously(auth);
+  }
 }
 
 export async function verifyUserIsAdmin(user: User | null): Promise<boolean> {
