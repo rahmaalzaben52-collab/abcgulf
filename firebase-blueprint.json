@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "SiteConfig",
+      "description": "Public company profile, logo reference, 3D model name, contact details, and social media links.",
+      "type": "object",
+      "properties": {
+        "nameAr": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "nameEn": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "taglineAr": { "type": "string", "maxLength": 300 },
+        "taglineEn": { "type": "string", "maxLength": 300 },
+        "aboutSummary": { "type": "string", "maxLength": 2000 },
+        "teamSummary": { "type": "string", "maxLength": 2000 },
+        "logoDataUrl": { "type": "string", "maxLength": 500000 },
+        "customModelName": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "locationAr": { "type": "string", "maxLength": 200 },
+        "locationEn": { "type": "string", "maxLength": 200 },
+        "mapsUrl": { "type": "string", "maxLength": 500 },
+        "youtube": { "type": "string", "maxLength": 500 },
+        "instagram": { "type": "string", "maxLength": 500 },
+        "linkedin": { "type": "string", "maxLength": 500 },
+        "facebook": { "type": "string", "maxLength": 500 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": [
+        "nameAr",
+        "nameEn",
+        "taglineAr",
+        "taglineEn",
+        "aboutSummary",
+        "teamSummary",
+        "logoDataUrl",
+        "customModelName",
+        "phone",
+        "email",
+        "locationAr",
+        "locationEn",
+        "mapsUrl",
+        "youtube",
+        "instagram",
+        "linkedin",
+        "facebook",
+        "updatedAt",
+        "updatedBy"
+      ]
+    },
+    "License": {
+      "title": "License",
+      "description": "Official media, commercial, or aerial production license displayed publicly on the corporate site grouped by region.",
+      "type": "object",
+      "properties": {
+        "region": { "type": "string", "enum": ["saudi", "oman", "kuwait", "uae", "erbil"] },
+        "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "authority": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "licenseNumber": { "type": "string", "minLength": 3, "maxLength": 80 },
+        "issueDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "maxLength": 10 },
+        "expiryDate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "maxLength": 10 },
+        "status": { "type": "string", "enum": ["active", "pending", "expired"] },
+        "category": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "attachmentName": { "type": "string", "maxLength": 200 },
+        "attachmentDataUrl": { "type": "string", "maxLength": 750000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": [
+        "region",
+        "title",
+        "authority",
+        "licenseNumber",
+        "issueDate",
+        "expiryDate",
+        "status",
+        "category",
+        "notes",
+        "attachmentName",
+        "attachmentDataUrl",
+        "createdAt",
+        "updatedAt",
+        "updatedBy"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized administrator identity allowed to manage site configuration and licenses.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "role": { "type": "string", "enum": ["admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["email", "role", "createdAt", "createdBy"]
+    }
+  },
+  "firestore": {
+    "/siteConfig/{configId}": {
+      "schema": { "$ref": "#/entities/SiteConfig" },
+      "description": "Singleton public site configuration document ('public') writable only by verified admins."
+    },
+    "/licenses/{licenseId}": {
+      "schema": { "$ref": "#/entities/License" },
+      "description": "Public official company licenses readable by visitors and managed exclusively by verified admins."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Authorized admin UIDs verified against the bootstrapped owner or Firestore admin registry."
+    }
+  }
+}

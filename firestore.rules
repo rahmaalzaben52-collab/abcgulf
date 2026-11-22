@@ -1,0 +1,152 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isSignedIn() && request.auth.token.email == 'rakannabale100@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() ||
+        (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isValidSiteConfig(data) {
+      return data.keys().hasAll([
+          'nameAr', 'nameEn', 'taglineAr', 'taglineEn',
+          'aboutSummary', 'teamSummary', 'logoDataUrl', 'customModelName',
+          'phone', 'email', 'locationAr', 'locationEn', 'mapsUrl',
+          'youtube', 'instagram', 'linkedin', 'facebook',
+          'updatedAt', 'updatedBy'
+        ])
+        && data.keys().hasOnly([
+          'nameAr', 'nameEn', 'taglineAr', 'taglineEn',
+          'aboutSummary', 'teamSummary', 'logoDataUrl', 'customModelName',
+          'phone', 'email', 'locationAr', 'locationEn', 'mapsUrl',
+          'youtube', 'instagram', 'linkedin', 'facebook',
+          'updatedAt', 'updatedBy'
+        ])
+        && data.nameAr is string && data.nameAr.size() >= 2 && data.nameAr.size() <= 160
+        && data.nameEn is string && data.nameEn.size() >= 2 && data.nameEn.size() <= 160
+        && data.taglineAr is string && data.taglineAr.size() <= 300
+        && data.taglineEn is string && data.taglineEn.size() <= 300
+        && data.aboutSummary is string && data.aboutSummary.size() <= 2000
+        && data.teamSummary is string && data.teamSummary.size() <= 2000
+        && data.logoDataUrl is string && data.logoDataUrl.size() <= 500000
+        && data.customModelName is string && data.customModelName.size() <= 200
+        && data.phone is string && data.phone.size() <= 40
+        && data.email is string && data.email.size() <= 120
+        && data.locationAr is string && data.locationAr.size() <= 200
+        && data.locationEn is string && data.locationEn.size() <= 200
+        && data.mapsUrl is string && data.mapsUrl.size() <= 500
+        && data.youtube is string && data.youtube.size() <= 500
+        && data.instagram is string && data.instagram.size() <= 500
+        && data.linkedin is string && data.linkedin.size() <= 500
+        && data.facebook is string && data.facebook.size() <= 500
+        && data.updatedAt is timestamp && data.updatedAt == request.time
+        && data.updatedBy is string && data.updatedBy == request.auth.uid;
+    }
+
+    function isValidLicense(data) {
+      return data.keys().hasAll([
+          'region', 'title', 'authority', 'licenseNumber', 'issueDate', 'expiryDate',
+          'status', 'category', 'notes', 'attachmentName', 'attachmentDataUrl',
+          'createdAt', 'updatedAt', 'updatedBy'
+        ])
+        && data.keys().hasOnly([
+          'region', 'title', 'authority', 'licenseNumber', 'issueDate', 'expiryDate',
+          'status', 'category', 'notes', 'attachmentName', 'attachmentDataUrl',
+          'createdAt', 'updatedAt', 'updatedBy'
+        ])
+        && data.region in ['saudi', 'oman', 'kuwait', 'uae', 'erbil']
+        && data.title is string && data.title.size() >= 3 && data.title.size() <= 200
+        && data.authority is string && data.authority.size() >= 3 && data.authority.size() <= 200
+        && data.licenseNumber is string && data.licenseNumber.size() >= 3 && data.licenseNumber.size() <= 80
+        && data.issueDate is string && data.issueDate.size() == 10 && data.issueDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.expiryDate is string && data.expiryDate.size() == 10 && data.expiryDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.status in ['active', 'pending', 'expired']
+        && data.category is string && data.category.size() >= 2 && data.category.size() <= 160
+        && data.notes is string && data.notes.size() <= 1000
+        && data.attachmentName is string && data.attachmentName.size() <= 200
+        && data.attachmentDataUrl is string && data.attachmentDataUrl.size() <= 750000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp && data.updatedAt == request.time
+        && data.updatedBy is string && data.updatedBy == request.auth.uid;
+    }
+
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['email', 'role', 'createdAt', 'createdBy'])
+        && data.keys().hasOnly(['email', 'role', 'createdAt', 'createdBy'])
+        && data.email is string && data.email.size() >= 5 && data.email.size() <= 120
+        && data.role == 'admin'
+        && data.createdAt is timestamp && data.createdAt == request.time
+        && data.createdBy is string && data.createdBy == request.auth.uid;
+    }
+
+    // Singleton public site config ('public') - public read, admin-only write
+    match /siteConfig/{configId} {
+      allow get: if isValidId(configId) && configId == 'public';
+      allow list: if false;
+      allow create, update: if isValidId(configId)
+        && configId == 'public'
+        && isAdmin()
+        && isValidSiteConfig(incoming());
+      allow delete: if false;
+    }
+
+    // Official licenses - public read/list, admin-only create/update/delete
+    match /licenses/{licenseId} {
+      allow get: if isValidId(licenseId);
+      allow list: if resource.data.status in ['active', 'pending', 'expired'];
+      allow create: if isValidId(licenseId)
+        && isAdmin()
+        && isValidLicense(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(licenseId)
+        && isAdmin()
+        && isValidLicense(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'region', 'title', 'authority', 'licenseNumber', 'issueDate', 'expiryDate',
+          'status', 'category', 'notes', 'attachmentName', 'attachmentDataUrl',
+          'updatedAt', 'updatedBy'
+        ]);
+      allow delete: if isValidId(licenseId) && isAdmin();
+    }
+
+    // Admin registry - non-listable, self-get or bootstrapped admin only
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && isSignedIn() && (request.auth.uid == adminId || isBootstrappedAdmin());
+      allow list: if false;
+      allow create: if isValidId(adminId) && isBootstrappedAdmin() && isValidAdminUser(incoming());
+      allow update: if false;
+      allow delete: if isValidId(adminId) && isBootstrappedAdmin() && adminId != request.auth.uid;
+    }
+
+    // Connectivity test doc
+    match /test/{docId} {
+      allow get: if isValidId(docId) && docId == 'connection';
+      allow list, write: if false;
+    }
+  }
+}

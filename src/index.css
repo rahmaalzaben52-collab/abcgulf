@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-ar: 'Cairo', system-ui, -apple-system, sans-serif;
+    --font-en: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  html {
+    font-family: var(--font-ar);
+    background-color: #090A0E;
+    color: #F4F5F7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
+  }
+}
+
+.font-latin {
+  font-family: var(--font-en);
+}
+
+.font-code {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.studio-hairline-grid {
+  background-image:
+    linear-gradient(to right, rgba(223, 175, 90, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(223, 175, 90, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.gold-gradient-banner {
+  background: linear-gradient(100deg, #B28438 0%, #DFB365 48%, #C09042 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #F6DDA7 0%, #DFAF5A 55%, #BA8838 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "شركة الخليج للإنتاج الفني | Abc Gulf Productions",
+  "description": "شركة الخليج للإنتاج الفني — شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في إنتاج الفيديوهات الدعائية والأفلام القصيرة والبودكاست وخدمات ما بعد الإنتاج.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
