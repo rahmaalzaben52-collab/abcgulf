@@ -34,6 +34,7 @@ import {
   loadStoredLanguage,
   saveStoredConfig,
   saveStoredLanguage,
+  STORAGE_KEY,
   type CompanyProfile,
   type LicenseRecord,
 } from './utils/siteStore';
@@ -54,7 +55,13 @@ export default function App() {
   });
   const [cloudLicenses, setCloudLicenses] = useState<LicenseRecord[]>(() => {
     const stored = loadStoredConfig();
-    return stored.licenses && stored.licenses.length > 0 ? stored.licenses : DEFAULT_LICENSES;
+    // null means nothing in localStorage → start with DEFAULT_LICENSES reference
+    return stored.licenses ?? DEFAULT_LICENSES;
+  });
+  // True when admin has saved data to localStorage → always use cloudLicenses for display
+  const [localLicensesEdited, setLocalLicensesEdited] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return !!window.localStorage.getItem(STORAGE_KEY); // saved before → use cloudLicenses
   });
   const [dbConfigExists, setDbConfigExists] = useState(false);
   const [dbLicensesEmpty, setDbLicensesEmpty] = useState(true);
@@ -184,8 +191,10 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Always use cloudLicenses after any admin edit; fall back to DEFAULT_LICENSES
+  // only when neither Firestore nor localStorage has any data yet.
   const displayedLicenses =
-    !dbConfigExists && dbLicensesEmpty ? DEFAULT_LICENSES : cloudLicenses;
+    localLicensesEdited || !dbLicensesEmpty ? cloudLicenses : DEFAULT_LICENSES;
 
   const navigateToSection = useCallback((sectionId: string) => {
     setActiveSection(sectionId);
@@ -263,6 +272,7 @@ export default function App() {
       if (!isAdmin) return;
       setProfile(importedProfile);
       setCloudLicenses(importedLicenses);
+      setLocalLicensesEdited(true);
       saveStoredConfig(importedProfile, importedLicenses);
       try {
         await saveSiteConfigToFirestore(importedProfile);
@@ -277,11 +287,15 @@ export default function App() {
   const handleAddLicense = useCallback(
     async (record: LicenseRecord) => {
       if (!isAdmin) return;
+      // On first admin edit, seed cloudLicenses from the currently displayed list
+      // so DEFAULT_LICENSES entries are preserved alongside the new one
       setCloudLicenses((prev) => {
-        const next = [record, ...prev];
+        const base = prev === DEFAULT_LICENSES ? [...DEFAULT_LICENSES] : prev;
+        const next = [record, ...base];
         saveStoredConfig(profile, next);
         return next;
       });
+      setLocalLicensesEdited(true);
       try {
         await createLicenseInFirestore(record);
       } catch (err) {
@@ -295,10 +309,12 @@ export default function App() {
     async (record: LicenseRecord) => {
       if (!isAdmin) return;
       setCloudLicenses((prev) => {
-        const next = prev.map((item) => (item.id === record.id ? record : item));
+        const base = prev === DEFAULT_LICENSES ? [...DEFAULT_LICENSES] : prev;
+        const next = base.map((item) => (item.id === record.id ? record : item));
         saveStoredConfig(profile, next);
         return next;
       });
+      setLocalLicensesEdited(true);
       try {
         const existsInCloud = cloudLicenses.some((item) => item.id === record.id);
         if (existsInCloud) {
@@ -317,10 +333,12 @@ export default function App() {
     async (id: string) => {
       if (!isAdmin) return;
       setCloudLicenses((prev) => {
-        const next = prev.filter((item) => item.id !== id);
+        const base = prev === DEFAULT_LICENSES ? [...DEFAULT_LICENSES] : prev;
+        const next = base.filter((item) => item.id !== id);
         saveStoredConfig(profile, next);
         return next;
       });
+      setLocalLicensesEdited(true);
       try {
         await deleteLicenseFromFirestore(id);
       } catch (err) {

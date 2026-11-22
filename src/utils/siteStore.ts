@@ -197,80 +197,7 @@ export const DEFAULT_PROFILE: CompanyProfile = {
   },
 };
 
-export const DEFAULT_LICENSES: LicenseRecord[] = [
-  {
-    id: 'lic-saudi-01',
-    region: 'saudi',
-    title: 'ترخيص الإنتاج المرئي والمسموع — السعودية',
-    authority: 'الهيئة العامة لتنظيم الإعلام',
-    licenseNumber: 'KSA-GAMR-2026-304',
-    issueDate: '2025-02-10',
-    expiryDate: '2027-02-09',
-    status: 'active',
-    category: 'إنتاج تلفزيوني وإعلاني',
-    notes: 'تصريح معتمد لتنفيذ الأعمال التلفزيونية والإعلانات التجارية داخل المملكة العربية السعودية.',
-  },
-  {
-    id: 'lic-oman-01',
-    region: 'oman',
-    title: 'تصريح التصوير والإنتاج الفني — عُمان',
-    authority: 'وزارة الإعلام العُمانية',
-    licenseNumber: 'OMN-MOI-2026-182',
-    issueDate: '2025-03-01',
-    expiryDate: '2027-02-28',
-    status: 'active',
-    category: 'إنتاج وثائقي وسينمائي',
-    notes: 'اعتماد رسمي لتصوير الأفلام الوثائقية والحملات التجارية في سلطنة عُمان.',
-  },
-  {
-    id: 'lic-kuwait-01',
-    region: 'kuwait',
-    title: 'رخصة الإنتاج الإعلامي والبرامج — الكويت',
-    authority: 'وزارة الإعلام الكويتية',
-    licenseNumber: 'KWT-MOI-2025-719',
-    issueDate: '2025-01-20',
-    expiryDate: '2027-01-19',
-    status: 'active',
-    category: 'برامج تلفزيونية وإعلانات',
-    notes: 'تصريح إنتاج وتغطية الفعاليات والمشاريع المرئية والسمعية داخل دولة الكويت.',
-  },
-  {
-    id: 'lic-uae-01',
-    region: 'uae',
-    title: 'رخصة الإنتاج السينمائي والتجاري — الإمارات',
-    authority: 'مجلس الإمارات للإعلام',
-    licenseNumber: 'UAE-EMC-2026-552',
-    issueDate: '2025-04-05',
-    expiryDate: '2027-04-04',
-    status: 'active',
-    category: 'إنتاج سينمائي ورقمي',
-    notes: 'ترخيص متكامل لتصوير الحملات الإعلانية والأفلام القصيرة في دولة الإمارات.',
-  },
-  {
-    id: 'lic-erbil-01',
-    region: 'erbil',
-    title: 'رخصة الإنتاج الإعلامي والمرئي — أربيل',
-    authority: 'هيئة الإعلام المرئي والمسموع',
-    licenseNumber: 'IQ-EBL-2026-4810',
-    issueDate: '2025-01-15',
-    expiryDate: '2027-01-14',
-    status: 'active',
-    category: 'إنتاج تلفزيوني وإعلاني',
-    notes: 'ترخيص رسمي لإنتاج الفيديوهات الدعائية والبرامج التلفزيونية والأفلام القصيرة.',
-  },
-  {
-    id: 'lic-erbil-02',
-    region: 'erbil',
-    title: 'السجل التجاري المعتمد — أربيل',
-    authority: 'وزارة التجارة والصناعة',
-    licenseNumber: 'CR-EBL-90412',
-    issueDate: '2023-06-01',
-    expiryDate: '2028-05-31',
-    status: 'active',
-    category: 'كيان تجاري مسجل',
-    notes: 'شركة مسجلة في أربيل لمزاولة أنشطة الإنتاج الفني والسمعي والبصري.',
-  },
-];
+export const DEFAULT_LICENSES: LicenseRecord[] = [];
 
 export const CORE_SERVICES: ServiceItem[] = [
   {
@@ -509,22 +436,22 @@ export function parseSiteConfig(rawJson: string): SiteConfigPayload | null {
   }
 }
 
-export function loadStoredConfig(): { profile: CompanyProfile; licenses: LicenseRecord[] } {
+export function loadStoredConfig(): { profile: CompanyProfile; licenses: LicenseRecord[] | null } {
   if (typeof window === 'undefined' || !window.localStorage) {
-    return { profile: DEFAULT_PROFILE, licenses: DEFAULT_LICENSES };
+    return { profile: DEFAULT_PROFILE, licenses: null };
   }
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      return { profile: DEFAULT_PROFILE, licenses: DEFAULT_LICENSES };
+      return { profile: DEFAULT_PROFILE, licenses: null };
     }
     const parsed = parseSiteConfig(raw);
     if (!parsed) {
-      return { profile: DEFAULT_PROFILE, licenses: DEFAULT_LICENSES };
+      return { profile: DEFAULT_PROFILE, licenses: null };
     }
     return { profile: parsed.profile, licenses: parsed.licenses };
   } catch {
-    return { profile: DEFAULT_PROFILE, licenses: DEFAULT_LICENSES };
+    return { profile: DEFAULT_PROFILE, licenses: null };
   }
 }
 
