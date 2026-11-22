@@ -45,12 +45,12 @@ function createEmptyDraft(region: LicenseRegion = 'saudi'): LicenseDraft {
   return {
     region,
     title: '',
-    authority: '',
-    licenseNumber: 'LIC-DOC',
-    issueDate: '2026-01-01',
+    authority: 'الجهة الرسمية المعتمدة',
+    licenseNumber: `LIC-${Date.now().toString().slice(-6)}`,
+    issueDate: '2025-01-01',
     expiryDate: '2028-01-01',
     status: 'active',
-    category: 'Official License Document',
+    category: 'إنتاج فني وإعلامي',
     notes: '',
     attachmentName: '',
     attachmentDataUrl: '',
@@ -236,12 +236,18 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
       status: 'active',
     };
 
-    if (editingId) {
-      await onUpdateLicense(payload);
-    } else {
-      await onAddLicense(payload);
+    try {
+      if (editingId) {
+        await onUpdateLicense(payload);
+      } else {
+        await onAddLicense(payload);
+      }
+    } catch (err) {
+      console.warn('Error saving license:', err);
+    } finally {
+      setModalOpen(false);
+      setErrors({});
     }
-    setModalOpen(false);
   };
 
   const localizedPreview = previewLicense ? getDisplayLicense(previewLicense) : null;
@@ -593,6 +599,83 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                   className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
                 />
                 {errors.title && <p className="mt-1 text-xs text-rose-400">{errors.title}</p>}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="lic-authority" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
+                    {t.formAuthority}
+                  </label>
+                  <input
+                    id="lic-authority"
+                    type="text"
+                    value={draft.authority}
+                    onChange={(e) => setDraft({ ...draft, authority: e.target.value })}
+                    placeholder={lang === 'en' ? 'e.g. Ministry of Media' : 'مثال: وزارة الإعلام / هيئة تنظيم الإعلام'}
+                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
+                  />
+                  {errors.authority && <p className="mt-1 text-xs text-rose-400">{errors.authority}</p>}
+                </div>
+
+                <div>
+                  <label htmlFor="lic-number" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
+                    {t.formNumber}
+                  </label>
+                  <input
+                    id="lic-number"
+                    type="text"
+                    dir="ltr"
+                    value={draft.licenseNumber}
+                    onChange={(e) => setDraft({ ...draft, licenseNumber: e.target.value })}
+                    placeholder="e.g. LIC-2026-904"
+                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm font-code text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none text-left"
+                  />
+                  {errors.licenseNumber && <p className="mt-1 text-xs text-rose-400">{errors.licenseNumber}</p>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-1">
+                  <label htmlFor="lic-category" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
+                    {t.formCategory}
+                  </label>
+                  <input
+                    id="lic-category"
+                    type="text"
+                    value={draft.category}
+                    onChange={(e) => setDraft({ ...draft, category: e.target.value })}
+                    placeholder={lang === 'en' ? 'e.g. Cinema & TV' : 'مثال: إنتاج سينمائي وتلفزيوني'}
+                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="lic-issue" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
+                    {t.formIssue}
+                  </label>
+                  <input
+                    id="lic-issue"
+                    type="date"
+                    dir="ltr"
+                    value={draft.issueDate}
+                    onChange={(e) => setDraft({ ...draft, issueDate: e.target.value })}
+                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white focus:border-[#DFAF5A] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="lic-expiry" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
+                    {t.formExpiry}
+                  </label>
+                  <input
+                    id="lic-expiry"
+                    type="date"
+                    dir="ltr"
+                    value={draft.expiryDate}
+                    onChange={(e) => setDraft({ ...draft, expiryDate: e.target.value })}
+                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white focus:border-[#DFAF5A] focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div>

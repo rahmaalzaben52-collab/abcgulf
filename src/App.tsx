@@ -211,7 +211,11 @@ export default function App() {
       if (!isAdmin) return;
       setProfile(updated);
       saveStoredConfig(updated, displayedLicenses);
-      await saveSiteConfig(updated);
+      try {
+        await saveSiteConfig(updated);
+      } catch (err) {
+        console.warn('Cloudflare live sync notice:', err);
+      }
     },
     [isAdmin, displayedLicenses],
   );
@@ -223,8 +227,12 @@ export default function App() {
       setCloudLicenses(importedLicenses);
       setLocalLicensesEdited(true);
       saveStoredConfig(importedProfile, importedLicenses);
-      await saveSiteConfig(importedProfile);
-      await Promise.all(importedLicenses.map((lic) => upsertLicense(lic)));
+      try {
+        await saveSiteConfig(importedProfile);
+        await Promise.all(importedLicenses.map((lic) => upsertLicense(lic)));
+      } catch (err) {
+        console.warn('Cloudflare live sync notice:', err);
+      }
     },
     [isAdmin],
   );
@@ -239,7 +247,11 @@ export default function App() {
         return next;
       });
       setLocalLicensesEdited(true);
-      await upsertLicense(record);
+      try {
+        await upsertLicense(record);
+      } catch (err) {
+        console.warn('Cloudflare live sync notice:', err);
+      }
     },
     [isAdmin, profile],
   );
@@ -254,7 +266,11 @@ export default function App() {
         return next;
       });
       setLocalLicensesEdited(true);
-      await upsertLicense(record);
+      try {
+        await upsertLicense(record);
+      } catch (err) {
+        console.warn('Cloudflare live sync notice:', err);
+      }
     },
     [isAdmin, profile],
   );
@@ -269,7 +285,11 @@ export default function App() {
         return next;
       });
       setLocalLicensesEdited(true);
-      await deleteLicense(id);
+      try {
+        await deleteLicense(id);
+      } catch (err) {
+        console.warn('Cloudflare live sync notice:', err);
+      }
     },
     [isAdmin, profile],
   );

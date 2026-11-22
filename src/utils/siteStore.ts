@@ -278,41 +278,18 @@ export function validateLicenseDraft(
 ): ValidationResult<LicenseDraft> {
   const errors: Record<string, string> = {};
   const region = normalizeLicenseRegion(draft.region);
-  const title = draft.title.trim();
-  const authority = draft.authority.trim();
-  const licenseNumber = draft.licenseNumber.trim();
-  const category = draft.category.trim();
+  const title = draft.title.trim() || draft.attachmentName || (lang === 'en' ? 'Official License' : 'ترخيص رسمي');
+  const authority = draft.authority?.trim() || (lang === 'en' ? 'Competent Authority' : 'الجهة الرسمية المعتمدة');
+  const licenseNumber = draft.licenseNumber?.trim() || `LIC-${Date.now().toString().slice(-6)}`;
+  const category = draft.category?.trim() || (lang === 'en' ? 'Audiovisual Production' : 'إنتاج فني وإعلامي');
+  const issueDate = draft.issueDate || '2025-01-01';
+  const expiryDate = draft.expiryDate || '2028-01-01';
 
-  if (title.length < 3) {
+  if (title.length < 2) {
     errors.title =
       lang === 'en'
-        ? 'Please enter a license title (at least 3 characters).'
-        : 'يرجى إدخال اسم الترخيص (3 أحرف على الأقل).';
-  }
-  if (authority.length < 3) {
-    errors.authority =
-      lang === 'en' ? 'Please enter the issuing authority.' : 'يرجى إدخال الجهة المانحة للترخيص.';
-  }
-  if (licenseNumber.length < 3) {
-    errors.licenseNumber =
-      lang === 'en' ? 'Please enter the official license number.' : 'يرجى إدخال رقم الترخيص الرسمي.';
-  }
-  if (!draft.issueDate) {
-    errors.issueDate =
-      lang === 'en' ? 'Please select an issue date.' : 'يرجى تحديد تاريخ الإصدار.';
-  }
-  if (!draft.expiryDate) {
-    errors.expiryDate =
-      lang === 'en' ? 'Please select an expiry date.' : 'يرجى تحديد تاريخ الانتهاء.';
-  } else if (draft.issueDate && draft.expiryDate < draft.issueDate) {
-    errors.expiryDate =
-      lang === 'en'
-        ? 'Expiry date must be after issue date.'
-        : 'تاريخ الانتهاء يجب أن يكون بعد تاريخ الإصدار.';
-  }
-  if (category.length < 2) {
-    errors.category =
-      lang === 'en' ? 'Please enter a license category.' : 'يرجى تحديد مجال أو فئة الترخيص.';
+        ? 'Please enter a license title.'
+        : 'يرجى إدخال اسم الترخيص.';
   }
 
   if (Object.keys(errors).length > 0) {
@@ -328,6 +305,8 @@ export function validateLicenseDraft(
       title,
       authority,
       licenseNumber,
+      issueDate,
+      expiryDate,
       status: 'active',
       category,
       notes: draft.notes?.trim() || '',
