@@ -5,7 +5,6 @@ import {
   MapPin,
   Send,
   CheckCircle2,
-  Youtube,
   ChevronLeft,
   ChevronRight,
   SlidersHorizontal,
@@ -72,10 +71,6 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
     setSubject('');
     setMessage('');
   };
-
-  const socialItems = [
-    { name: 'YouTube', url: profile.socials.youtube, icon: Youtube },
-  ].filter((item) => Boolean(item.url));
 
   return (
     <>
@@ -152,27 +147,6 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                       </div>
                       <div className="text-xs text-[#9CA3AF]">{t.locationHint}</div>
                     </div>
-                  </div>
-                </div>
-
-                <div className="pt-5 border-t border-white/10">
-                  <p className="text-xs font-semibold text-[#C5C9D3] mb-3">{t.socialHeading}</p>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {socialItems.map((item) => {
-                      const SocialIcon = item.icon;
-                      return (
-                        <a
-                          key={item.name}
-                          href={sanitizeExternalUrl(item.url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={item.name}
-                          className="w-10 h-10 rounded-full border border-[#DFAF5A]/45 bg-[#191C26] hover:bg-[#DFAF5A] text-[#DFAF5A] hover:text-[#0B0C10] flex items-center justify-center transition-colors"
-                        >
-                          <SocialIcon className="w-4 h-4" />
-                        </a>
-                      );
-                    })}
                   </div>
                 </div>
               </div>
@@ -324,24 +298,6 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                 {lang === 'ar' ? profile.nameEn : profile.nameAr}
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {socialItems.map((item) => {
-              const SocialIcon = item.icon;
-              return (
-                <a
-                  key={`footer-${item.name}`}
-                  href={sanitizeExternalUrl(item.url)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={item.name}
-                  className="w-9 h-9 rounded-full bg-[#F4F5F7] text-[#0B0C10] hover:bg-[#DFAF5A] flex items-center justify-center transition-colors"
-                >
-                  <SocialIcon className="w-4 h-4" />
-                </a>
-              );
-            })}
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#9CA3AF]">

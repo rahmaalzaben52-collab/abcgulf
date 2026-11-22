@@ -131,6 +131,7 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
     renderer.domElement.style.display = 'block';
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
+    renderer.domElement.style.touchAction = 'pan-y';
     renderer.domElement.setAttribute('data-testid', 'hero-3d-canvas');
     renderer.domElement.setAttribute('aria-label', '3D Cinema Production Studio');
 
@@ -163,12 +164,16 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
       requestRender();
     };
 
+    const isMobileDevice = () =>
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 1024 || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
+
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(...initial.target);
     controls.enableDamping = !isSoftwareGl;
     controls.dampingFactor = 0.06;
     controls.enablePan = false;
-    // Allow mouse wheel scrolling to scroll the website seamlessly
+    // Allow mouse wheel and touch gestures to scroll the website seamlessly
     controls.enableZoom = false;
     controls.minDistance = 2.0;
     controls.maxDistance = 8.5;
@@ -176,6 +181,13 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
     controls.maxPolarAngle = Math.PI / 2 - 0.04;
     controls.autoRotate = !isSoftwareGl;
     controls.autoRotateSpeed = 0.45;
+
+    // On mobile/touch devices, disable OrbitControls so swiping over the 3D model scrolls down smoothly
+    if (isMobileDevice()) {
+      controls.enabled = false;
+      controls.enableRotate = false;
+    }
+
     controls.update();
 
     // Three-point warm/cool studio lighting
@@ -366,8 +378,9 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
     controls.addEventListener('start', handleControlsStart);
     controls.addEventListener('change', handleControlsChange);
 
-    // Interactive website mouse parallax
+    // Interactive website mouse parallax (desktop only)
     const handlePointerMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
       const rect = container.getBoundingClientRect();
       if (rect.width <= 0 || rect.height <= 0) return;
       const next = normalizePointerToViewport(e.clientX, e.clientY, rect);
@@ -468,6 +481,12 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
       const h = container.clientHeight || 680;
       applyViewFraming();
       renderer.setSize(w, h);
+      const isMobile = w < 1024 || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      controls.enabled = !isMobile;
+      controls.enableRotate = !isMobile;
+      if (isMobile) {
+        renderer.domElement.style.touchAction = 'pan-y';
+      }
       requestRender();
     };
     window.addEventListener('resize', handleResize);
@@ -541,7 +560,10 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
   return (
     <div className="relative w-full h-full">
       {/* Seamless Full-Bleed Three.js WebGL Stage (zero box frame or border) */}
-      <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+      <div
+        ref={mountRef}
+        className="w-full h-full pointer-events-none lg:pointer-events-auto cursor-grab active:cursor-grabbing touch-pan-y"
+      />
 
       {/* Fallback message if WebGL context is unavailable */}
       {webglError && (
