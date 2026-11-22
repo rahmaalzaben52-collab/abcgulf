@@ -72,9 +72,8 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                   key={srv.id}
                   className="flex flex-col items-start text-start px-5 py-4"
                 >
-                  <div className="flex items-center justify-between w-full mb-3">
+                  <div className="flex items-center mb-3">
                     <Icon className="w-5 h-5 text-[#DFAF5A]" />
-                    <span className="font-code text-[11px] text-[#8E95A5]">{srv.order}</span>
                   </div>
                   <h3 className="text-sm font-bold text-[#F4F5F7] leading-snug mb-1.5">
                     {srv.title}
@@ -185,9 +184,6 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#131620] via-[#131620]/35 to-transparent"
                     />
-                    <span className="absolute top-4 end-4 font-code text-xs text-[#F6DDA7] bg-[#090A0E]/85 border border-white/12 px-2.5 py-1 rounded-md">
-                      {srv.order}
-                    </span>
                   </div>
 
                   <div className="p-6 flex-1 flex flex-col justify-between gap-4">
