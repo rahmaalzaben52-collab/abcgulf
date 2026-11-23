@@ -180,6 +180,18 @@ export default {
     }
 
     // ── Static assets ─────────────────────────────────────────
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (url.pathname.startsWith('/licenses/') || url.pathname.endsWith('.pdf')) {
+      const headers = new Headers(res.headers);
+      headers.set('Content-Type', 'application/pdf');
+      headers.set('Content-Disposition', 'inline');
+      headers.set('Access-Control-Allow-Origin', '*');
+      return new Response(res.body, {
+        status: res.status,
+        statusText: res.statusText,
+        headers,
+      });
+    }
+    return res;
   },
 };

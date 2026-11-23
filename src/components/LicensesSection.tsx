@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckCircle2,
   Download,
@@ -107,6 +107,8 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [previewLicense, setPreviewLicense] = useState<LicenseRecord | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [previewBlobUrl, setPreviewBlobUrl] = useState<string | null>(null);
+  const [isLoadingPreview, setIsLoadingPreview] = useState<boolean>(false);
 
   const regionalGroups = useMemo(() => groupLicensesByRegion(licenses), [licenses]);
 
@@ -206,28 +208,78 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
     reader.readAsDataURL(file);
   };
 
+  const getLicensePdfBlob = async (rawLic: LicenseRecord): Promise<Blob> => {
+    const lic = getDisplayLicense(rawLic);
+    const url = lic.attachmentDataUrl;
+
+    if (url) {
+      if (isPdfDataUrl(url)) {
+        const b = dataUrlToBlob(url);
+        if (b) return b;
+      } else if (isPdfAttachment(url)) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const contentType = res.headers.get('Content-Type') || '';
+            if (!contentType.includes('text/html')) {
+              const ab = await res.arrayBuffer();
+              const headerStr = String.fromCharCode(...new Uint8Array(ab.slice(0, 5)));
+              if (headerStr.startsWith('%PDF')) {
+                return new Blob([ab], { type: 'application/pdf' });
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Could not fetch license PDF directly:', err);
+        }
+      }
+    }
+
+    const regionMeta = getLicenseRegionMeta(lic.region);
+    return await generateLicensePdfBlob(lic, regionMeta, lang, companyName);
+  };
+
+  useEffect(() => {
+    let active = true;
+    let createdUrl: string | null = null;
+
+    if (!previewLicense) {
+      setPreviewBlobUrl(null);
+      setIsLoadingPreview(false);
+      return;
+    }
+
+    setIsLoadingPreview(true);
+    getLicensePdfBlob(previewLicense)
+      .then((blob) => {
+        if (!active) return;
+        createdUrl = URL.createObjectURL(blob);
+        setPreviewBlobUrl(createdUrl);
+      })
+      .catch((err) => {
+        console.warn('Failed to prepare license preview blob:', err);
+      })
+      .finally(() => {
+        if (active) setIsLoadingPreview(false);
+      });
+
+    return () => {
+      active = false;
+      if (createdUrl) {
+        URL.revokeObjectURL(createdUrl);
+      }
+    };
+  }, [previewLicense]);
+
   const handleDownloadPdf = async (rawLic: LicenseRecord) => {
     const lic = getDisplayLicense(rawLic);
     setDownloadingId(lic.id);
     try {
-      if (lic.attachmentDataUrl && !lic.attachmentDataUrl.startsWith('data:')) {
-        try {
-          const res = await fetch(lic.attachmentDataUrl);
-          if (res.ok) {
-            const blob = await res.blob();
-            const fileBase = lic.attachmentName || `${lic.title}.pdf`;
-            triggerBlobDownload(blob, sanitizePdfFilename(fileBase));
-            return;
-          }
-        } catch (fetchErr) {
-          console.warn('Direct file download fallback:', fetchErr);
-        }
-      }
-      const regionMeta = getLicenseRegionMeta(lic.region);
-      const pdfBlob = await generateLicensePdfBlob(lic, regionMeta, lang, companyName);
-      const fileBase =
-        lic.attachmentName || `${regionMeta.code}-${lic.licenseNumber || lic.title}`;
+      const pdfBlob = await getLicensePdfBlob(rawLic);
+      const fileBase = lic.attachmentName || `${lic.title}.pdf`;
       triggerBlobDownload(pdfBlob, sanitizePdfFilename(fileBase));
+    } catch (err) {
+      console.error('Failed to download PDF:', err);
     } finally {
       setDownloadingId((curr) => (curr === lic.id ? null : curr));
     }
@@ -743,12 +795,12 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
           aria-labelledby="preview-license-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 overflow-y-auto"
         >
-          <div className="w-full max-w-2xl rounded-2xl border border-white/12 bg-[#14161E] p-5 sm:p-7 shadow-2xl my-8 flex flex-col">
+          <div className="w-full max-w-3xl rounded-2xl border border-[#DDA146]/30 bg-[#120F0A] p-5 sm:p-7 shadow-2xl my-8 flex flex-col text-start">
             {/* Header */}
-            <div className="flex items-start justify-between gap-4 pb-4 border-b border-white/10">
+            <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#DDA146]/20">
               <div className="space-y-1.5">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-code text-xs font-bold tracking-wider px-2 py-0.5 rounded bg-[#DFAF5A]/15 text-[#F6DDA7] border border-[#DFAF5A]/30">
+                  <span className="font-code text-xs font-bold tracking-wider px-2 py-0.5 rounded bg-[#DDA146]/15 text-[#F3C067] border border-[#DDA146]/30">
                     {previewRegionMeta.code}
                   </span>
                   <span className="text-xs text-[#D1D5DB] font-medium">
@@ -786,59 +838,102 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
             {/* Complete License Information Details Grid */}
             <div className="py-5 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl border border-white/8 bg-[#0D0E14]">
+                <div className="p-3.5 rounded-xl border border-[#DDA146]/20 bg-[#070605]">
                   <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.authority}</p>
                   <p className="text-sm font-bold text-[#F8F9FA]">{localizedPreview.authority || '—'}</p>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-white/8 bg-[#0D0E14]">
+                <div className="p-3.5 rounded-xl border border-[#DDA146]/20 bg-[#070605]">
                   <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.number}</p>
-                  <p dir="ltr" className="text-sm font-code font-bold text-[#F6DDA7] rtl:text-right ltr:text-left">
+                  <p dir="ltr" className="text-sm font-code font-bold text-[#F3C067] rtl:text-right ltr:text-left">
                     {localizedPreview.licenseNumber || '—'}
                   </p>
                 </div>
               </div>
 
-              {/* Official Attached File Card with Direct Open & Download Action */}
-              {localizedPreview.attachmentDataUrl && (
-                <div className="p-4 rounded-xl border border-[#DFAF5A]/30 bg-[#DFAF5A]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#DFAF5A]/15 border border-[#DFAF5A]/35 flex items-center justify-center shrink-0">
-                      <FileText className="w-5 h-5 text-[#DFAF5A]" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#F8F9FA] break-all">
-                        {localizedPreview.attachmentName || `${localizedPreview.title}.pdf`}
-                      </p>
-                      <p className="text-[11px] text-[#A9AFBE]">
-                        {isPdfAttachment(localizedPreview.attachmentDataUrl)
-                          ? (lang === 'en' ? 'Official PDF Certificate Document' : lang === 'ku' ? 'بەڵگەنامەی فەرمی PDF' : 'مستند وترخيص رسمي معتمد بصيغة PDF')
-                          : (lang === 'en' ? 'Official Document Image' : lang === 'ku' ? 'وێنەی بەڵگەنامەی فەرمی' : 'صورة الوثيقة المعتمدة')}
-                      </p>
-                    </div>
+              {/* Official Attached File Card with Direct Open Action */}
+              <div className="p-4 rounded-xl border border-[#DDA146]/30 bg-[#DDA146]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-[#DDA146]/15 border border-[#DDA146]/35 flex items-center justify-center shrink-0">
+                    <FileText className="w-5 h-5 text-[#DDA146]" />
                   </div>
-
-                  <a
-                    href={localizedPreview.attachmentDataUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#DFAF5A] hover:bg-[#ECC578] text-[#0B0C10] px-4 py-2 text-xs font-bold transition-colors shrink-0 shadow-sm"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    <span>
-                      {lang === 'en'
-                        ? 'Open Document'
-                        : lang === 'ku'
-                          ? 'کردنەوەی بەڵگەنامە'
-                          : 'عرض المستند الأصلي'}
-                    </span>
-                  </a>
+                  <div>
+                    <p className="text-xs font-bold text-[#F8F9FA] break-all">
+                      {localizedPreview.attachmentName || `${localizedPreview.title}.pdf`}
+                    </p>
+                    <p className="text-[11px] text-[#A9AFBE]">
+                      {isPdfAttachment(localizedPreview.attachmentDataUrl)
+                        ? (lang === 'en' ? 'Official PDF Certificate Document' : lang === 'ku' ? 'بەڵگەنامەی فەرمی PDF' : 'مستند وترخيص رسمي معتمد بصيغة PDF')
+                        : (lang === 'en' ? 'Official Document Certificate' : lang === 'ku' ? 'بەڵگەنامەی فەرمی' : 'شهادة وترخيص رسمي معتمد')}
+                    </p>
+                  </div>
                 </div>
-              )}
+
+                <div className="flex items-center gap-2">
+                  {previewBlobUrl && (
+                    <a
+                      href={previewBlobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-4 py-2 text-xs font-bold transition-all shrink-0 shadow-sm"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === 'en'
+                          ? 'Open Document'
+                          : lang === 'ku'
+                            ? 'کردنەوەی بەڵگەنامە'
+                            : 'عرض المستند الأصلي'}
+                      </span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Real PDF Document Embedded Viewer inside the Modal */}
+              {isLoadingPreview ? (
+                <div className="py-12 flex flex-col items-center justify-center gap-3 text-center rounded-xl border border-[#DDA146]/20 bg-[#070605]">
+                  <div className="w-8 h-8 rounded-full border-2 border-[#DDA146] border-t-transparent animate-spin" />
+                  <p className="text-xs text-[#A9AFBE]">
+                    {lang === 'en' ? 'Loading license document...' : lang === 'ku' ? 'بارکردنی بەڵگەنامە...' : 'جاري تجهيز وعرض مستند الترخيص...'}
+                  </p>
+                </div>
+              ) : previewBlobUrl ? (
+                <div className="rounded-xl overflow-hidden border border-[#DDA146]/25 bg-[#070605] flex flex-col">
+                  <div className="bg-[#0C0A07] px-4 py-2 border-b border-[#DDA146]/20 flex items-center justify-between text-xs text-[#D1D5DB]">
+                    <span className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-[#DDA146]" />
+                      <span className="font-semibold">{localizedPreview.attachmentName || `${localizedPreview.title}.pdf`}</span>
+                    </span>
+                    <a
+                      href={previewBlobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[#DDA146] hover:text-[#F3C067] font-semibold"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? 'Full Screen' : lang === 'ku' ? 'تەواوی شاشە' : 'ملء الشاشة'}</span>
+                    </a>
+                  </div>
+                  <div className="h-[380px] sm:h-[480px] w-full bg-[#120F0A]">
+                    <object
+                      data={previewBlobUrl}
+                      type="application/pdf"
+                      className="w-full h-full"
+                    >
+                      <iframe
+                        src={previewBlobUrl}
+                        title={localizedPreview.title}
+                        className="w-full h-full border-0"
+                      />
+                    </object>
+                  </div>
+                </div>
+              ) : null}
 
               {/* If an image attachment, display thumbnail preview cleanly */}
               {isImageAttachment(localizedPreview.attachmentDataUrl) && localizedPreview.attachmentDataUrl && (
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/60 p-2 flex justify-center">
+                <div className="rounded-xl overflow-hidden border border-[#DDA146]/20 bg-black/60 p-2 flex justify-center">
                   <img
                     src={localizedPreview.attachmentDataUrl}
                     alt={localizedPreview.title}
@@ -850,7 +945,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
             </div>
 
             {/* Footer actions */}
-            <div className="pt-4 flex items-center justify-between gap-3 border-t border-white/10">
+            <div className="pt-4 flex items-center justify-between gap-3 border-t border-[#DDA146]/20">
               <span className="text-xs text-[#8E95A5]">
                 {previewRegionMeta.code} · {localizedPreview.licenseNumber}
               </span>
@@ -858,7 +953,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => setPreviewLicense(null)}
-                  className="rounded-lg border border-white/12 px-4 py-2 text-xs font-semibold text-[#D1D5DB] hover:bg-white/6 cursor-pointer transition-colors"
+                  className="rounded-lg border border-[#DDA146]/30 px-4 py-2 text-xs font-semibold text-[#D1D5DB] hover:bg-white/6 cursor-pointer transition-colors"
                 >
                   {t.closePreview}
                 </button>
@@ -866,7 +961,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                   type="button"
                   disabled={downloadingId === localizedPreview.id}
                   onClick={() => previewLicense && void handleDownloadPdf(previewLicense)}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#DFAF5A] hover:bg-[#ECC578] text-[#0B0C10] px-4 py-2 text-xs font-bold cursor-pointer transition-colors"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-4 py-2 text-xs font-bold cursor-pointer transition-colors shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   <span>
