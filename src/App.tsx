@@ -296,7 +296,7 @@ export default function App() {
   );
 
   const t = UI_COPY[lang];
-  const DirectionalChevron = lang === 'ar' ? ChevronLeft : ChevronRight;
+  const DirectionalChevron = lang === 'en' ? ChevronRight : ChevronLeft;
 
   return (
     <div className="min-h-screen bg-[#090A0E] text-[#F4F5F7] flex flex-col">
@@ -305,7 +305,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto h-10 flex items-center justify-between gap-4 text-xs text-[#9CA3AF]">
           <div className="flex items-center gap-2 truncate">
             <span className="truncate font-latin" dir="ltr">
-              {lang === 'ar' ? profile.contact.locationAr : profile.contact.locationEn}
+              {lang === 'en'
+                ? profile.contact.locationEn
+                : lang === 'ku'
+                  ? profile.contact.locationKu || profile.contact.locationAr
+                  : profile.contact.locationAr}
             </span>
             <span className="hidden sm:inline text-white/20" aria-hidden="true">·</span>
             <a
@@ -324,6 +328,17 @@ export default function App() {
             className="inline-flex items-center gap-1 shrink-0"
           >
             <Globe className="w-3.5 h-3.5 text-[#DFAF5A]" aria-hidden="true" />
+            <button
+              type="button"
+              data-testid="lang-btn-ku"
+              aria-pressed={lang === 'ku'}
+              onClick={() => setLang('ku')}
+              className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                lang === 'ku' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
+              }`}
+            >
+              کوردی
+            </button>
             <button
               type="button"
               data-testid="lang-btn-ar"
@@ -368,7 +383,11 @@ export default function App() {
             <div className="flex items-center gap-2 text-[#F6DDA7]">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="font-bold">
-                {lang === 'en' ? 'Admin Mode Active' : 'وضع الأدمن مفعل'}
+                {lang === 'en'
+                  ? 'Admin Mode Active'
+                  : lang === 'ku'
+                    ? 'دۆخی بەڕێوەبەر چالاکە'
+                    : 'وضع الأدمن مفعل'}
               </span>
             </div>
 
@@ -380,7 +399,11 @@ export default function App() {
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span>
-                  {lang === 'en' ? 'Edit Contact, Socials & Logo' : 'تعديل التواصل والشعار والملفات'}
+                  {lang === 'en'
+                    ? 'Edit Contact, Socials & Logo'
+                    : lang === 'ku'
+                      ? 'دەستکاری پەیوەندی، لۆگۆ و فایلەکان'
+                      : 'تعديل التواصل والشعار والملفات'}
                 </span>
               </button>
               <button
@@ -389,7 +412,7 @@ export default function App() {
                 className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-[#0B0C10] hover:bg-white/6 text-[#E5E7EB] px-3 py-1.5 font-semibold transition-colors cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#DFAF5A]" />
-                <span>{lang === 'en' ? 'Exit Admin' : 'خروج'}</span>
+                <span>{lang === 'en' ? 'Exit Admin' : lang === 'ku' ? 'دەرچوون' : 'خروج'}</span>
               </button>
             </div>
           </div>
@@ -424,11 +447,15 @@ export default function App() {
                 <div className="flex items-center gap-3">
                   <span className="w-8 h-px bg-[#DFAF5A]" aria-hidden="true" />
                   <p className="text-xs sm:text-sm font-latin tracking-wider text-[#DFAF5A] font-semibold">
-                    {lang === 'ar' ? profile.nameEn : profile.nameAr}
+                    {lang === 'en' ? profile.nameAr : profile.nameEn}
                   </p>
                 </div>
                 <h1 id="hero-heading" className="text-3xl sm:text-5xl font-bold text-[#F8F9FA] leading-[1.18] text-balance">
-                  {lang === 'ar' ? profile.nameAr : t.hero.companyName}
+                  {lang === 'en'
+                    ? t.hero.companyName
+                    : lang === 'ku'
+                      ? profile.nameKu || t.hero.companyName
+                      : profile.nameAr}
                 </h1>
                 <p className="text-base sm:text-lg text-[#D1D5DB] leading-relaxed">{t.hero.tagline}</p>
               </div>

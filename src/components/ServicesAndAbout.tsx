@@ -40,10 +40,16 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
   const t = UI_COPY[lang];
 
   const getLocalizedService = (srv: ServiceItem) => {
-    if (lang === 'en' && SERVICE_COPY[srv.id]) {
+    if (lang === 'en' && SERVICE_COPY[srv.id]?.en) {
       return {
         ...srv,
         ...SERVICE_COPY[srv.id].en,
+      };
+    }
+    if (lang === 'ku' && SERVICE_COPY[srv.id]?.ku) {
+      return {
+        ...srv,
+        ...SERVICE_COPY[srv.id].ku,
       };
     }
     return srv;
@@ -94,9 +100,11 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
               <StudioArt
                 variant="about-studio"
                 alt={
-                  lang === 'ar'
-                    ? 'استوديو شركة الخليج للإنتاج الفني للتصوير والمقابلات التلفزيونية'
-                    : 'Abc Gulf Productions Broadcast & Interview Studio'
+                  lang === 'en'
+                    ? 'Abc Gulf Productions Broadcast & Interview Studio'
+                    : lang === 'ku'
+                      ? 'ستۆدیۆی کۆمپانیای ئەی بی سی خەلیج بۆ وێنەگرتن و چاوپێکەوتنی تەلەفزیۆنی'
+                      : 'استوديو أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ للتصوير والمقابلات التلفزيونية'
                 }
                 className="w-full h-full object-cover"
               />
@@ -113,12 +121,20 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                   id="about-heading"
                   className="text-2xl sm:text-4xl font-bold text-[#F8F9FA] leading-[1.2] text-balance"
                 >
-                  {lang === 'ar' ? profile.nameAr : profile.nameEn}
+                  {lang === 'en'
+                    ? profile.nameEn
+                    : lang === 'ku'
+                      ? profile.nameKu || 'ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری'
+                      : profile.nameAr}
                 </h2>
               </div>
 
               <p className="text-base sm:text-lg text-[#D1D5DB] leading-relaxed">
-                {lang === 'ar' ? profile.aboutSummary : t.about.summary}
+                {lang === 'en'
+                  ? t.about.summary
+                  : lang === 'ku'
+                    ? profile.aboutSummaryKu || t.about.summary
+                    : profile.aboutSummary}
               </p>
 
               <div className="rounded-xl border border-white/10 bg-[#12151E] p-5 sm:p-6 flex items-start gap-4">
@@ -128,7 +144,11 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                 <div>
                   <h3 className="text-sm font-bold text-[#F6DDA7] mb-1.5">{t.about.teamTitle}</h3>
                   <p className="text-sm text-[#A9AFBE] leading-relaxed">
-                    {lang === 'ar' ? profile.teamSummary : t.about.teamBody}
+                    {lang === 'en'
+                      ? t.about.teamBody
+                      : lang === 'ku'
+                        ? profile.teamSummaryKu || t.about.teamBody
+                        : profile.teamSummary}
                   </p>
                 </div>
               </div>

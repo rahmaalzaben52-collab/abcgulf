@@ -1,13 +1,19 @@
-export type Language = 'ar' | 'en';
+export type Language = 'ku' | 'ar' | 'en';
 
 export function getDirection(lang: Language): 'rtl' | 'ltr' {
-  return lang === 'ar' ? 'rtl' : 'ltr';
+  return lang === 'en' ? 'ltr' : 'rtl';
 }
 
 export const SERVICE_COPY: Record<
   string,
   {
     en: {
+      title: string;
+      shortDesc: string;
+      fullDesc: string;
+      deliverables: string[];
+    };
+    ku?: {
       title: string;
       shortDesc: string;
       fullDesc: string;
@@ -23,6 +29,13 @@ export const SERVICE_COPY: Record<
         'Concept-to-delivery commercial production including creative scriptwriting, cinema-grade filming, and multi-platform campaign edits.',
       deliverables: ['Creative Scriptwriting', '4K/6K Cinema Filming', 'Social-Ready Cutdowns'],
     },
+    ku: {
+      title: 'بەرهەمهێنانی ڤیدیۆی ڕیکلامی و بازرگانی',
+      shortDesc: 'کەمپینی بینراوی کاریگەر کە ناسنامەی براند دروست دەکات و بینەر ڕادەکێشێت.',
+      fullDesc:
+        'بەرهەمهێنانی ڕیکلامە بازرگانییەکان لە بیرۆکەوە تا ڕادەستکردن، لەوانە نووسینی سیناریۆی داهێنەرانە، وێنەگرتنی سینەمایی، و مۆنتاژی تایبەت بۆ تۆڕە کۆمەڵایەتییەکان.',
+      deliverables: ['نووسینی سیناریۆی داهێنەرانە', 'وێنەگرتنی سینەمایی 4K/6K', 'وەشانی ئامادەکراو بۆ سۆشیاڵ میدیا'],
+    },
   },
   'srv-films-tv': {
     en: {
@@ -31,6 +44,13 @@ export const SERVICE_COPY: Record<
       fullDesc:
         'Full production of short films, documentaries, and television programs led by experienced directors and cinematographers.',
       deliverables: ['Production & Location Management', 'Artistic Direction', 'Broadcast Studio Setup'],
+    },
+    ku: {
+      title: 'کورتەفیلم و بەرنامەی تەلەفزیۆنی',
+      shortDesc: 'گێڕانەوەی چیرۆک لە یەکەم بیرۆکەوە تا کاتی پەخشکردن لەسەر شاشەکان.',
+      fullDesc:
+        'بەرهەمهێنانی تەواوی کورتەفیلم، دۆکیۆمێنتاری و بەرنامەی تەلەفزیۆنی لەژێر چاودێری دەرهێنەر و وێنەگرە بەئەزموونەکان بەپێی ستانداردە نێودەوڵەتییەکان.',
+      deliverables: ['بەڕێوەبردنی بەرهەمهێنان و شوێنەکان', 'دەرهێنانی هونەری پرۆفێشناڵ', 'ئامادەکردنی ستۆدیۆی تەلەفزیۆنی'],
     },
   },
   'srv-cinematography': {
@@ -41,6 +61,13 @@ export const SERVICE_COPY: Record<
         'Event coverage, corporate documentaries, and field shoots captured with modern cinema cameras and precision stabilization.',
       deliverables: ['Multi-Camera Live Coverage', 'Aerial Drone Cinematography', 'Precision Editorial Cut'],
     },
+    ku: {
+      title: 'وێنەگرتن و مۆنتاژی ڤیدیۆ بە کوالیتی سینەمایی',
+      shortDesc: 'هاوێنەی سینەمایی، ڕووناککردنەوەی ستۆدیۆ و مۆنتاژی ورد و خێرا.',
+      fullDesc:
+        'رووماڵی بۆنە و فێستیڤاڵەکان، دۆکیۆمێنتاری کۆمپانیاکان و وێنەگرتنی مەیدانی بە نوێترین کامێرای سینەمایی و سیستەمی جێگیرکردنی پێشکەوتوو.',
+      deliverables: ['رووماڵی ڕاستەوخۆ بە چەندین کامێرا', 'وێنەگرتنی ئاسمانی بە درۆن (Drone)', 'مۆنتاژی پرۆفێشناڵ و ورد'],
+    },
   },
   'srv-podcast': {
     en: {
@@ -49,6 +76,13 @@ export const SERVICE_COPY: Record<
       fullDesc:
         'Audio and video podcast recording featuring broadcast microphones, warm studio lighting, and clean audio engineering.',
       deliverables: ['Audio Mastering & Cleanup', '3-Angle Video Setup', 'Short-Form Highlights'],
+    },
+    ku: {
+      title: 'بەرهەمهێنانی پۆدکاست و چاوپێکەوتن',
+      shortDesc: 'ستۆدیۆی بێدەنگکراوی ئەکۆستیک لەگەڵ وێنەگرتنی فرە گۆشە (Multi-Angle).',
+      fullDesc:
+        'تۆمارکردنی پۆدکاستی دەنگی و بینراو بە مایکرۆفۆنی پەخشی فەرمی، ڕووناککردنەوەی گەرمی ستۆدیۆ و ئەندازیاری دەنگی بێگەرد.',
+      deliverables: ['پاککردنەوە و ماستەرینگی دەنگ', 'وێنەگرتنی هاوکات بە 3 گۆشە', 'بڕگەی کورت بۆ ڕیلز و تیکتۆک'],
     },
   },
   'srv-post': {
@@ -59,10 +93,164 @@ export const SERVICE_COPY: Record<
         'Complete post-production suite covering narrative editing, color grading, motion graphics, and broadcast audio mastering.',
       deliverables: ['Cinema Color Grading', 'Motion Graphics & VFX', 'Broadcast Audio Mixing'],
     },
+    ku: {
+      title: 'خزمەتگوزارییە گشتگیرەکانی دوای بەرهەمهێنان (Post-Production)',
+      shortDesc: 'مۆنتاژ، ڕەنگڕێژی سینەمایی (Color Grading)، کاریگەری بینراو (VFX) و میکسینی دەنگ.',
+      fullDesc:
+        'ستۆدیۆی تەواوی دوای بەرهەمهێنان کە مۆنتاژی درامی، ڕەنگڕێژی سینەمایی، مووشەن گرافیک و ماستەرینگی دەنگی پەخش لەخۆدەگرێت.',
+      deliverables: ['ڕەنگڕێژی سینەمایی پێشکەوتوو', 'مووشەن گرافیک و VFX', 'میکسینگ و ماستەرینگی دەنگ'],
+    },
   },
 };
 
 export const UI_COPY = {
+  ku: {
+    nav: {
+      hero: 'سەرەکی',
+      services: 'خزمەتگوزارییەکان',
+      about: 'دەربارە',
+      licenses: 'مۆڵەتەکان',
+      contact: 'پەیوەندی',
+      openMenu: 'کردنەوەی پێڕست',
+      closeMenu: 'داخستنی پێڕست',
+    },
+    hero: {
+      companyName: 'کۆمپانیای ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری',
+      tagline:
+        'بیرۆکەکان دەگۆڕین بۆ ئەزموونی بینراوی سەرنجڕاکێش کە کاریگەرییەکی هەمیشەیی جێدەهێڵێت — چارەسەری نوێ و گشتگیر لە پیشەسازی میدیای بینراو و بیستراودا.',
+      ctaServices: 'خزمەتگوزارییەکانمان ببینە',
+      ctaYoutube: 'کەناڵی یووتیووب',
+      hint3d: 'ماوس بجوڵێنە یان بۆ خوارەوە بڕۆ بۆ کارلێککردن لەگەڵ ستۆدیۆ، یان ڕابکێشە بۆ سووڕانەوە',
+      publicHint3d: 'ماوس بجوڵێنە یان بۆ خوارەوە بڕۆ بۆ کارلێککردن لەگەڵ ستۆدیۆی سێ ڕەهەندی',
+      openCustomizer: 'ڕێکخستنی لۆگۆ و فایلی 3D',
+      langLabel: 'زمان',
+    },
+    dock: {
+      cinematic: 'سینەمایی',
+      front: 'پێشەوە',
+      lens: 'هاوێنە',
+      wide: 'فراوان',
+      rotate: 'سووڕانەوە',
+      upload: 'بارکردنی 3D',
+      hide: 'شاردنەوە',
+      show: 'کۆنتڕۆڵ',
+      restore: 'گەڕاندنەوەی بنەڕەتی',
+      loadedPrefix: 'مۆدێل بارکرا:',
+      parseError: 'فایلەکە نەخوێندرایەوە. تکایە دڵنیابە فایلی GLB یان GLTF دروستە.',
+    },
+    expertiseStripTitle: 'بوارەکانی شارەزایی',
+    about: {
+      kicker: 'دەربارەی کۆمپانیا و تیمی داهێنەر',
+      summary:
+        'کۆمپانیای ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری کۆمپانیایەکی پێشەنگە لە بواری میدیا و بەرهەمهێنانی بینراو و بیستراو، تایبەتمەندە لە پێشکەشکردنی چارەسەری نوێ و گشتگیر لە پیشەسازی ناوەڕۆکی میدیایی کە هەوڵدەدات بیرۆکەکان بگۆڕێت بۆ ئەزموونی بینراوی سەرنجڕاکێش.',
+      teamTitle: 'تیمی کاری یەکگرتوو',
+      teamBody:
+        'تیمەکە لە کۆمەڵێک کەسایەتی پیشەگەر لە دەرهێنان، وێنەگرتن، مۆنتاژ و نووسینی داهێنەرانە پێکهاتووە، کە بە هەماهەنگی تەواو کاردەکەن بۆ دڵنیابوون لە بەرزترین ئاستی کوالیتی سینەمایی و دەنگی لە هەر پڕۆژەیەکدا.',
+      ctaServices: 'بینینی خزمەتگوزارییە وردەکان',
+      ctaYoutube: 'سەردانی کەناڵی یووتیووب بکە',
+    },
+    services: {
+      kicker: 'خزمەتگوزارییەکانمان',
+      heading: 'چارەسەری بەرهەمهێنانی میدیایی پرۆفێشناڵ',
+      subheading: 'ئێمە تەواوی قۆناغەکانی بەرهەمهێنانی بینراو و بیستراو لە سەرەتای بیرۆکەوە تا بڵاوکردنەوەی دیجیتاڵی و پەخش دەگرینە ئەستۆ.',
+      detailsBtn: 'بینینی وردەکاری و دەستکەوتەکان',
+      modalOrderPrefix: 'خزمەتگوزاری ژمارە',
+      deliverablesTitle: 'گرنگترین دەستکەوتەکان:',
+      close: 'داخستن',
+      quoteBtn: 'داوای نرخ بکە بۆ ئەم خزمەتگوزارییە',
+      processTitle: 'قۆناغەکانی بەرهەمهێنانمان',
+      steps: [
+        { step: '01', title: 'بیرۆکە', desc: 'تێگەیشتن لە دیدگاکەت و داڕشتنی چارەسەری داهێنەرانە' },
+        { step: '02', title: 'پلاندانان', desc: 'خشتەی وێنەگرتن و هەڵبژاردنی شوێن و ستافی بەرهەمهێنان' },
+        { step: '03', title: 'بەرهەمهێنان', desc: 'جێبەجێکردنی وێنەگرتن و تۆمارکردن بە نوێترین ئامێری سینەمایی' },
+        { step: '04', title: 'ڕادەستکردن', desc: 'مۆنتاژ، ڕەنگڕێژی و ڕادەستکردن بە بەرزترین کوالیتی' },
+      ],
+    },
+    goldBanner: {
+      title: 'با پێکەوە بەرهەمێکی داهێنەرانەی ناوازە دروست بکەین کە کاریگەرییەکی هەمیشەیی جێبهێڵێت',
+      cta: 'ئێستا پڕۆژەکەت دەست پێبکە',
+    },
+    licenses: {
+      kicker: 'متمانەپێدانی فەرمی و مۆڵەتە هەرێمییەکان',
+      heading: 'مۆڵەت و بڕوانامە پەسەندکراوەکان',
+      subheading:
+        'تۆمارێکی بەڵگەدار بۆ مۆڵەتەکانی بەرهەمهێنانی میدیایی و بازرگانی بەپێی وڵات، لەگەڵ توانای بینین و دابەزاندنی فایلی فەرمی PDF.',
+      publicSubheading:
+        'کۆمپانیای ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری پابەندە بە سەرجەم ڕێنمایی و مۆڵەتە فەرمییە پەسەندکراوەکان لە هەموو ئەو وڵاتانەی کاریان تێدا دەکات.',
+      allRegions: 'هەموو وڵاتان',
+      addBtn: 'زیادکردنی مۆڵەتی نوێ',
+      addToRegionBtn: 'زیادکردنی مۆڵەت بۆ ئەم وڵاتە',
+      manageBtn: 'بەڕێوەبردنی لۆگۆ و فایلەکان',
+      emptyTitle: 'لە ئێستادا هیچ مۆڵەتێک بۆ ئەم وڵاتە زیاد نەکراوە',
+      emptyDesc: 'دەتوانیت مۆڵەت و فایلە فەرمییەکانی ئەم وڵاتە زیاد بکەیت بۆ ئەوەی لەلایەن کڕیارانەوە ببینرێت و دابەزێنرێت.',
+      addFirstBtn: 'زیادکردنی مۆڵەتی نوێ',
+      fields: {
+        region: 'وڵات / هەرێم',
+        number: 'ژمارەی مۆڵەت',
+        issue: 'بەرواری دەرچوون',
+        expiry: 'بەرواری بەسەرچوون',
+        authority: 'لایەنی بەخشەر',
+        validity: 'ماوەی کارایی',
+        category: 'پۆلێن / بوار',
+      },
+      pdfAttached: 'فایلی فەرمی هاوپێچە',
+      pdfReady: 'ئامادەیە بۆ دابەزاندن',
+      viewDoc: 'پیشاندان',
+      viewDetails: 'وردەکاری',
+      downloadPdf: 'دابەزاندنی PDF',
+      downloadingPdf: 'ئامادەکردن...',
+      closePreview: 'داخستنی پێشبینین',
+      modalAddTitle: 'زیادکردنی مۆڵەت یان بڕوانامەی نوێ',
+      modalEditTitle: 'دەستکاریکردنی زانیاری مۆڵەت',
+      formRegion: 'وڵات / هەرێم *',
+      formTitle: 'ناوی مۆڵەت / بڕوانامە *',
+      formAuthority: 'لایەنی بەخشەر *',
+      formNumber: 'ژمارەی فەرمی مۆڵەت *',
+      formCategory: 'بوار / پۆلێن *',
+      formIssue: 'بەرواری دەرچوون *',
+      formExpiry: 'بەرواری بەسەرچوون *',
+      formNotes: 'تێبینی زیاتر',
+      formAttachment: 'بارکردنی فایلی مۆڵەت بە شێوازی PDF',
+      chooseFile: 'فایلی PDF هەڵبژێرە',
+      removeFile: 'سڕینەوەی فایل',
+      cancel: 'پاشگەزبوونەوە',
+      saveEdit: 'پاشەکەوتکردنی گۆڕانکارییەکان',
+      saveNew: 'پاشەکەوت و زیادکردنی مۆڵەت',
+      downloadDoc: 'دابەزاندنی فایلی PDF',
+      countSingle: 'یەک مۆڵەت',
+      countPlural: 'مۆڵەت',
+    },
+    contact: {
+      kicker: 'پەیوەندیمان پێوە بکەن',
+      heading: 'با پێکەوە پڕۆژەی داهاتووتان دروست بکەین',
+      subheading:
+        'پەیوەندی بە تیمی کۆمپانیای ئەی بی سی خەلیج بکەن بۆ تاوتوێکردنی بیرۆکەی ڕیکلام، فیلم، یان گرتنی ستۆدیۆی پۆدکاست.',
+      directTitle: 'زانیاری پەیوەندی ڕاستەوخۆ',
+      phoneHint: 'هەر کاتێک بێت پەیوەندیمان پێوە بکەن',
+      emailHint: 'لە ڕێگەی ئیمەیڵ / Gmail نامە بنێرن',
+      locationHint: 'ناونیشانی بنکەی سەرەکی و ستۆدیۆ',
+      socialHeading: 'کەناڵی یووتیووب و تۆڕە کۆمەڵایەتییەکان',
+      formTitle: 'نامەیەکمان بۆ بنێرە',
+      successTitle: 'نامەکەت بە سەرکەوتوویی گەیشت، بەڕێز',
+      successSub: 'تیمی بەرهەمهێنانمان لە ڕێگەی ئیمەیڵەوە پەیوەندیت پێوە دەکات',
+      nameLabel: 'ناوی تەواو *',
+      namePlaceholder: 'ناوی خۆت بنووسە',
+      emailLabel: 'ئیمەیڵ / Gmail *',
+      subjectLabel: 'بابەتی پڕۆژە',
+      subjectPlaceholder: 'ڕیکلامی بازرگانی، پۆدکاست، کورتەفیلم...',
+      messageLabel: 'دەقی نامە *',
+      messagePlaceholder: 'وردەکاری بیرۆکەکەت یان داواکاری بەرهەمهێنانمان بۆ بنووسە...',
+      submitBtn: 'ناردنی نامە',
+      ourLocation: 'ناونیشانمان',
+      locationDesc:
+        'خۆشحاڵین بە پێشوازیکردنتان لە ستۆدیۆ و بنکەی کۆمپانیا لە هەولێر بۆ تاوتوێکردنی پڕۆژە میدیاییەکانتان و ڕێکخستنی کاتی وێنەگرتن.',
+      openMaps: 'کردنەوەی شوێن لە گووگڵ ماپس',
+    },
+    footer: {
+      tagline: 'میدیا . داهێنان . کاریگەری',
+      customize: 'ڕێکخستنی لۆگۆ و فایلی 3D',
+    },
+  },
   ar: {
     nav: {
       hero: 'الرئيسية',
@@ -74,7 +262,7 @@ export const UI_COPY = {
       closeMenu: 'إغلاق القائمة',
     },
     hero: {
-      companyName: 'شركة الخليج للإنتاج الفني',
+      companyName: 'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ',
       tagline:
         'نحوّل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور — حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي المرئي والسمعي.',
       ctaServices: 'استكشف خدماتنا',
@@ -101,7 +289,7 @@ export const UI_COPY = {
     about: {
       kicker: 'نبذة عن الشركة والفريق الإبداعي',
       summary:
-        'شركة الخليج للإنتاج الفني هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
+        'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
       teamTitle: 'فريق عمل متكامل',
       teamBody:
         'يتألف الفريق من مجموعة من محترفي الإخراج والتصوير والتحرير والكتابة الإبداعية، يعملون بتكامل تام لضمان أعلى معايير الجودة السينمائية والسمعية في كل مشروع.',
@@ -135,7 +323,7 @@ export const UI_COPY = {
       subheading:
         'سجل موثق لتراخيص الإنتاج الإعلامي والتجاري حسب الدولة، مع إمكانية رفع ملفات PDF وتنظيمها وتنزيلها عبر وضع الأدمن.',
       publicSubheading:
-        'تلتزم شركة الخليج للإنتاج الفني بكافة الضوابط والتراخيص الرسمية المعتمدة في جميع الدول التي تعمل بها، مع إمكانية معاينة وتنزيل ملفات PDF.',
+        'تلتزم أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ بكافة الضوابط والتراخيص الرسمية المعتمدة في جميع الدول التي تعمل بها، مع إمكانية معاينة وتنزيل ملفات PDF.',
       allRegions: 'كل الدول',
       addBtn: 'إضافة ترخيص جديد',
       addToRegionBtn: 'إضافة ترخيص لهذه الدولة',
@@ -183,7 +371,7 @@ export const UI_COPY = {
       kicker: 'تواصل معنا',
       heading: 'لنصنع مشروعك القادم معاً',
       subheading:
-        'تواصل مع فريق شركة الخليج للإنتاج الفني لمناقشة فكرتك الإعلانية أو التلفزيونية أو حجز استوديو البودكاست.',
+        'تواصل مع فريق أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ لمناقشة فكرتك الإعلانية أو التلفزيونية أو حجز استوديو البودكاست.',
       directTitle: 'معلومات الاتصال المباشر',
       phoneHint: 'اتصل بنا في أي وقت',
       emailHint: 'راسلنا عبر البريد الإلكتروني / Gmail',
@@ -248,7 +436,7 @@ export const UI_COPY = {
     about: {
       kicker: 'About Us & Creative Team',
       summary:
-        'Abc Gulf Productions (شركة الخليج للإنتاج الفني) is a leading media and audiovisual production company specialized in delivering innovative, comprehensive content solutions — transforming concepts into engaging visual experiences that leave a lasting impact.',
+        'Abc Gulf Productions (أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ) is a leading media and audiovisual production company specialized in delivering innovative, comprehensive content solutions — transforming concepts into engaging visual experiences that leave a lasting impact.',
       teamTitle: 'Multidisciplinary Creative Team',
       teamBody:
         'Our team brings together seasoned professionals in directing, cinematography, editing, and creative writing, collaborating seamlessly to deliver cinema-grade visual and audio quality.',

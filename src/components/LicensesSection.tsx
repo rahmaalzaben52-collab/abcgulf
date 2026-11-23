@@ -332,7 +332,12 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
 
           {regionalGroups.map(({ region, items }) => {
             const active = selectedRegion === region.id;
-            const label = lang === 'ar' ? region.labelAr : region.labelEn;
+            const label =
+              lang === 'ku'
+                ? region.labelKu || region.labelAr
+                : lang === 'ar'
+                  ? region.labelAr
+                  : region.labelEn;
             return (
               <button
                 key={region.id}
@@ -383,7 +388,12 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
         ) : (
           <div data-testid="licenses-grouped-container" className="space-y-10">
             {visibleGroups.map(({ region, items }) => {
-              const regionTitle = lang === 'ar' ? region.labelAr : region.labelEn;
+              const regionTitle =
+                lang === 'ku'
+                  ? region.labelKu || region.labelAr
+                  : lang === 'ar'
+                    ? region.labelAr
+                    : region.labelEn;
               const countLabel =
                 lang === 'ar'
                   ? items.length === 1
@@ -576,7 +586,11 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                 >
                   {LICENSE_REGIONS.map((region) => (
                     <option key={region.id} value={region.id}>
-                      {lang === 'ar' ? region.labelAr : region.labelEn}
+                      {lang === 'ku'
+                        ? region.labelKu || region.labelAr
+                        : lang === 'ar'
+                          ? region.labelAr
+                          : region.labelEn}
                     </option>
                   ))}
                 </select>
@@ -743,7 +757,12 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
             <div className="flex items-center justify-between gap-4 pb-3 border-b border-white/10">
               <div>
                 <p className="text-xs font-semibold text-[#DFAF5A] mb-1">
-                  {previewRegionMeta.code} · {lang === 'ar' ? previewRegionMeta.labelAr : previewRegionMeta.labelEn}
+                  {previewRegionMeta.code} ·{' '}
+                  {lang === 'ku'
+                    ? previewRegionMeta.labelKu || previewRegionMeta.labelAr
+                    : lang === 'ar'
+                      ? previewRegionMeta.labelAr
+                      : previewRegionMeta.labelEn}
                 </p>
                 <h3 id="preview-license-title" className="text-lg font-bold text-[#F8F9FA]">
                   {localizedPreview.title}

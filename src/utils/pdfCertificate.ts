@@ -203,7 +203,7 @@ export async function generateLicensePdfBlob(
   ctx.lineWidth = 1.5;
   ctx.strokeRect(64, 64, width - 128, height - 128);
 
-  const isRtl = lang === 'ar';
+  const isRtl = lang === 'ar' || lang === 'ku';
   ctx.direction = isRtl ? 'rtl' : 'ltr';
   ctx.textAlign = isRtl ? 'right' : 'left';
   const anchorX = isRtl ? width - 110 : 110;
@@ -218,8 +218,14 @@ export async function generateLicensePdfBlob(
   ctx.textAlign = isRtl ? 'left' : 'right';
   ctx.fillStyle = '#F6DDA7';
   ctx.font = '700 22px Outfit, Cairo, sans-serif';
+  const regionLabel =
+    lang === 'ku'
+      ? regionMeta.labelKu || regionMeta.labelAr
+      : isRtl
+        ? regionMeta.labelAr
+        : regionMeta.labelEn;
   ctx.fillText(
-    `${regionMeta.code} · ${isRtl ? regionMeta.labelAr : regionMeta.labelEn}`,
+    `${regionMeta.code} · ${regionLabel}`,
     oppX,
     138,
   );
@@ -237,7 +243,11 @@ export async function generateLicensePdfBlob(
   ctx.fillStyle = '#DFAF5A';
   ctx.font = '600 22px Cairo, Outfit, sans-serif';
   ctx.fillText(
-    isRtl ? 'وثيقة اعتماد وترخيص رسمي' : 'Official Accreditation & License Record',
+    lang === 'ku'
+      ? 'بەڵگەنامەی پەسەندکردن و مۆڵەتی فەرمی'
+      : isRtl
+        ? 'وثيقة اعتماد وترخيص رسمي'
+        : 'Official Accreditation & License Record',
     anchorX,
     235,
   );
@@ -255,12 +265,30 @@ export async function generateLicensePdfBlob(
   // Metadata grid box
   y += 26;
   const rows: Array<[string, string]> = [
-    [isRtl ? 'الدولة / المنطقة' : 'Country / Region', isRtl ? regionMeta.labelAr : regionMeta.labelEn],
-    [isRtl ? 'الجهة المانحة' : 'Issuing Authority', license.authority],
-    [isRtl ? 'المجال / الفئة' : 'Category', license.category],
-    [isRtl ? 'رقم الترخيص' : 'License Number', license.licenseNumber],
-    [isRtl ? 'تاريخ الإصدار' : 'Issue Date', license.issueDate],
-    [isRtl ? 'تاريخ الانتهاء' : 'Expiry Date', license.expiryDate],
+    [
+      isRtl ? (lang === 'ku' ? 'وڵات / ناوچە' : 'الدولة / المنطقة') : 'Country / Region',
+      regionLabel,
+    ],
+    [
+      isRtl ? (lang === 'ku' ? 'لایەنی دەرکەر' : 'الجهة المانحة') : 'Issuing Authority',
+      license.authority,
+    ],
+    [
+      isRtl ? (lang === 'ku' ? 'بوار / جۆر' : 'المجال / الفئة') : 'Category',
+      license.category,
+    ],
+    [
+      isRtl ? (lang === 'ku' ? 'ژمارەی مۆڵەت' : 'رقم الترخيص') : 'License Number',
+      license.licenseNumber,
+    ],
+    [
+      isRtl ? (lang === 'ku' ? 'بەرواری دەرچوون' : 'تاريخ الإصدار') : 'Issue Date',
+      license.issueDate,
+    ],
+    [
+      isRtl ? (lang === 'ku' ? 'بەرواری بەسەرچوون' : 'تاريخ الانتهاء') : 'Expiry Date',
+      license.expiryDate,
+    ],
   ];
 
   const boxHeight = rows.length * 76 + 32;

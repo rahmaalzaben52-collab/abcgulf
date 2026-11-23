@@ -9,8 +9,10 @@ export interface LicenseRegionMeta {
   code: string;
   labelAr: string;
   labelEn: string;
+  labelKu?: string;
   subtitleAr: string;
   subtitleEn: string;
+  subtitleKu?: string;
 }
 
 export const LICENSE_REGIONS: LicenseRegionMeta[] = [
@@ -19,40 +21,50 @@ export const LICENSE_REGIONS: LicenseRegionMeta[] = [
     code: 'EBL',
     labelAr: 'أربيل',
     labelEn: 'Erbil',
+    labelKu: 'هەولێر',
     subtitleAr: 'التراخيص الرسمية والسجلات المعتمدة في المقر الرئيسي بأربيل',
     subtitleEn: 'Official corporate & studio licenses at our Erbil headquarters',
+    subtitleKu: 'مۆڵەتە فەرمییەکان و تۆمارە باوەڕپێکراوەکان لە بنکەی سەرەکی لە هەولێر',
   },
   {
     id: 'oman',
     code: 'OMN',
     labelAr: 'سلطنة عُمان',
     labelEn: 'Oman',
+    labelKu: 'سەڵتەنەتی عومان',
     subtitleAr: 'تراخيص التصوير والإنتاج الفني في سلطنة عُمان',
     subtitleEn: 'Filming & audiovisual production licenses in Oman',
+    subtitleKu: 'مۆڵەتەکانی وێنەگرتن و بەرهەمهێنانی هونەری لە عومان',
   },
   {
     id: 'kuwait',
     code: 'KWT',
     labelAr: 'دولة الكويت',
     labelEn: 'Kuwait',
+    labelKu: 'کووەیت',
     subtitleAr: 'التصاريح الإعلامية والسينمائية المعتمدة في الكويت',
     subtitleEn: 'Approved broadcast & film production permits in Kuwait',
+    subtitleKu: 'مۆڵەتەکانی بەرهەمهێنانی میدیایی و بەرنامەکان لە کووەیت',
   },
   {
     id: 'saudi',
     code: 'KSA',
     labelAr: 'المملكة العربية السعودية',
     labelEn: 'Saudi Arabia',
+    labelKu: 'عەرەبستانی سعوودی',
     subtitleAr: 'اعتمادات وتصاريح الإنتاج الإعلامي داخل المملكة',
     subtitleEn: 'Media production permits & regulatory approvals in Saudi Arabia',
+    subtitleKu: 'ڕێگەپێدان و مۆڵەتەکانی بەرهەمهێنانی میدیایی لە سعوودیە',
   },
   {
     id: 'uae',
     code: 'UAE',
     labelAr: 'الإمارات العربية المتحدة',
     labelEn: 'United Arab Emirates',
+    labelKu: 'ئیمارات',
     subtitleAr: 'تراخيص الإنتاج التجاري والسينمائي في الإمارات',
     subtitleEn: 'Commercial & cinema production accreditations in the UAE',
+    subtitleKu: 'مۆڵەتەکانی بەرهەمهێنانی بازرگانی و سینەمایی لە ئیمارات',
   },
 ];
 
@@ -124,16 +136,21 @@ export interface ContactInfo {
   email: string;
   locationAr: string;
   locationEn: string;
+  locationKu?: string;
   mapsUrl: string;
 }
 
 export interface CompanyProfile {
   nameAr: string;
   nameEn: string;
+  nameKu?: string;
   taglineAr: string;
   taglineEn: string;
+  taglineKu?: string;
   aboutSummary: string;
+  aboutSummaryKu?: string;
   teamSummary: string;
+  teamSummaryKu?: string;
   logoDataUrl: string | null;
   customModelName: string | null;
   contact: ContactInfo;
@@ -172,21 +189,28 @@ export const LANG_STORAGE_KEY = 'abc_gulf_lang_v1';
 export const DEFAULT_LOGO_URL = '/assets/abc-gulf-logo.png';
 
 export const DEFAULT_PROFILE: CompanyProfile = {
-  nameAr: 'شركة الخليج للإنتاج الفني',
-  nameEn: 'Abc gulf productions',
-  taglineAr: 'نحوّل الأفكار إلى تجارب بصرية ملهمة',
+  nameAr: 'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ',
+  nameEn: 'Abc Gulf Productions',
+  nameKu: 'ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری',
+  taglineAr: 'نَحْوُ الأَفْكَارِ إِلَى تَجَارِبَ بَصَرِيَّةٍ مُلْهِمَةٍ',
   taglineEn: 'Media. Creativity. Impact.',
+  taglineKu: 'میدیا . داهێنان . کاریگەری',
   aboutSummary:
-    'شركة الخليج للإنتاج الفني هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
+    'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
+  aboutSummaryKu:
+    'کۆمپانیای ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری کۆمپانیایەکی پێشەنگە لە بواری میدیا و بەرهەمهێنانی بینراو و بیستراو، تایبەتمەندە لە پێشکەشکردنی چارەسەری نوێ و گشتگیر لە پیشەسازی ناوەڕۆکی میدیایی کە هەوڵدەدات بیرۆکەکان بگۆڕێت بۆ ئەزموونی بینراوی سەرنجڕاکێش.',
   teamSummary:
-    'يتألف الفريق من مجموعة من محترفي الإخراج والتصوير والتحرير والكتابة الإبداعية، يعملون بتكامل تام لضمان أعلى معايير الجودة السينمائية والسمعية في كل مشروع.',
+    'يتألف الفريق من نخبة من المحترفين في الإخراج والتصوير والتحرير والمونتاج والكتابة الإبداعية، يعملون بتكامل تام لضمان أعلى معايير الجودة السينمائية والسمعية في كل مشروع.',
+  teamSummaryKu:
+    'تیمەکە لە کۆمەڵێک کەسایەتی پیشەگەر لە دەرهێنان، وێنەگرتن، مۆنتاژ و نووسینی داهێنەرانە پێکهاتووە، کە بە هەماهەنگی تەواو کاردەکەن بۆ دڵنیابوون لە بەرزترین ئاستی کوالیتی سینەمایی و دەنگی لە هەر پڕۆژەیەکدا.',
   logoDataUrl: DEFAULT_LOGO_URL,
   customModelName: null,
   contact: {
     phone: '+964 751 524 1452',
     email: 'Abc.productions2030@gmail.com',
-    locationAr: 'Erbil - Boulevard - B2-12-253',
+    locationAr: 'أربيل - البوليفارد - B2-12-253',
     locationEn: 'Erbil - Boulevard - B2-12-253',
+    locationKu: 'هەولێر - بۆلیڤارد - B2-12-253',
     mapsUrl: 'https://maps.google.com/?q=Erbil+Boulevard',
   },
   socials: {
@@ -519,13 +543,16 @@ export function saveStoredConfig(profile: CompanyProfile, licenses: LicenseRecor
 
 export function loadStoredLanguage(): Language {
   if (typeof window === 'undefined' || !window.localStorage) {
-    return 'ar';
+    return 'ku';
   }
   try {
     const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-    return stored === 'en' ? 'en' : 'ar';
+    if (stored === 'ku' || stored === 'ar' || stored === 'en') {
+      return stored as Language;
+    }
+    return 'ku';
   } catch {
-    return 'ar';
+    return 'ku';
   }
 }
 

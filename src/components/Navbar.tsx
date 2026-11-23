@@ -35,8 +35,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = UI_COPY[lang].nav;
-  const displayName = lang === 'ar' ? profile.nameAr : profile.nameEn;
-  const DirectionalChevron = lang === 'ar' ? ChevronLeft : ChevronRight;
+  const displayName =
+    lang === 'en'
+      ? profile.nameEn
+      : lang === 'ku'
+        ? profile.nameKu || 'ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری'
+        : profile.nameAr;
+  const DirectionalChevron = lang === 'en' ? ChevronRight : ChevronLeft;
 
   const navLinks = [
     { id: 'hero', label: t.hero },
@@ -146,9 +151,21 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="pt-2 flex items-center justify-between gap-2 border-t border-white/8">
             <span className="inline-flex items-center gap-1.5 text-xs text-[#9CA3AF]">
               <Globe className="w-3.5 h-3.5 text-[#DFAF5A]" />
-              <span>{lang === 'ar' ? 'اللغة' : 'Language'}</span>
+              <span>{lang === 'en' ? 'Language' : lang === 'ku' ? 'زمان' : 'اللغة'}</span>
             </span>
             <div className="inline-flex rounded-lg border border-white/12 bg-[#0B0C10] p-0.5">
+              <button
+                type="button"
+                onClick={() => {
+                  onToggleLanguage('ku');
+                  setMobileMenuOpen(false);
+                }}
+                className={`px-2.5 py-1 rounded text-xs font-semibold cursor-pointer ${
+                  lang === 'ku' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3]'
+                }`}
+              >
+                کوردی
+              </button>
               <button
                 type="button"
                 onClick={() => {

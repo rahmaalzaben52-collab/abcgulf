@@ -562,9 +562,11 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#090A0E] p-6 text-center z-10">
           <Camera className="w-10 h-10 text-[#DFAF5A] mb-3" />
           <p className="text-sm text-[#E5E7EB] font-semibold">
-            {lang === 'ar'
-              ? 'تعذر تشغيل محرك العرض ثلاثي الأبعاد على هذا المتصفح.'
-              : '3D WebGL renderer could not initialize in this browser.'}
+            {lang === 'en'
+              ? '3D WebGL renderer could not initialize in this browser.'
+              : lang === 'ku'
+                ? 'مۆتۆری نمایشی سێ دووری لەسەر ئەم وێبگەڕە کار ناکات.'
+                : 'تعذر تشغيل محرك العرض ثلاثي الأبعاد على هذا المتصفح.'}
           </p>
         </div>
       )}

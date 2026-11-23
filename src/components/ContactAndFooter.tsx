@@ -40,9 +40,19 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
 }) => {
   const t = UI_COPY[lang].contact;
   const f = UI_COPY[lang].footer;
-  const DirectionalChevron = lang === 'ar' ? ChevronLeft : ChevronRight;
-  const displayName = lang === 'ar' ? profile.nameAr : profile.nameEn;
-  const displayLocation = lang === 'ar' ? profile.contact.locationAr : profile.contact.locationEn;
+  const DirectionalChevron = lang === 'en' ? ChevronRight : ChevronLeft;
+  const displayName =
+    lang === 'en'
+      ? profile.nameEn
+      : lang === 'ku'
+        ? profile.nameKu || 'ئەی بی سی خەلیج بۆ بەرهەمهێنانی هونەری'
+        : profile.nameAr;
+  const displayLocation =
+    lang === 'en'
+      ? profile.contact.locationEn
+      : lang === 'ku'
+        ? profile.contact.locationKu || profile.contact.locationAr
+        : profile.contact.locationAr;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -71,7 +81,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
     const toEmail = profile.contact.email;
     const mailSubject = encodeURIComponent(res.data.subject);
     const mailBody = encodeURIComponent(
-      `${lang === 'ar' ? 'الاسم' : 'Name'}: ${res.data.name}\n${lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}: ${res.data.email}\n\n${res.data.message ?? message.trim()}`
+      `${lang === 'en' ? 'Name' : lang === 'ku' ? 'ناو' : 'الاسم'}: ${res.data.name}\n${lang === 'en' ? 'Email' : lang === 'ku' ? 'ئیمەیڵ' : 'البريد الإلكتروني'}: ${res.data.email}\n\n${res.data.message ?? message.trim()}`
     );
     window.location.href = `mailto:${toEmail}?subject=${mailSubject}&body=${mailBody}`;
 
@@ -266,9 +276,11 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
               <StudioArt
                 variant="amman-map"
                 alt={
-                  lang === 'ar'
-                    ? 'خريطة موقع شركة الخليج للإنتاج الفني في أربيل بوليفارد'
-                    : 'Abc Gulf Productions location map at Erbil Boulevard'
+                  lang === 'en'
+                    ? 'Abc Gulf Productions location map at Erbil Boulevard'
+                    : lang === 'ku'
+                      ? 'نەخشەی شوێنی کۆمپانیای ئەی بی سی خەلیج لە هەولێر بۆلیڤارد'
+                      : 'خريطة موقع شركة أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ في أربيل بوليفارد'
                 }
                 className="h-full"
               />
@@ -312,14 +324,27 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#9CA3AF]">
             <span>{f.tagline}</span>
             <span aria-hidden="true">·</span>
-            <button
-              type="button"
-              onClick={() => onToggleLanguage(lang === 'ar' ? 'en' : 'ar')}
-              className="inline-flex items-center gap-1.5 text-[#C5C9D3] hover:text-[#DFAF5A] font-medium cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#DFAF5A]" />
-              <span>{lang === 'ar' ? 'English' : 'العربية'}</span>
-            </button>
+            <div className="inline-flex items-center gap-1 rounded-md bg-white/5 p-0.5 border border-white/10">
+              <Globe className="w-3.5 h-3.5 text-[#DFAF5A] mx-1" />
+              {(['ku', 'ar', 'en'] as const).map((code) => {
+                const label = code === 'ku' ? 'کوردی' : code === 'ar' ? 'العربية' : 'English';
+                const isActive = lang === code;
+                return (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => onToggleLanguage(code)}
+                    className={`px-2 py-0.5 text-[11px] font-medium rounded transition-colors cursor-pointer ${
+                      isActive
+                        ? 'bg-[#DFAF5A] text-[#0B0C10] font-bold shadow-sm'
+                        : 'text-[#C5C9D3] hover:text-white'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
             {isAdmin && (
               <>
                 <span aria-hidden="true">·</span>

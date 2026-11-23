@@ -9,6 +9,8 @@ export interface MotionInput {
   baseRotationY: number;
 }
 
+import type { Language } from '../utils/i18n';
+
 export interface StudioMotionTargets {
   rigRotationY: number;
   rigRotationX: number;
@@ -65,13 +67,13 @@ export function computeStudioMotionTargets(input: MotionInput): StudioMotionTarg
 export function computeResponsiveViewOffset(
   width: number,
   height: number,
-  lang: 'ar' | 'en',
+  lang: Language,
 ): { offsetX: number; offsetY: number } {
   if (width >= 1024) {
     // Shift camera sub-window toward the text side so the 3D rig frames in the open side:
-    // RTL ('ar'): text is on the right (+X), so positive offsetX places the 3D rig on the left.
+    // RTL ('ar' | 'ku'): text is on the right (+X), so positive offsetX places the 3D rig on the left.
     // LTR ('en'): text is on the left (-X), so negative offsetX places the 3D rig on the right.
-    const ratioX = lang === 'ar' ? 0.22 : -0.22;
+    const ratioX = lang === 'en' ? -0.22 : 0.22;
     return {
       offsetX: Math.round(width * ratioX),
       offsetY: 0,
