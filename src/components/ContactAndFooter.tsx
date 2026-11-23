@@ -280,7 +280,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     ? 'Abc Gulf Productions location map at Erbil Boulevard'
                     : lang === 'ku'
                       ? 'نەخشەی شوێنی کۆمپانیای ئەی بی سی خەلیج لە هەولێر بۆلیڤارد'
-                      : 'خريطة موقع شركة أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ في أربيل بوليفارد'
+                      : 'خريطة موقع شركة أي بي سي الخليج للإنتاج الفني في أربيل بوليفارد'
                 }
                 className="h-full"
               />

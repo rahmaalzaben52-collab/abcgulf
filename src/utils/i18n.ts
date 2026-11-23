@@ -262,7 +262,7 @@ export const UI_COPY = {
       closeMenu: 'إغلاق القائمة',
     },
     hero: {
-      companyName: 'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ',
+      companyName: 'أي بي سي الخليج للإنتاج الفني',
       tagline:
         'نحوّل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور — حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي المرئي والسمعي.',
       ctaServices: 'استكشف خدماتنا',
@@ -289,7 +289,7 @@ export const UI_COPY = {
     about: {
       kicker: 'نبذة عن الشركة والفريق الإبداعي',
       summary:
-        'أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
+        'أي بي سي الخليج للإنتاج الفني هي شركة رائدة في مجال الإعلام والإنتاج المرئي والسمعي، متخصصة في تقديم حلول مبتكرة وشاملة في صناعة المحتوى الإعلامي حيث تسعى الشركة إلى تحويل الأفكار إلى تجارب بصرية جذابة تترك أثراً دائماً لدى الجمهور.',
       teamTitle: 'فريق عمل متكامل',
       teamBody:
         'يتألف الفريق من مجموعة من محترفي الإخراج والتصوير والتحرير والكتابة الإبداعية، يعملون بتكامل تام لضمان أعلى معايير الجودة السينمائية والسمعية في كل مشروع.',
@@ -323,7 +323,7 @@ export const UI_COPY = {
       subheading:
         'سجل موثق لتراخيص الإنتاج الإعلامي والتجاري حسب الدولة، مع إمكانية رفع ملفات PDF وتنظيمها وتنزيلها عبر وضع الأدمن.',
       publicSubheading:
-        'تلتزم أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ بكافة الضوابط والتراخيص الرسمية المعتمدة في جميع الدول التي تعمل بها، مع إمكانية معاينة وتنزيل ملفات PDF.',
+        'تلتزم أي بي سي الخليج للإنتاج الفني بكافة الضوابط والتراخيص الرسمية المعتمدة في جميع الدول التي تعمل بها، مع إمكانية معاينة وتنزيل ملفات PDF.',
       allRegions: 'كل الدول',
       addBtn: 'إضافة ترخيص جديد',
       addToRegionBtn: 'إضافة ترخيص لهذه الدولة',
@@ -371,7 +371,7 @@ export const UI_COPY = {
       kicker: 'تواصل معنا',
       heading: 'لنصنع مشروعك القادم معاً',
       subheading:
-        'تواصل مع فريق أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ لمناقشة فكرتك الإعلانية أو التلفزيونية أو حجز استوديو البودكاست.',
+        'تواصل مع فريق أي بي سي الخليج للإنتاج الفني لمناقشة فكرتك الإعلانية أو التلفزيونية أو حجز استوديو البودكاست.',
       directTitle: 'معلومات الاتصال المباشر',
       phoneHint: 'اتصل بنا في أي وقت',
       emailHint: 'راسلنا عبر البريد الإلكتروني / Gmail',
@@ -436,7 +436,7 @@ export const UI_COPY = {
     about: {
       kicker: 'About Us & Creative Team',
       summary:
-        'Abc Gulf Productions (أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ) is a leading media and audiovisual production company specialized in delivering innovative, comprehensive content solutions — transforming concepts into engaging visual experiences that leave a lasting impact.',
+        'Abc Gulf Productions (أي بي سي الخليج للإنتاج الفني) is a leading media and audiovisual production company specialized in delivering innovative, comprehensive content solutions — transforming concepts into engaging visual experiences that leave a lasting impact.',
       teamTitle: 'Multidisciplinary Creative Team',
       teamBody:
         'Our team brings together seasoned professionals in directing, cinematography, editing, and creative writing, collaborating seamlessly to deliver cinema-grade visual and audio quality.',

@@ -104,7 +104,7 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                     ? 'Abc Gulf Productions Broadcast & Interview Studio'
                     : lang === 'ku'
                       ? 'ستۆدیۆی کۆمپانیای ئەی بی سی خەلیج بۆ وێنەگرتن و چاوپێکەوتنی تەلەفزیۆنی'
-                      : 'استوديو أَيْ بِي سِي الخَلِيج لِلْإِنْتَاجِ الفَنِّيّ للتصوير والمقابلات التلفزيونية'
+                      : 'استوديو أي بي سي الخليج للإنتاج الفني للتصوير والمقابلات التلفزيونية'
                 }
                 className="w-full h-full object-cover"
               />
