@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Award,
   ChevronLeft,
@@ -11,11 +11,14 @@ import {
   Film,
   Globe,
   LogOut,
+  Pause,
   Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Upload,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import {
   deriveAndStoreAdminToken,
@@ -76,6 +79,13 @@ export default function App() {
 
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [customizerOpen, setCustomizerOpen] = useState(false);
+
+  // Video hero state & refs
+  const [heroVideoPlaying, setHeroVideoPlaying] = useState(false);
+  const [heroVideoMuted, setHeroVideoMuted] = useState(true);
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+  const heroSectionRef = useRef<HTMLElement | null>(null);
 
   const [pendingModelBuffer, setPendingModelBuffer] = useState<ArrayBuffer | null>(null);
   const [pendingModelName, setPendingModelName] = useState<string | null>(null);
@@ -143,6 +153,52 @@ export default function App() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // UI/UX Pro Max: IntersectionObserver — pause video when hero scrolls out of view
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    const hero = heroSectionRef.current;
+    if (!video || !hero) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return; // honour accessibility preference — keep paused
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+            setHeroVideoPlaying(true);
+          } else {
+            video.pause();
+            setHeroVideoPlaying(false);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [heroVideoReady]);
+
+  const toggleHeroVideo = () => {
+    const v = heroVideoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play().catch(() => {});
+      setHeroVideoPlaying(true);
+    } else {
+      v.pause();
+      setHeroVideoPlaying(false);
+    }
+  };
+
+  const toggleHeroMute = () => {
+    const v = heroVideoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setHeroVideoMuted(v.muted);
+  };
 
   // Displayed licenses: cloud/edited data, or DEFAULT_LICENSES if nothing saved yet
   const displayedLicenses =
@@ -422,27 +478,115 @@ export default function App() {
       )}
 
       <main className="flex-1">
-        {/* Cinematic Heritage Hero (Inspired by Erbil Citadel Architecture & 35mm Gold Cinema Film) */}
+        {/* ═══════════════════════════════════════════════════════════════
+            Cinematic Heritage Hero — Drone footage of historic fortress
+            UI/UX Pro Max: Dark OLED + Gold accents, 7:1+ contrast text,
+            IntersectionObserver auto-pause, prefers-reduced-motion safe,
+            accessible play/mute controls (44×44 px min touch targets).
+        ═══════════════════════════════════════════════════════════════ */}
         <section
+          ref={heroSectionRef}
           id="hero"
           aria-labelledby="hero-heading"
           className="relative overflow-hidden bg-[#070605] studio-hairline-grid min-h-[640px] sm:min-h-[720px] lg:min-h-[760px] flex items-center"
         >
-          {/* Background: Majestic Erbil Citadel Colonnade & 35mm Golden Cinema Film Strips */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* ── Video Background Layer ── */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+            {/* Static image fallback shown while video loads */}
             <img
               src="/images/erbil-cinema-theme.jpg"
-              alt="Erbil Citadel ancient brick colonnade and 35mm golden cinema film strips"
-              className="w-full h-full object-cover object-top opacity-55 sm:opacity-65 scale-100"
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover object-top"
+              style={{ opacity: heroVideoReady ? 0 : 0.6, transition: 'opacity 0.8s ease' }}
             />
-            {/* Deep Warm Cinema Gradients & Scrims (Ensures >= 7:1 contrast for text readability) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/80 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/90 via-transparent to-[#070605]" />
-            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/90 to-transparent/30" />
 
-            {/* Warm Amber Atmospheric Flares */}
-            <div className="absolute top-1/4 start-1/3 w-[450px] h-[450px] rounded-full bg-[#DDA146]/15 blur-3xl" />
-            <div className="absolute bottom-1/3 end-1/4 w-[380px] h-[380px] rounded-full bg-[#F3C067]/10 blur-3xl" />
+            {/*
+              CSS clarity enhancements applied directly on the <video>:
+              - contrast(1.15)  → punchier colours, deeper blacks
+              - saturate(1.25)  → richer warm amber / golden tones
+              - brightness(1.05)→ lifts mid-tones so dark areas stay visible
+              - opacity 0.75    → allows dark scrims to stack without washing text
+              These are GPU-composited and cost zero extra repaints.
+            */}
+            <video
+              ref={heroVideoRef}
+              src="/videos/historic-fortress-cinema.mp4"
+              poster="/images/erbil-cinema-theme.jpg"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              onCanPlay={() => {
+                setHeroVideoReady(true);
+                const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (!prefersReduced) {
+                  heroVideoRef.current?.play().catch(() => {});
+                  setHeroVideoPlaying(true);
+                }
+              }}
+              className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700"
+              style={{
+                opacity: heroVideoReady ? 0.78 : 0,
+                filter: 'contrast(1.15) saturate(1.25) brightness(1.05)',
+              }}
+            />
+
+            {/* Deep cinematic scrims — maintain >= 7:1 text contrast (WCAG AAA) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/75 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/85 via-transparent to-[#070605]" />
+            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/85 to-transparent/20" />
+
+            {/* Warm amber atmospheric light flares */}
+            <div className="absolute top-1/4 start-1/3 w-[480px] h-[480px] rounded-full bg-[#DDA146]/12 blur-3xl" />
+            <div className="absolute bottom-1/3 end-1/4 w-[400px] h-[400px] rounded-full bg-[#F3C067]/8 blur-3xl" />
+          </div>
+
+          {/* ── Cinematic Video Control Dock (bottom-end corner) ──
+              UI/UX Pro Max: 44×44px minimum touch targets, visible focus rings,
+              labelled with aria-label for screen readers.
+          ── */}
+          <div
+            className="absolute bottom-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-2xl border border-[#DDA146]/35 bg-[#0C0A07]/90 backdrop-blur-md px-3 py-2 shadow-[0_0_20px_rgba(221,161,70,0.18)]"
+            role="group"
+            aria-label={lang === 'en' ? 'Video playback controls' : lang === 'ku' ? 'کۆنتڕۆڵی ڤیدیۆ' : 'أدوات تشغيل الفيديو'}
+          >
+            {/* Live indicator dot */}
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146] animate-pulse" aria-hidden="true" />
+            <span className="text-[11px] font-code font-semibold text-[#F6DDA7] select-none">
+              {lang === 'en' ? 'Historic Fortress' : lang === 'ku' ? 'قەڵای مێژوویی' : 'القلعة التاريخية'}
+            </span>
+
+            {/* Play / Pause — 44px touch target */}
+            <button
+              type="button"
+              onClick={toggleHeroVideo}
+              aria-label={heroVideoPlaying
+                ? (lang === 'en' ? 'Pause background video' : lang === 'ku' ? 'وەستاندنی ڤیدیۆ' : 'إيقاف الفيديو')
+                : (lang === 'en' ? 'Play background video' : lang === 'ku' ? 'لێدانی ڤیدیۆ' : 'تشغيل الفيديو')
+              }
+              className="w-11 h-11 flex items-center justify-center rounded-xl text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
+            >
+              {heroVideoPlaying
+                ? <Pause className="w-4 h-4" />
+                : <Play className="w-4 h-4" />
+              }
+            </button>
+
+            {/* Mute / Unmute — 44px touch target */}
+            <button
+              type="button"
+              onClick={toggleHeroMute}
+              aria-label={heroVideoMuted
+                ? (lang === 'en' ? 'Unmute video' : lang === 'ku' ? 'دەنگ کردنەوە' : 'تشغيل الصوت')
+                : (lang === 'en' ? 'Mute video' : lang === 'ku' ? 'بێدەنگکردن' : 'كتم الصوت')
+              }
+              className="w-11 h-11 flex items-center justify-center rounded-xl text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
+            >
+              {heroVideoMuted
+                ? <VolumeX className="w-4 h-4" />
+                : <Volume2 className="w-4 h-4" />
+              }
+            </button>
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
