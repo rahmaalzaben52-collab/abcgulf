@@ -837,19 +837,14 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
 
             {/* Complete License Information Details Grid */}
             <div className="py-5 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl border border-[#DDA146]/20 bg-[#070605]">
-                  <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.authority}</p>
-                  <p className="text-sm font-bold text-[#F8F9FA]">{localizedPreview.authority || '—'}</p>
-                </div>
-
-                <div className="p-3.5 rounded-xl border border-[#DDA146]/20 bg-[#070605]">
-                  <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.number}</p>
-                  <p dir="ltr" className="text-sm font-code font-bold text-[#F3C067] rtl:text-right ltr:text-left">
-                    {localizedPreview.licenseNumber || '—'}
+              {localizedPreview.licenseNumber && (
+                <div className="p-3.5 rounded-xl border border-[#DDA146]/20 bg-[#070605] flex items-center justify-between">
+                  <p className="text-xs font-semibold text-[#8E95A5]">{t.fields.number}</p>
+                  <p dir="ltr" className="text-sm font-code font-bold text-[#F3C067]">
+                    {localizedPreview.licenseNumber}
                   </p>
                 </div>
-              </div>
+              )}
 
               {/* Official Attached File Card with Direct Open Action */}
               <div className="p-4 rounded-xl border border-[#DDA146]/30 bg-[#DDA146]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -858,13 +853,17 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                     <FileText className="w-5 h-5 text-[#DDA146]" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-[#F8F9FA] break-all">
-                      {localizedPreview.attachmentName || `${localizedPreview.title}.pdf`}
+                    <p className="text-sm font-bold text-[#F8F9FA]">
+                      {lang === 'en'
+                        ? 'Official Verified License Document'
+                        : lang === 'ku'
+                          ? 'بەڵگەنامەی فەرمی پەسەندکراوی مۆڵەت'
+                          : 'مستند وترخيص رسمي معتمد'}
                     </p>
-                    <p className="text-[11px] text-[#A9AFBE]">
+                    <p className="text-xs text-[#A9AFBE]">
                       {isPdfAttachment(localizedPreview.attachmentDataUrl)
-                        ? (lang === 'en' ? 'Official PDF Certificate Document' : lang === 'ku' ? 'بەڵگەنامەی فەرمی PDF' : 'مستند وترخيص رسمي معتمد بصيغة PDF')
-                        : (lang === 'en' ? 'Official Document Certificate' : lang === 'ku' ? 'بەڵگەنامەی فەرمی' : 'شهادة وترخيص رسمي معتمد')}
+                        ? (lang === 'en' ? 'PDF Document' : lang === 'ku' ? 'بەڵگەنامەی PDF' : 'ملف بصيغة PDF')
+                        : (lang === 'en' ? 'Official Certificate' : lang === 'ku' ? 'بەڵگەنامەی فەرمی' : 'شهادة رسمية')}
                     </p>
                   </div>
                 </div>
@@ -903,7 +902,13 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                   <div className="bg-[#0C0A07] px-4 py-2 border-b border-[#DDA146]/20 flex items-center justify-between text-xs text-[#D1D5DB]">
                     <span className="flex items-center gap-2">
                       <FileText className="w-4 h-4 text-[#DDA146]" />
-                      <span className="font-semibold">{localizedPreview.attachmentName || `${localizedPreview.title}.pdf`}</span>
+                      <span className="font-semibold text-xs text-[#F8F9FA]">
+                        {lang === 'en'
+                          ? 'License Document (PDF)'
+                          : lang === 'ku'
+                            ? 'بەڵگەنامەی مۆڵەت (PDF)'
+                            : 'مستند الترخيص (PDF)'}
+                      </span>
                     </span>
                     <a
                       href={previewBlobUrl}
