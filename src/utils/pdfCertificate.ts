@@ -5,8 +5,26 @@ export function isPdfDataUrl(dataUrl?: string | null): boolean {
   return typeof dataUrl === 'string' && /^data:application\/pdf(?:;[^,]*)?,/i.test(dataUrl);
 }
 
+export function isPdfAttachment(urlOrData?: string | null): boolean {
+  if (typeof urlOrData !== 'string' || !urlOrData) return false;
+  return (
+    urlOrData.startsWith('data:application/pdf') ||
+    /\.pdf(?:[?#]|$)/i.test(urlOrData) ||
+    urlOrData.startsWith('/licenses/') ||
+    urlOrData.startsWith('/api/files/')
+  );
+}
+
 export function isImageDataUrl(dataUrl?: string | null): boolean {
   return typeof dataUrl === 'string' && /^data:image\/[a-z0-9.+-]+(?:;[^,]*)?,/i.test(dataUrl);
+}
+
+export function isImageAttachment(urlOrData?: string | null): boolean {
+  if (typeof urlOrData !== 'string' || !urlOrData) return false;
+  return (
+    urlOrData.startsWith('data:image/') ||
+    /\.(?:png|jpe?g|webp|gif|svg)(?:[?#]|$)/i.test(urlOrData)
+  );
 }
 
 export function sanitizePdfFilename(rawName: string): string {
@@ -174,10 +192,23 @@ export async function generateLicensePdfBlob(
   lang: Language,
   companyName: string,
 ): Promise<Blob> {
-  if (isPdfDataUrl(license.attachmentDataUrl) && license.attachmentDataUrl) {
-    const decodedBlob = dataUrlToBlob(license.attachmentDataUrl);
-    if (decodedBlob) {
-      return decodedBlob;
+  const urlOrData = license.attachmentDataUrl;
+  if (urlOrData) {
+    if (isPdfDataUrl(urlOrData)) {
+      const decodedBlob = dataUrlToBlob(urlOrData);
+      if (decodedBlob) {
+        return decodedBlob;
+      }
+    }
+    if (isPdfAttachment(urlOrData)) {
+      try {
+        const res = await fetch(urlOrData);
+        if (res.ok) {
+          return await res.blob();
+        }
+      } catch (err) {
+        console.warn('Could not fetch attached PDF directly, falling back to generator:', err);
+      }
     }
   }
 

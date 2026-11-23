@@ -100,6 +100,20 @@ export async function deleteLicense(id: string): Promise<void> {
   }
 }
 
+export async function uploadLicenseFile(filename: string, dataUrl: string): Promise<string> {
+  const res = await fetch(`${API_BASE}/api/upload`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ filename, dataUrl }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error((err as { error?: string }).error ?? 'Failed to upload file to Cloudflare');
+  }
+  const data = (await res.json()) as { ok: boolean; url: string };
+  return data.url;
+}
+
 // ── Live subscription (polling — replaces Firestore onSnapshot) ─────────────
 
 export function subscribeToSiteData(callbacks: {

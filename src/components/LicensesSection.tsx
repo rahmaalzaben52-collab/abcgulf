@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Download,
+  ExternalLink,
   Eye,
   FileText,
   Globe2,
@@ -24,11 +25,14 @@ import {
 import {
   dataUrlToBlob,
   generateLicensePdfBlob,
+  isImageAttachment,
   isImageDataUrl,
+  isPdfAttachment,
   isPdfDataUrl,
   sanitizePdfFilename,
   triggerBlobDownload,
 } from '../utils/pdfCertificate';
+import { uploadLicenseFile } from '../cloudflareApi';
 import { UI_COPY, type Language } from '../utils/i18n';
 
 interface LicensesSectionProps {
@@ -171,13 +175,15 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
       return;
     }
 
-    if (file.size > 500 * 1024) {
+    if (file.size > 5 * 1024 * 1024) {
       setErrors((prev) => ({
         ...prev,
         attachment:
           lang === 'en'
-            ? 'File exceeds 500 KB limit. Please choose a smaller file.'
-            : 'حجم الملف يتجاوز 500 كيلوبايت، يرجى اختيار ملف أصغر.',
+            ? 'File exceeds 5 MB limit. Please choose a smaller file.'
+            : lang === 'ku'
+              ? 'قەبارەی فایل زیاترە لە 5 مێگابایت، تکایە فایلێکی بچووکتر هەڵبژێرە.'
+              : 'حجم الملف يتجاوز 5 ميجابايت، يرجى اختيار ملف أصغر.',
       }));
       return;
     }
@@ -203,12 +209,23 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
     const lic = getDisplayLicense(rawLic);
     setDownloadingId(lic.id);
     try {
+      if (lic.attachmentDataUrl && !lic.attachmentDataUrl.startsWith('data:')) {
+        try {
+          const res = await fetch(lic.attachmentDataUrl);
+          if (res.ok) {
+            const blob = await res.blob();
+            const fileBase = lic.attachmentName || `${lic.title}.pdf`;
+            triggerBlobDownload(blob, sanitizePdfFilename(fileBase));
+            return;
+          }
+        } catch (fetchErr) {
+          console.warn('Direct file download fallback:', fetchErr);
+        }
+      }
       const regionMeta = getLicenseRegionMeta(lic.region);
       const pdfBlob = await generateLicensePdfBlob(lic, regionMeta, lang, companyName);
       const fileBase =
-        lic.attachmentName && isPdfDataUrl(lic.attachmentDataUrl)
-          ? lic.attachmentName
-          : `${regionMeta.code}-${lic.licenseNumber || lic.title}`;
+        lic.attachmentName || `${regionMeta.code}-${lic.licenseNumber || lic.title}`;
       triggerBlobDownload(pdfBlob, sanitizePdfFilename(fileBase));
     } finally {
       setDownloadingId((curr) => (curr === lic.id ? null : curr));
@@ -226,9 +243,25 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
       return;
     }
 
+    let finalAttachmentUrl = result.data.attachmentDataUrl;
+    if (finalAttachmentUrl && finalAttachmentUrl.startsWith('data:')) {
+      try {
+        const cloudUrl = await uploadLicenseFile(
+          result.data.attachmentName || `license-${Date.now()}.pdf`,
+          finalAttachmentUrl,
+        );
+        if (cloudUrl) {
+          finalAttachmentUrl = cloudUrl;
+        }
+      } catch (err) {
+        console.warn('Could not upload file to Cloudflare directly, saving dataUrl:', err);
+      }
+    }
+
     const payload: LicenseRecord = {
       id: editingId ?? `lic-${result.data.region}-${Date.now()}`,
       ...result.data,
+      attachmentDataUrl: finalAttachmentUrl,
       status: 'active',
     };
 
@@ -463,7 +496,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                     >
                       {items.map((rawLic) => {
                         const lic = getDisplayLicense(rawLic);
-                        const hasCustomPdf = isPdfDataUrl(lic.attachmentDataUrl);
+                        const hasCustomPdf = isPdfAttachment(lic.attachmentDataUrl);
                         const isBusy = downloadingId === lic.id;
 
                         return (
@@ -753,8 +786,8 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
           aria-labelledby="preview-license-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
         >
-          <div className="w-full max-w-lg rounded-2xl border border-white/12 bg-[#14161E] p-6 shadow-2xl">
-            <div className="flex items-center justify-between gap-4 pb-3 border-b border-white/10">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl border border-white/12 bg-[#14161E] p-5 sm:p-6 shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between gap-4 pb-3 border-b border-white/10 shrink-0">
               <div>
                 <p className="text-xs font-semibold text-[#DFAF5A] mb-1">
                   {previewRegionMeta.code} ·{' '}
@@ -772,25 +805,63 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                 type="button"
                 onClick={() => setPreviewLicense(null)}
                 aria-label={t.closePreview}
-                className="p-1 rounded-lg text-[#9CA3AF] hover:text-white cursor-pointer"
+                className="p-1.5 rounded-lg text-[#9CA3AF] hover:text-white hover:bg-white/10 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="mt-4 space-y-4 text-sm">
-              {isImageDataUrl(localizedPreview.attachmentDataUrl) && localizedPreview.attachmentDataUrl && (
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black p-2">
-                  <img
-                    src={localizedPreview.attachmentDataUrl}
-                    alt={localizedPreview.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full max-h-72 object-contain rounded-lg"
+            <div className="mt-4 flex-1 overflow-y-auto space-y-4 text-sm pr-1">
+              {/* Authentic PDF Document Display */}
+              {isPdfAttachment(localizedPreview.attachmentDataUrl) && localizedPreview.attachmentDataUrl && (
+                <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0B0C10] flex flex-col">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10 text-xs text-[#9CA3AF]">
+                    <span className="flex items-center gap-1.5 font-semibold text-[#DFAF5A] truncate">
+                      <FileText className="w-4 h-4 shrink-0" />
+                      <span>{localizedPreview.attachmentName || localizedPreview.title}</span>
+                    </span>
+                    <a
+                      href={localizedPreview.attachmentDataUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 rounded bg-[#DFAF5A]/10 border border-[#DFAF5A]/30 px-2.5 py-1 text-[11px] font-semibold text-[#F6DDA7] hover:bg-[#DFAF5A] hover:text-[#0B0C10] transition-colors shrink-0"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>
+                        {lang === 'en'
+                          ? 'Open Fullscreen'
+                          : lang === 'ku'
+                            ? 'لە پەنجەرەی نوێ بکەرەوە'
+                            : 'فتح في نافذة كاملة'}
+                      </span>
+                    </a>
+                  </div>
+                  <iframe
+                    src={`${localizedPreview.attachmentDataUrl}#toolbar=1&navpanes=0`}
+                    title={localizedPreview.title}
+                    className="w-full h-[540px] bg-white border-0"
                   />
                 </div>
               )}
 
-              <div className="pt-2 flex items-center justify-end gap-3 border-t border-white/10">
+              {/* Image Document Display */}
+              {isImageAttachment(localizedPreview.attachmentDataUrl) && localizedPreview.attachmentDataUrl && (
+                <div className="rounded-xl overflow-hidden border border-white/10 bg-black p-2 flex justify-center">
+                  <img
+                    src={localizedPreview.attachmentDataUrl}
+                    alt={localizedPreview.title}
+                    referrerPolicy="no-referrer"
+                    className="max-h-[500px] w-auto max-w-full object-contain rounded-lg"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="pt-3 flex items-center justify-between gap-3 border-t border-white/10 shrink-0">
+              <span className="text-xs text-[#9CA3AF]">
+                {localizedPreview.authority} · {localizedPreview.licenseNumber}
+              </span>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setPreviewLicense(null)}
