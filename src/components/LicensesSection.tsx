@@ -678,50 +678,6 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="sm:col-span-1">
-                  <label htmlFor="lic-category" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
-                    {t.formCategory}
-                  </label>
-                  <input
-                    id="lic-category"
-                    type="text"
-                    value={draft.category}
-                    onChange={(e) => setDraft({ ...draft, category: e.target.value })}
-                    placeholder={lang === 'en' ? 'e.g. Cinema & TV' : 'مثال: إنتاج سينمائي وتلفزيوني'}
-                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="lic-issue" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
-                    {t.formIssue}
-                  </label>
-                  <input
-                    id="lic-issue"
-                    type="date"
-                    dir="ltr"
-                    value={draft.issueDate}
-                    onChange={(e) => setDraft({ ...draft, issueDate: e.target.value })}
-                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white focus:border-[#DFAF5A] focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="lic-expiry" className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
-                    {t.formExpiry}
-                  </label>
-                  <input
-                    id="lic-expiry"
-                    type="date"
-                    dir="ltr"
-                    value={draft.expiryDate}
-                    onChange={(e) => setDraft({ ...draft, expiryDate: e.target.value })}
-                    className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3 py-2 text-xs text-white focus:border-[#DFAF5A] focus:outline-none"
-                  />
-                </div>
-              </div>
-
               <div>
                 <label className="block text-xs font-semibold text-[#D1D5DB] mb-1.5">
                   {t.formAttachment}
@@ -841,31 +797,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                     {localizedPreview.licenseNumber || '—'}
                   </p>
                 </div>
-
-                <div className="p-3.5 rounded-xl border border-white/8 bg-[#0D0E14]">
-                  <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.category}</p>
-                  <p className="text-sm font-semibold text-[#E5E7EB]">{localizedPreview.category || '—'}</p>
-                </div>
-
-                <div className="p-3.5 rounded-xl border border-white/8 bg-[#0D0E14]">
-                  <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">{t.fields.validity}</p>
-                  <p dir="ltr" className="text-xs font-code text-[#C5C9D3] rtl:text-right ltr:text-left">
-                    {localizedPreview.issueDate} ➔ {localizedPreview.expiryDate}
-                  </p>
-                </div>
               </div>
-
-              {/* Notes / Details */}
-              {localizedPreview.notes && (
-                <div className="p-3.5 rounded-xl border border-white/8 bg-[#0D0E14]">
-                  <p className="text-[11px] font-semibold text-[#8E95A5] mb-1">
-                    {lang === 'en' ? 'Official Notes' : lang === 'ku' ? 'تێبینییە فەرمییەکان' : 'الملاحظات والبيانات'}
-                  </p>
-                  <p className="text-xs sm:text-sm text-[#D1D5DB] leading-relaxed">
-                    {localizedPreview.notes}
-                  </p>
-                </div>
-              )}
 
               {/* Official Attached File Card with Direct Open & Download Action */}
               {localizedPreview.attachmentDataUrl && (

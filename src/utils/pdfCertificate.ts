@@ -305,20 +305,8 @@ export async function generateLicensePdfBlob(
       license.authority,
     ],
     [
-      isRtl ? (lang === 'ku' ? 'بوار / جۆر' : 'المجال / الفئة') : 'Category',
-      license.category,
-    ],
-    [
       isRtl ? (lang === 'ku' ? 'ژمارەی مۆڵەت' : 'رقم الترخيص') : 'License Number',
       license.licenseNumber,
-    ],
-    [
-      isRtl ? (lang === 'ku' ? 'بەرواری دەرچوون' : 'تاريخ الإصدار') : 'Issue Date',
-      license.issueDate,
-    ],
-    [
-      isRtl ? (lang === 'ku' ? 'بەرواری بەسەرچوون' : 'تاريخ الانتهاء') : 'Expiry Date',
-      license.expiryDate,
     ],
   ];
 
@@ -353,23 +341,6 @@ export async function generateLicensePdfBlob(
   }
 
   y += boxHeight + 48;
-
-  // Notes section
-  if (license.notes) {
-    ctx.textAlign = isRtl ? 'right' : 'left';
-    ctx.fillStyle = '#DFAF5A';
-    ctx.font = '700 22px Cairo, Outfit, sans-serif';
-    ctx.fillText(isRtl ? 'التفاصيل والملاحظات' : 'Scope & Notes', anchorX, y);
-    y += 40;
-    ctx.fillStyle = '#D1D5DB';
-    ctx.font = '400 24px Cairo, Outfit, sans-serif';
-    const noteLines = wrapLines(ctx, license.notes, contentWidth, 4);
-    for (const line of noteLines) {
-      ctx.fillText(line, anchorX, y);
-      y += 38;
-    }
-    y += 24;
-  }
 
   // Embedded image attachment if provided
   if (isImageDataUrl(license.attachmentDataUrl) && license.attachmentDataUrl) {
