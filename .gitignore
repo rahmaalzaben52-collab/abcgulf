@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+*.zip
+*.rar
+Drone_filming_historic_fortress_*.mp4

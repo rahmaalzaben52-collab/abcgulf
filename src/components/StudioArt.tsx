@@ -135,14 +135,11 @@ export const StudioArt: React.FC<StudioArtProps> = ({ variant, alt, className = 
 
     case 'drone-aerial':
       return (
-        <svg viewBox="0 0 400 240" className={`w-full h-full object-cover ${className}`} aria-hidden="true">
-          <rect width="400" height="240" fill="#111319" />
-          <g transform="translate(200, 88)">
-            <line x1="-68" y1="-16" x2="68" y2="-16" stroke="#181A22" strokeWidth="7" strokeLinecap="round" />
-            <ellipse cx="-68" cy="-22" rx="34" ry="3.5" fill="#DFAF5A" fillOpacity="0.65" />
-            <ellipse cx="68" cy="-22" rx="34" ry="3.5" fill="#DFAF5A" fillOpacity="0.65" />
-          </g>
-        </svg>
+        <img
+          src="/gallery/drone-cinema-060.jpg"
+          alt={alt}
+          className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${className}`}
+        />
       );
 
     case 'podcast-mic':

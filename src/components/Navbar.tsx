@@ -45,6 +45,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navLinks = [
     { id: 'hero', label: t.hero },
+    {
+      id: 'cinema-suite',
+      label:
+        lang === 'en'
+          ? 'Cinema Suite'
+          : lang === 'ku'
+            ? 'سویتە سینەمایی'
+            : 'المعرض السينمائي',
+    },
     { id: 'services', label: t.services },
     { id: 'about', label: t.about },
     { id: 'licenses', label: t.licenses },
