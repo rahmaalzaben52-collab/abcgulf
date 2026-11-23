@@ -10,7 +10,7 @@
 
   html {
     font-family: var(--font-ar);
-    background-color: #090A0E;
+    background-color: #070605;
     color: #F4F5F7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -20,6 +20,7 @@
 
   body {
     overflow-x: clip;
+    background-color: #070605;
   }
 }
 
@@ -38,17 +39,28 @@
 
 .studio-hairline-grid {
   background-image:
-    linear-gradient(to right, rgba(223, 175, 90, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(223, 175, 90, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(221, 161, 70, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(221, 161, 70, 0.045) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .gold-gradient-banner {
-  background: linear-gradient(100deg, #B28438 0%, #DFB365 48%, #C09042 100%);
+  background: linear-gradient(100deg, #9C6C1F 0%, #DDA146 45%, #F4C46E 75%, #B37D28 100%);
 }
 
 .gold-text-gradient {
-  background: linear-gradient(135deg, #F6DDA7 0%, #DFAF5A 55%, #BA8838 100%);
+  background: linear-gradient(135deg, #FFE4A8 0%, #DDA146 50%, #B8822B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.gold-laser-ribbon {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(221, 161, 70, 0.4) 15%, #DDA146 50%, rgba(221, 161, 70, 0.4) 85%, transparent 100%);
+  box-shadow: 0 0 16px rgba(221, 161, 70, 0.7), 0 0 32px rgba(221, 161, 70, 0.3);
+}
+
+.gold-card-frame {
+  border: 2px solid #DDA146;
+  box-shadow: 0 0 25px rgba(221, 161, 70, 0.35);
 }

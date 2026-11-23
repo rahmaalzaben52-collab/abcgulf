@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
+  Film,
   Globe,
   LogOut,
   Play,
@@ -36,7 +37,6 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
-import { HeroStudio3D } from './components/HeroStudio3D';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -420,51 +420,74 @@ export default function App() {
       )}
 
       <main className="flex-1">
+        {/* Cinematic Heritage Hero (Inspired by Erbil Citadel Architecture & 35mm Gold Cinema Film) */}
         <section
           id="hero"
           aria-labelledby="hero-heading"
-          className="relative overflow-hidden bg-[#090A0E] studio-hairline-grid min-h-[780px] sm:min-h-[760px] lg:min-h-[680px] flex items-start lg:items-center"
+          className="relative overflow-hidden bg-[#070605] studio-hairline-grid min-h-[640px] sm:min-h-[720px] lg:min-h-[760px] flex items-center"
         >
-          <div className="absolute inset-0">
-            <HeroStudio3D
-              lang={lang}
-              isAdmin={isAdmin}
-              customModelName={pendingModelName}
-              pendingModelBuffer={pendingModelBuffer}
-              onModelLoaded={handleModelLoaded}
-              onUploadFileRequest={handleUpload3DFile}
+          {/* Background: Majestic Arched Brick Colonnade & Winding Golden Cinema Film Strip */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <img
+              src="/images/erbil-cinema-theme.jpg"
+              alt="Erbil Heritage & Cinema Soundstage Art"
+              className="w-full h-full object-cover object-top opacity-55 sm:opacity-65 scale-105"
             />
+            {/* Deep Warm Cinema Gradients & Vignettes */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/80 via-transparent to-[#070605]" />
+            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/85 to-transparent/30" />
+            
+            {/* Warm Amber Atmospheric Flares */}
+            <div className="absolute top-1/4 start-1/3 w-[450px] h-[450px] rounded-full bg-[#DDA146]/15 blur-3xl" />
+            <div className="absolute bottom-1/3 end-1/4 w-[380px] h-[380px] rounded-full bg-[#F3C067]/10 blur-3xl" />
           </div>
 
-          <div aria-hidden="true" className="pointer-events-none absolute -top-28 start-1/4 w-[580px] h-[580px] rounded-full bg-[#DFAF5A]/10 blur-3xl z-[1]" />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-[#090A0E] from-15% via-[#090A0E]/85 via-45% to-transparent lg:bg-none" />
-          <div aria-hidden="true" className="pointer-events-none hidden lg:block absolute inset-0 z-[2] rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#090A0E]/92 via-[#090A0E]/45 to-transparent" />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-24 z-[2] bg-gradient-to-t from-[#090A0E] to-transparent" />
-
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-8 pb-80 sm:pb-80 lg:py-20 pointer-events-none">
-            <div className="lg:w-[46%] xl:w-[44%] flex flex-col justify-center space-y-6 pointer-events-auto">
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+            <div className="lg:w-[58%] xl:w-[54%] flex flex-col justify-center space-y-6">
               <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="w-8 h-px bg-[#DFAF5A]" aria-hidden="true" />
-                  <p className="text-xs sm:text-sm font-latin tracking-wider text-[#DFAF5A] font-semibold">
+                {/* Cinematic Production Kicker Badge */}
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/40 bg-[#0E0C09]/90 px-3.5 py-1.5 shadow-[0_0_15px_rgba(221,161,70,0.2)] backdrop-blur-md self-start">
+                  <Film className="w-4 h-4 text-[#DDA146]" />
+                  <span className="text-xs font-semibold text-[#F6DDA7]">
+                    {lang === 'en'
+                      ? 'Cinema Soundstage & Media Production'
+                      : lang === 'ku'
+                        ? 'کۆمپانیای بەرهەمهێنانی سینەمایی و تەلەفزیۆنی'
+                        : 'شركة الإنتاج السينمائي والتلفزيوني المعتمدة'}
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <h1
+                    id="hero-heading"
+                    className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#F8F9FA] leading-[1.15] text-balance tracking-tight"
+                  >
+                    <span className="gold-text-gradient block">
+                      {lang === 'en'
+                        ? t.hero.companyName
+                        : lang === 'ku'
+                          ? profile.nameKu || t.hero.companyName
+                          : profile.nameAr}
+                    </span>
+                  </h1>
+
+                  <p className="text-sm sm:text-base font-latin tracking-widest text-[#DDA146] font-semibold">
                     {lang === 'en' ? profile.nameAr : profile.nameEn}
                   </p>
                 </div>
-                <h1 id="hero-heading" className="text-3xl sm:text-5xl font-bold text-[#F8F9FA] leading-[1.18] text-balance">
-                  {lang === 'en'
-                    ? t.hero.companyName
-                    : lang === 'ku'
-                      ? profile.nameKu || t.hero.companyName
-                      : profile.nameAr}
-                </h1>
-                <p className="text-base sm:text-lg text-[#D1D5DB] leading-relaxed">{t.hero.tagline}</p>
+
+                <p className="text-base sm:text-lg text-[#D1D5DB] leading-relaxed max-w-2xl font-normal">
+                  {t.hero.tagline}
+                </p>
               </div>
 
+              {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <button
                   type="button"
                   onClick={() => navigateToSection('services')}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#DFAF5A] hover:bg-[#ECC578] text-[#0B0C10] px-6 py-3 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-7 py-3.5 text-sm font-bold transition-all shadow-[0_0_25px_rgba(221,161,70,0.4)] whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <span>{t.hero.ctaServices}</span>
                   <DirectionalChevron className="w-4 h-4" />
@@ -474,15 +497,110 @@ export default function App() {
                   href={profile.socials.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-[#12151E]/90 hover:border-[#DFAF5A]/50 px-4 py-3 text-sm font-medium text-[#F4F5F7] transition-colors whitespace-nowrap shrink-0"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#DDA146]/40 bg-[#0E0C09]/90 hover:border-[#DDA146] hover:bg-[#14110C] px-5 py-3.5 text-sm font-semibold text-[#F4F5F7] transition-all whitespace-nowrap shrink-0 shadow-sm"
                 >
-                  <Play className="w-4 h-4 text-[#DFAF5A]" />
+                  <Play className="w-4 h-4 text-[#DDA146] fill-[#DDA146]/30" />
                   <span>{t.hero.ctaYoutube}</span>
                 </a>
+              </div>
+
+              {/* Trust & Heritage Highlights Row */}
+              <div className="pt-6 border-t border-[#DDA146]/20 flex flex-wrap items-center gap-6 text-xs text-[#C5BBAA]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
+                  <span>
+                    {lang === 'en' ? 'Erbil Boulevard Headquarters' : lang === 'ku' ? 'بارەگای سەرەکی: هەولێر بۆلیڤارد' : 'المقر: أربيل بوليفارد B2-12-253'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
+                  <span>
+                    {lang === 'en' ? 'Cinema Soundstage 4K / 6K' : lang === 'ku' ? 'ستۆدیۆی سینەمایی 4K / 6K' : 'استوديوهات إنتاج سينمائي 4K/6K'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
+                  <span>
+                    {lang === 'en' ? 'Gulf & Regional Official Accreditations' : lang === 'ku' ? 'مۆڵەتە فەرمییەکانی هەرێم و کەنداو' : 'تراخيص رسمية معتمدة عبر الخليج'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Luminous Gold Laser Ribbon Divider */}
+        <div className="gold-laser-ribbon" />
+
+        {/* Signature 3 Floating Gold-Framed Cards (From Middle of Reference Image) */}
+        <section aria-label="Erbil Cinema Heritage Showcase" className="relative z-10 py-10 sm:py-14 bg-[#070605]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {/* Card 1: Warm colonnade */}
+              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)]">
+                <div className="aspect-[16/10] overflow-hidden bg-black">
+                  <img
+                    src="/images/card-hallway.jpg"
+                    alt="Cinema Soundstage & Studio Lighting"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
+                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
+                    {lang === 'en'
+                      ? 'Cinema Soundstages & Studio Lighting'
+                      : lang === 'ku'
+                        ? 'ستۆدیۆکانی وێنەگرتن و ڕووناککردنەوەی سینەمایی'
+                        : 'استوديوهات التصوير والإضاءة السينمائية'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2: Ancient Erbil Citadel Fortress */}
+              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)] md:-translate-y-3">
+                <div className="aspect-[16/10] overflow-hidden bg-black">
+                  <img
+                    src="/images/card-citadel.jpg"
+                    alt="Erbil Citadel Heritage"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
+                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
+                    {lang === 'en'
+                      ? 'Authentic Production from the Heart of Erbil'
+                      : lang === 'ku'
+                        ? 'بەرهەمهێنانی ڕەسەن لە دڵی قەڵای هەولێرەوە'
+                        : 'أصالة الإنتاج من قلب قلعة أربيل'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3: Erbil Historic Clock Tower & Fountains */}
+              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)]">
+                <div className="aspect-[16/10] overflow-hidden bg-black">
+                  <img
+                    src="/images/card-clocktower.jpg"
+                    alt="Erbil Clock Square & Gulf Media Coverage"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
+                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
+                    {lang === 'en'
+                      ? 'Regional Media Coverage — Kurdistan & The Gulf'
+                      : lang === 'ku'
+                        ? 'ڕووماڵی میدیایی گەورە لە کوردستان و کەنداو'
+                        : 'تغطيات كبرى في كوردستان ودول الخليج'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Luminous Gold Laser Ribbon Divider */}
+        <div className="gold-laser-ribbon" />
 
         <ServicesAndAbout profile={profile} lang={lang} />
 

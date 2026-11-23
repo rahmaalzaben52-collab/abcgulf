@@ -97,11 +97,11 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
       <section
         id="contact"
         aria-labelledby="contact-heading"
-        className="py-20 sm:py-28 border-t border-white/8 bg-[#0D0F15]"
+        className="py-20 sm:py-28 border-t border-[#DDA146]/20 bg-[#0C0A07]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mb-14">
-            <p className="text-xs font-semibold tracking-wide text-[#DFAF5A] mb-2">{t.kicker}</p>
+            <p className="text-xs font-semibold tracking-wide text-[#DDA146] mb-2">{t.kicker}</p>
             <h2
               id="contact-heading"
               className="text-2xl sm:text-4xl font-bold text-[#F8F9FA] leading-tight text-balance"
@@ -116,7 +116,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Direct Contact Details */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="rounded-2xl border border-white/10 bg-[#12151E] p-6 sm:p-8 space-y-6">
+              <div className="rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] p-6 sm:p-8 space-y-6 shadow-xl">
                 <h3 className="text-lg font-bold text-[#F8F9FA]">{t.directTitle}</h3>
 
                 <div className="space-y-5">
@@ -124,13 +124,13 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     href={`tel:${profile.contact.phone.replace(/\s+/g, '')}`}
                     className="flex items-center gap-4 group"
                   >
-                    <div className="w-11 h-11 rounded-full border border-[#DFAF5A]/50 bg-[#DFAF5A]/10 flex items-center justify-center shrink-0">
-                      <Phone className="w-5 h-5 text-[#DFAF5A]" />
+                    <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
+                      <Phone className="w-5 h-5 text-[#DDA146]" />
                     </div>
                     <div>
                       <div
                         dir="ltr"
-                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DFAF5A] transition-colors rtl:text-right ltr:text-left"
+                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
                       >
                         {profile.contact.phone}
                       </div>
@@ -142,13 +142,13 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     href={`mailto:${profile.contact.email}`}
                     className="flex items-center gap-4 group"
                   >
-                    <div className="w-11 h-11 rounded-full border border-[#DFAF5A]/50 bg-[#DFAF5A]/10 flex items-center justify-center shrink-0">
-                      <Mail className="w-5 h-5 text-[#DFAF5A]" />
+                    <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
+                      <Mail className="w-5 h-5 text-[#DDA146]" />
                     </div>
                     <div>
                       <div
                         dir="ltr"
-                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DFAF5A] transition-colors rtl:text-right ltr:text-left"
+                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
                       >
                         {profile.contact.email}
                       </div>
@@ -157,8 +157,8 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                   </a>
 
                   <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full border border-[#DFAF5A]/50 bg-[#DFAF5A]/10 flex items-center justify-center shrink-0">
-                      <MapPin className="w-5 h-5 text-[#DFAF5A]" />
+                    <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-5 h-5 text-[#DDA146]" />
                     </div>
                     <div>
                       <div dir="ltr" className="text-base font-bold text-[#F8F9FA] rtl:text-right ltr:text-left">
@@ -173,7 +173,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
 
             {/* Contact Form */}
             <div className="lg:col-span-7">
-              <div className="rounded-2xl border border-white/10 bg-[#12151E] p-6 sm:p-8">
+              <div className="rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] p-6 sm:p-8 shadow-xl">
                 <h3 className="text-lg font-bold text-[#F8F9FA] mb-5">{t.formTitle}</h3>
 
                 {submittedData && (
@@ -205,7 +205,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t.namePlaceholder}
-                        className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
+                        className="w-full rounded-lg border border-[#DDA146]/25 bg-[#070605] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DDA146] focus:outline-none"
                       />
                       {errors.name && <p className="mt-1 text-xs text-rose-400">{errors.name}</p>}
                     </div>
@@ -221,7 +221,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="name@gmail.com"
-                        className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm font-code text-white placeholder:text-[#6B7280] text-left focus:border-[#DFAF5A] focus:outline-none"
+                        className="w-full rounded-lg border border-[#DDA146]/25 bg-[#070605] px-3.5 py-2.5 text-sm font-code text-white placeholder:text-[#6B7280] text-left focus:border-[#DDA146] focus:outline-none"
                       />
                       {errors.email && <p className="mt-1 text-xs text-rose-400">{errors.email}</p>}
                     </div>
@@ -237,7 +237,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
                       placeholder={t.subjectPlaceholder}
-                      className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
+                      className="w-full rounded-lg border border-[#DDA146]/25 bg-[#070605] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DDA146] focus:outline-none"
                     />
                   </div>
 
@@ -251,7 +251,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder={t.messagePlaceholder}
-                      className="w-full rounded-lg border border-white/12 bg-[#0D0E13] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DFAF5A] focus:outline-none"
+                      className="w-full rounded-lg border border-[#DDA146]/25 bg-[#070605] px-3.5 py-2.5 text-sm text-white placeholder:text-[#6B7280] focus:border-[#DDA146] focus:outline-none"
                     />
                     {errors.message && (
                       <p className="mt-1 text-xs text-rose-400">{errors.message}</p>
@@ -260,7 +260,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
 
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#DFAF5A] hover:bg-[#ECC578] text-[#0B0C10] px-6 py-2.5 text-sm font-bold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] shadow-[0_0_15px_rgba(221,161,70,0.3)] px-6 py-2.5 text-sm font-bold transition-all cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
                     <span>{t.submitBtn}</span>
@@ -271,8 +271,8 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
           </div>
 
           {/* Location Map Card */}
-          <div className="mt-12 rounded-2xl border border-white/10 bg-[#12151E] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch">
-            <div className="lg:col-span-6 aspect-[3/2] lg:aspect-auto lg:min-h-[320px] bg-[#0B0C10]">
+          <div className="mt-12 rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch shadow-xl">
+            <div className="lg:col-span-6 aspect-[3/2] lg:aspect-auto lg:min-h-[320px] bg-[#070605]">
               <StudioArt
                 variant="amman-map"
                 alt={
@@ -286,7 +286,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
               />
             </div>
             <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-center space-y-3">
-              <p className="text-xs font-semibold text-[#DFAF5A]">{t.ourLocation}</p>
+              <p className="text-xs font-semibold text-[#DDA146]">{t.ourLocation}</p>
               <h3 dir="ltr" className="text-2xl font-bold text-[#F8F9FA] rtl:text-right ltr:text-left">
                 {displayLocation}
               </h3>
@@ -296,7 +296,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                   href={sanitizeExternalUrl(profile.contact.mapsUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-[#DFAF5A]/55 px-4 py-2 text-xs font-semibold text-[#F6DDA7] hover:bg-[#DFAF5A] hover:text-[#0B0C10] transition-colors"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[#DDA146]/55 px-4 py-2 text-xs font-semibold text-[#F3C067] hover:bg-[#DDA146] hover:text-[#070605] transition-colors"
                 >
                   <MapPin className="w-3.5 h-3.5" />
                   <span>{t.openMaps}</span>
@@ -309,7 +309,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
       </section>
 
       {/* Quiet Studio Footer */}
-      <footer className="border-t border-white/8 bg-[#07080B] py-10">
+      <footer className="border-t border-[#DDA146]/20 bg-[#050403] py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <BrandLogoMark logoDataUrl={profile.logoDataUrl} alt={displayName} />
@@ -324,8 +324,8 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#9CA3AF]">
             <span>{f.tagline}</span>
             <span aria-hidden="true">·</span>
-            <div className="inline-flex items-center gap-1 rounded-md bg-white/5 p-0.5 border border-white/10">
-              <Globe className="w-3.5 h-3.5 text-[#DFAF5A] mx-1" />
+            <div className="inline-flex items-center gap-1 rounded-md bg-[#070605] p-0.5 border border-[#DDA146]/25">
+              <Globe className="w-3.5 h-3.5 text-[#DDA146] mx-1" />
               {(['ku', 'ar', 'en'] as const).map((code) => {
                 const label = code === 'ku' ? 'کوردی' : code === 'ar' ? 'العربية' : 'English';
                 const isActive = lang === code;
@@ -336,7 +336,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     onClick={() => onToggleLanguage(code)}
                     className={`px-2 py-0.5 text-[11px] font-medium rounded transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-[#DFAF5A] text-[#0B0C10] font-bold shadow-sm'
+                        ? 'bg-[#DDA146] text-[#070605] font-bold shadow-sm'
                         : 'text-[#C5C9D3] hover:text-white'
                     }`}
                   >
@@ -351,7 +351,7 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                 <button
                   type="button"
                   onClick={onOpenCustomizer}
-                  className="inline-flex items-center gap-1.5 text-[#DFAF5A] hover:text-[#F6DDA7] font-medium cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[#DDA146] hover:text-[#F3C067] font-medium cursor-pointer"
                 >
                   <SlidersHorizontal className="w-3.5 h-3.5" />
                   <span>{f.customize}</span>

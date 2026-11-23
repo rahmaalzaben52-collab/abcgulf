@@ -287,11 +287,11 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
     <section
       id="licenses"
       aria-labelledby="licenses-heading"
-      className="py-20 sm:py-28 border-t border-white/8 bg-[#090A0E] relative overflow-hidden"
+      className="py-20 sm:py-28 border-t border-[#DDA146]/20 bg-[#070605] relative overflow-hidden"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 end-1/4 w-[420px] h-[420px] rounded-full bg-[#DFAF5A]/5 blur-3xl"
+        className="pointer-events-none absolute -top-24 end-1/4 w-[420px] h-[420px] rounded-full bg-[#DDA146]/8 blur-3xl"
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,8 +299,8 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="w-7 h-px bg-[#DFAF5A]" aria-hidden="true" />
-              <p className="text-xs font-semibold tracking-wide text-[#DFAF5A]">{t.kicker}</p>
+              <span className="w-7 h-px bg-[#DDA146]" aria-hidden="true" />
+              <p className="text-xs font-semibold tracking-wide text-[#DDA146]">{t.kicker}</p>
             </div>
             <h2
               id="licenses-heading"
@@ -318,7 +318,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
               <button
                 type="button"
                 onClick={() => openCreateModal()}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#DFAF5A] hover:bg-[#ECC578] text-[#0B0C10] px-4 py-2.5 text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-4 py-2.5 text-sm font-bold transition-all shadow-[0_0_12px_rgba(221,161,70,0.3)] whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>{t.addBtn}</span>
@@ -326,7 +326,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
               <button
                 type="button"
                 onClick={onOpenCustomizer}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/14 bg-[#161821] hover:border-[#DFAF5A]/50 text-[#F4F5F7] px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#DDA146]/30 bg-[#120F0A] hover:border-[#DDA146] text-[#F4F5F7] px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <span>{t.manageBtn}</span>
               </button>
@@ -339,7 +339,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
           role="tablist"
           aria-label={t.fields.region}
           data-testid="license-region-tabs"
-          className="flex flex-wrap items-center gap-2.5 pb-8 mb-10 border-b border-white/10"
+          className="flex flex-wrap items-center gap-2.5 pb-8 mb-10 border-b border-[#DDA146]/20"
         >
           <button
             type="button"
@@ -349,15 +349,15 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
             onClick={() => setSelectedRegion('all')}
             className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs sm:text-sm font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               selectedRegion === 'all'
-                ? 'bg-[#DFAF5A] border-[#DFAF5A] text-[#0B0C10]'
-                : 'bg-[#12151E] border-white/12 text-[#D1D5DB] hover:border-[#DFAF5A]/45 hover:text-white'
+                ? 'bg-[#DDA146] border-[#DDA146] text-[#070605] shadow-[0_0_10px_rgba(221,161,70,0.3)]'
+                : 'bg-[#120F0A] border-[#DDA146]/25 text-[#D1D5DB] hover:border-[#DDA146]/60 hover:text-white'
             }`}
           >
             <Globe2 className="w-4 h-4 shrink-0" />
             <span>{t.allRegions}</span>
             <span
               className={`font-code text-[11px] px-1.5 py-0.5 rounded ${
-                selectedRegion === 'all' ? 'bg-[#0B0C10]/15 text-[#0B0C10]' : 'bg-white/6 text-[#9CA3AF]'
+                selectedRegion === 'all' ? 'bg-[#070605]/20 text-[#070605]' : 'bg-white/6 text-[#9CA3AF]'
               }`}
             >
               {licenses.length}
@@ -382,19 +382,19 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                 onClick={() => setSelectedRegion(region.id)}
                 className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs sm:text-sm font-semibold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   active
-                    ? 'bg-[#DFAF5A] border-[#DFAF5A] text-[#0B0C10]'
-                    : 'bg-[#12151E] border-white/12 text-[#D1D5DB] hover:border-[#DFAF5A]/45 hover:text-white'
+                    ? 'bg-[#DDA146] border-[#DDA146] text-[#070605] shadow-[0_0_10px_rgba(221,161,70,0.3)]'
+                    : 'bg-[#120F0A] border-[#DDA146]/25 text-[#D1D5DB] hover:border-[#DDA146]/60 hover:text-white'
                 }`}
               >
                 <span
                   className={`font-code text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded ${
-                    active ? 'bg-[#0B0C10]/15 text-[#0B0C10]' : 'bg-[#DFAF5A]/12 text-[#DFAF5A]'
+                    active ? 'bg-[#070605]/20 text-[#070605]' : 'bg-[#DDA146]/15 text-[#DDA146]'
                   }`}
                 >
                   {region.code}
                 </span>
                 <span>{label}</span>
-                <span className={`font-code text-[11px] ${active ? 'text-[#0B0C10]/80' : 'text-[#8E95A5]'}`}>
+                <span className={`font-code text-[11px] ${active ? 'text-[#070605]/80' : 'text-[#8E95A5]'}`}>
                   {items.length}
                 </span>
               </button>
@@ -404,15 +404,15 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
 
         {/* Grouped Country Sections — Facebook Story/Card Style Row Grid */}
         {visibleGroups.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/15 bg-[#12151E] p-12 text-center">
-            <FileText className="w-10 h-10 text-[#DFAF5A] mx-auto mb-3" />
+          <div className="rounded-2xl border border-dashed border-[#DDA146]/30 bg-[#120F0A] p-12 text-center">
+            <FileText className="w-10 h-10 text-[#DDA146] mx-auto mb-3" />
             <p className="text-base font-semibold text-[#F4F5F7]">{t.emptyTitle}</p>
             <p className="text-sm text-[#9CA3AF] mt-1 mb-5">{t.emptyDesc}</p>
             {isAdmin && (
               <button
                 type="button"
                 onClick={() => openCreateModal()}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#DFAF5A] text-[#0B0C10] px-4 py-2 text-sm font-bold cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#DDA146] text-[#070605] px-4 py-2 text-sm font-bold cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>{t.addFirstBtn}</span>
@@ -442,19 +442,19 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                   key={region.id}
                   data-testid={`license-group-${region.id}`}
                   aria-labelledby={`group-heading-${region.id}`}
-                  className="relative rounded-2xl border border-white/10 bg-[#10131C]/95 p-5 sm:p-6 overflow-hidden"
+                  className="relative rounded-2xl border border-[#DDA146]/25 bg-[#0C0A07]/95 p-5 sm:p-6 overflow-hidden"
                 >
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#DFAF5A] via-[#F6DDA7]/65 to-transparent z-10"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#DDA146] via-[#F3C067]/65 to-transparent z-10"
                   />
 
                   {/* Country Header Bar */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/8">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#DDA146]/15">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl border border-[#DFAF5A]/35 bg-[#DFAF5A]/10 flex flex-col items-center justify-center shrink-0">
-                        <MapPin className="w-4 h-4 text-[#DFAF5A] mb-0.5" aria-hidden="true" />
-                        <span className="font-code text-[10px] font-bold tracking-wider text-[#F6DDA7]">
+                      <div className="w-10 h-10 rounded-xl border border-[#DDA146]/35 bg-[#DDA146]/10 flex flex-col items-center justify-center shrink-0">
+                        <MapPin className="w-4 h-4 text-[#DDA146] mb-0.5" aria-hidden="true" />
+                        <span className="font-code text-[10px] font-bold tracking-wider text-[#F3C067]">
                           {region.code}
                         </span>
                       </div>
@@ -466,7 +466,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                           >
                             {regionTitle}
                           </h3>
-                          <span className="inline-flex items-center rounded-md border border-[#DFAF5A]/30 bg-[#DFAF5A]/10 px-2 py-0.5 text-[11px] font-semibold text-[#F6DDA7]">
+                          <span className="inline-flex items-center rounded-md border border-[#DDA146]/30 bg-[#DDA146]/10 px-2 py-0.5 text-[11px] font-semibold text-[#F3C067]">
                             {countLabel}
                           </span>
                         </div>
@@ -477,7 +477,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                       <button
                         type="button"
                         onClick={() => openCreateModal(region.id)}
-                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#DFAF5A]/40 bg-[#DFAF5A]/10 hover:bg-[#DFAF5A] hover:text-[#0B0C10] text-[#F6DDA7] px-3.5 py-2 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[#DDA146]/40 bg-[#DDA146]/10 hover:bg-[#DDA146] hover:text-[#070605] text-[#F3C067] px-3.5 py-2 text-xs font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>{t.addToRegionBtn}</span>
@@ -487,7 +487,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
 
                   {/* Facebook Story-Style Horizontal Grid (Side-by-Side Cards) */}
                   {items.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-white/12 bg-[#0B0D13] p-8 text-center">
+                    <div className="rounded-xl border border-dashed border-white/12 bg-[#070605] p-8 text-center">
                       <p className="text-sm text-[#9CA3AF]">{t.emptyTitle}</p>
                     </div>
                   ) : (
@@ -504,20 +504,20 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                           <article
                             key={lic.id}
                             data-testid={`license-card-${lic.id}`}
-                            className="group relative flex flex-col justify-between rounded-xl border border-white/10 bg-[#141824] hover:border-[#DFAF5A]/60 transition-all duration-200 overflow-hidden shadow-lg p-4"
+                            className="group relative flex flex-col justify-between rounded-xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146]/80 hover:shadow-[0_0_20px_rgba(221,161,70,0.2)] transition-all duration-200 overflow-hidden shadow-lg p-4"
                           >
                             <span
                               aria-hidden="true"
-                              className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#DFAF5A] to-transparent"
+                              className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#DDA146] via-[#F3C067] to-transparent"
                             />
 
                             <div>
                               <div className="flex items-center justify-between gap-2 mb-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#DFAF5A]/12 border border-[#DFAF5A]/25 flex items-center justify-center shrink-0">
-                                  <FileText className="w-4 h-4 text-[#DFAF5A]" />
+                                <div className="w-8 h-8 rounded-lg bg-[#DDA146]/12 border border-[#DDA146]/25 flex items-center justify-center shrink-0">
+                                  <FileText className="w-4 h-4 text-[#DDA146]" />
                                 </div>
-                                <span className="inline-flex items-center gap-1 rounded border border-white/12 bg-[#0D1018] px-2 py-0.5 text-[10px] font-semibold text-[#D1D5DB]">
-                                  <span className="font-code text-[#DFAF5A] font-bold">PDF</span>
+                                <span className="inline-flex items-center gap-1 rounded border border-[#DDA146]/25 bg-[#070605] px-2 py-0.5 text-[10px] font-semibold text-[#D1D5DB]">
+                                  <span className="font-code text-[#DDA146] font-bold">PDF</span>
                                   <span>{hasCustomPdf ? t.pdfAttached : t.pdfReady}</span>
                                 </span>
                               </div>
@@ -530,11 +530,11 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                               </h4>
                             </div>
 
-                            <div className="pt-3 border-t border-white/8 flex items-center justify-between gap-1.5">
+                            <div className="pt-3 border-t border-[#DDA146]/15 flex items-center justify-between gap-1.5">
                               <button
                                 type="button"
                                 onClick={() => setPreviewLicense(rawLic)}
-                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#DFAF5A] hover:text-[#F6DDA7] cursor-pointer bg-[#0D1018] px-2.5 py-1.5 rounded border border-white/8"
+                                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#DDA146] hover:text-[#F3C067] cursor-pointer bg-[#070605] px-2.5 py-1.5 rounded border border-[#DDA146]/25"
                               >
                                 <Eye className="w-3.5 h-3.5" />
                                 <span>{t.viewDoc}</span>
@@ -545,7 +545,7 @@ export const LicensesSection: React.FC<LicensesSectionProps> = ({
                                 disabled={isBusy}
                                 onClick={() => void handleDownloadPdf(rawLic)}
                                 aria-label={`${t.downloadPdf} — ${lic.title}`}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold bg-[#DFAF5A] hover:bg-[#ECC578] disabled:opacity-60 text-[#0B0C10] px-2.5 py-1.5 rounded transition-colors cursor-pointer"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold bg-[#DDA146] hover:bg-[#F3C067] disabled:opacity-60 text-[#070605] px-2.5 py-1.5 rounded transition-colors cursor-pointer"
                               >
                                 <Download className="w-3.5 h-3.5" />
                                 <span>{isBusy ? t.downloadingPdf : t.downloadPdf}</span>
