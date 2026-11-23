@@ -28,10 +28,6 @@ const PHOTO_ASSETS: Partial<Record<StudioArtProps['variant'], { src: string; alt
     src: '/src/assets/images/service_post_editing_1795364637668.jpg',
     alt: 'Color grading and post-production suite',
   },
-  'drone-aerial': {
-    src: '/src/assets/images/service_aerial_drone_1795364638710.jpg',
-    alt: 'Cinema drone aerial filming at golden hour',
-  },
   'about-studio': {
     src: '/assets/aistudio/a11b8692-2948-42ee-911f-ca42aaa8cbc6_8d81ffbb.jpg',
     alt: 'Abc Gulf Productions broadcast and interview studio',
@@ -131,15 +127,6 @@ export const StudioArt: React.FC<StudioArtProps> = ({ variant, alt, className = 
           <rect x="55" y="42" width="136" height="86" rx="6" fill="#151924" stroke="#DFAF5A" strokeOpacity="0.45" />
           <rect x="68" y="92" width="110" height="8" rx="2" fill="#DFAF5A" fillOpacity="0.65" />
         </svg>
-      );
-
-    case 'drone-aerial':
-      return (
-        <img
-          src="/gallery/drone-cinema-060.jpg"
-          alt={alt}
-          className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${className}`}
-        />
       );
 
     case 'podcast-mic':

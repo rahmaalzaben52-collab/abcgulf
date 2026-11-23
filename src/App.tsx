@@ -3,20 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Award,
   ChevronLeft,
   ChevronRight,
   Film,
   Globe,
   LogOut,
-  Pause,
   Play,
   ShieldCheck,
   SlidersHorizontal,
+  Sparkles,
   Upload,
-  Volume2,
-  VolumeX,
 } from 'lucide-react';
 import {
   deriveAndStoreAdminToken,
@@ -40,7 +39,6 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
-import { CinemaDeckScrubber } from './components/CinemaDeckScrubber';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -78,11 +76,6 @@ export default function App() {
 
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [customizerOpen, setCustomizerOpen] = useState(false);
-
-  const [heroVideoPlaying, setHeroVideoPlaying] = useState(true);
-  const [heroVideoMuted, setHeroVideoMuted] = useState(true);
-  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
-  const heroSectionRef = useRef<HTMLElement | null>(null);
 
   const [pendingModelBuffer, setPendingModelBuffer] = useState<ArrayBuffer | null>(null);
   const [pendingModelName, setPendingModelName] = useState<string | null>(null);
@@ -136,7 +129,7 @@ export default function App() {
 
   // Update active navigation indicator on scroll
   useEffect(() => {
-    const sectionIds = ['hero', 'cinema-suite', 'services', 'about', 'licenses', 'contact'];
+    const sectionIds = ['hero', 'services', 'about', 'licenses', 'contact'];
     const handleScroll = () => {
       const scrollY = window.scrollY + 140;
       for (let i = sectionIds.length - 1; i >= 0; i--) {
@@ -150,58 +143,6 @@ export default function App() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // UI/UX Pro Max: Video Background Observer (Auto-pause offscreen to save battery/GPU)
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    const hero = heroSectionRef.current;
-    if (!video || !hero) return;
-
-    // Respect prefers-reduced-motion
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) {
-      video.pause();
-      setHeroVideoPlaying(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            video.play().catch(() => {});
-            setHeroVideoPlaying(true);
-          } else {
-            video.pause();
-            setHeroVideoPlaying(false);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
-
-  const toggleHeroVideo = () => {
-    const v = heroVideoRef.current;
-    if (!v) return;
-    if (v.paused) {
-      v.play().catch(() => {});
-      setHeroVideoPlaying(true);
-    } else {
-      v.pause();
-      setHeroVideoPlaying(false);
-    }
-  };
-
-  const toggleHeroMute = () => {
-    const v = heroVideoRef.current;
-    if (!v) return;
-    v.muted = !v.muted;
-    setHeroVideoMuted(v.muted);
-  };
 
   // Displayed licenses: cloud/edited data, or DEFAULT_LICENSES if nothing saved yet
   const displayedLicenses =
@@ -483,55 +424,25 @@ export default function App() {
       <main className="flex-1">
         {/* Cinematic Heritage Hero (Inspired by Erbil Citadel Architecture & 35mm Gold Cinema Film) */}
         <section
-          ref={heroSectionRef}
           id="hero"
           aria-labelledby="hero-heading"
           className="relative overflow-hidden bg-[#070605] studio-hairline-grid min-h-[640px] sm:min-h-[720px] lg:min-h-[760px] flex items-center"
         >
-          {/* Background: Aerial Drone Cinema Footage + Majestic Heritage Backdrop */}
+          {/* Background: Majestic Erbil Citadel Colonnade & 35mm Golden Cinema Film Strips */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <video
-              ref={heroVideoRef}
-              src="/videos/hero-drone-cinema.mp4"
-              poster="/videos/hero-drone-poster.jpg"
-              autoPlay
-              muted={heroVideoMuted}
-              loop
-              playsInline
-              className="w-full h-full object-cover object-center opacity-45 sm:opacity-55 scale-105"
+            <img
+              src="/images/erbil-cinema-theme.jpg"
+              alt="Erbil Citadel ancient brick colonnade and 35mm golden cinema film strips"
+              className="w-full h-full object-cover object-top opacity-55 sm:opacity-65 scale-100"
             />
             {/* Deep Warm Cinema Gradients & Scrims (Ensures >= 7:1 contrast for text readability) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/75 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/85 via-transparent to-[#070605]" />
-            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/90 to-transparent/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/90 via-transparent to-[#070605]" />
+            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/90 to-transparent/30" />
 
             {/* Warm Amber Atmospheric Flares */}
             <div className="absolute top-1/4 start-1/3 w-[450px] h-[450px] rounded-full bg-[#DDA146]/15 blur-3xl" />
             <div className="absolute bottom-1/3 end-1/4 w-[380px] h-[380px] rounded-full bg-[#F3C067]/10 blur-3xl" />
-          </div>
-
-          {/* Video Accessibility & Control Dock */}
-          <div className="absolute bottom-8 end-8 z-20 hidden sm:flex items-center gap-2 rounded-xl border border-[#DDA146]/30 bg-[#0C0A07]/85 backdrop-blur-md px-3 py-1.5 shadow-[0_0_15px_rgba(221,161,70,0.15)]">
-            <span className="text-[11px] font-code text-[#F6DDA7]">
-              {lang === 'en' ? '4K Cinema Drone Aerial' : lang === 'ku' ? 'دیمەنی درۆن 4K' : 'تصوير جوي درون 4K'}
-            </span>
-            <span className="w-1 h-1 rounded-full bg-[#DDA146]" />
-            <button
-              type="button"
-              onClick={toggleHeroVideo}
-              aria-label={heroVideoPlaying ? 'Pause background video' : 'Play background video'}
-              className="p-1 rounded text-[#DDA146] hover:text-[#F3C067] hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              {heroVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            </button>
-            <button
-              type="button"
-              onClick={toggleHeroMute}
-              aria-label={heroVideoMuted ? 'Unmute video audio' : 'Mute video audio'}
-              className="p-1 rounded text-[#DDA146] hover:text-[#F3C067] hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            </button>
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
@@ -693,8 +604,93 @@ export default function App() {
         {/* Luminous Gold Laser Ribbon Divider */}
         <div className="gold-laser-ribbon" />
 
-        {/* Interactive Aerial Cinematography Suite (Scrubber with 120-Frame Sequence & Drone Telemetry) */}
-        <CinemaDeckScrubber lang={lang} />
+        {/* UI/UX Pro Max: High-Impact Cinema Production Metrics & Trust Grid */}
+        <section
+          aria-label="Production Accreditations & Scale"
+          className="relative py-12 sm:py-16 bg-gradient-to-b from-[#070605] via-[#0B0907] to-[#070605] border-y border-[#DDA146]/20"
+        >
+          {/* Subtle Ambient Studio Stage in Background */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25">
+            <img
+              src="/images/studio-stage.jpg"
+              alt=""
+              className="w-full h-full object-cover object-bottom"
+            />
+            <div className="absolute inset-0 bg-[#070605]/85" />
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              {/* Stat 1 */}
+              <div className="group rounded-2xl border border-[#DDA146]/25 bg-[#0E0C09]/90 backdrop-blur-md p-5 sm:p-6 text-center transition-all duration-300 hover:border-[#DDA146] hover:shadow-[0_0_25px_rgba(221,161,70,0.25)] hover:-translate-y-1">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-[#DDA146]/10 border border-[#DDA146]/30 flex items-center justify-center text-[#DDA146] group-hover:scale-110 transition-transform">
+                  <Award className="w-5 h-5" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#F8F9FA] tracking-tight font-latin">
+                  15+
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-medium text-[#C5BBAA]">
+                  {lang === 'en'
+                    ? 'Years Production Legacy'
+                    : lang === 'ku'
+                      ? 'ساڵ ئەزموونی بەرهەمهێنان'
+                      : 'عاماً من الخبرة الإنتاجية'}
+                </div>
+              </div>
+
+              {/* Stat 2 */}
+              <div className="group rounded-2xl border border-[#DDA146]/25 bg-[#0E0C09]/90 backdrop-blur-md p-5 sm:p-6 text-center transition-all duration-300 hover:border-[#DDA146] hover:shadow-[0_0_25px_rgba(221,161,70,0.25)] hover:-translate-y-1">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-[#DDA146]/10 border border-[#DDA146]/30 flex items-center justify-center text-[#DDA146] group-hover:scale-110 transition-transform">
+                  <Film className="w-5 h-5" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#F8F9FA] tracking-tight font-latin">
+                  500+
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-medium text-[#C5BBAA]">
+                  {lang === 'en'
+                    ? 'Films & Commercial Campaigns'
+                    : lang === 'ku'
+                      ? 'پڕۆژە و بەرهەمی سەرکەوتوو'
+                      : 'عمل سينمائي وحملة إعلانية'}
+                </div>
+              </div>
+
+              {/* Stat 3 */}
+              <div className="group rounded-2xl border border-[#DDA146]/25 bg-[#0E0C09]/90 backdrop-blur-md p-5 sm:p-6 text-center transition-all duration-300 hover:border-[#DDA146] hover:shadow-[0_0_25px_rgba(221,161,70,0.25)] hover:-translate-y-1">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-[#DDA146]/10 border border-[#DDA146]/30 flex items-center justify-center text-[#DDA146] group-hover:scale-110 transition-transform">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#F8F9FA] tracking-tight font-latin">
+                  5
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-medium text-[#C5BBAA]">
+                  {lang === 'en'
+                    ? 'Official Certified Accreditations'
+                    : lang === 'ku'
+                      ? 'مۆڵەتی فەرمی پەسەندکراو'
+                      : 'تراخيص رسمية معتمدة'}
+                </div>
+              </div>
+
+              {/* Stat 4 */}
+              <div className="group rounded-2xl border border-[#DDA146]/25 bg-[#0E0C09]/90 backdrop-blur-md p-5 sm:p-6 text-center transition-all duration-300 hover:border-[#DDA146] hover:shadow-[0_0_25px_rgba(221,161,70,0.25)] hover:-translate-y-1">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-[#DDA146]/10 border border-[#DDA146]/30 flex items-center justify-center text-[#DDA146] group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-[#F8F9FA] tracking-tight font-latin">
+                  4K / 6K
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-medium text-[#C5BBAA]">
+                  {lang === 'en'
+                    ? 'Cinema Standard Resolution'
+                    : lang === 'ku'
+                      ? 'ستانداردی سینەمایی و کوالیتی'
+                      : 'معايير الدقة السينمائية'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Luminous Gold Laser Ribbon Divider */}
         <div className="gold-laser-ribbon" />

@@ -55,18 +55,18 @@ export const SERVICE_COPY: Record<
   },
   'srv-cinematography': {
     en: {
-      title: 'High-Definition Video Filming & Editing',
-      shortDesc: 'Cinema lenses, studio lighting, and seamless editorial pacing.',
+      title: 'Live Media Coverage & Field Production',
+      shortDesc: 'Cinema lenses, studio lighting, and multi-camera live broadcast.',
       fullDesc:
-        'Event coverage, corporate documentaries, and field shoots captured with modern cinema cameras and precision stabilization.',
-      deliverables: ['Multi-Camera Live Coverage', 'Aerial Drone Cinematography', 'Precision Editorial Cut'],
+        'Major event coverage, corporate summits, and multi-camera field broadcasting captured with modern cinema cameras and live transmission setups.',
+      deliverables: ['Multi-Camera Live Coverage', 'Live Broadcast Transmission', 'Precision Editorial Cut'],
     },
     ku: {
-      title: 'وێنەگرتن و مۆنتاژی ڤیدیۆ بە کوالیتی سینەمایی',
-      shortDesc: 'هاوێنەی سینەمایی، ڕووناککردنەوەی ستۆدیۆ و مۆنتاژی ورد و خێرا.',
+      title: 'رووماڵی میدیایی و بەرهەمهێنانی مەیدانی ڕاستەوخۆ',
+      shortDesc: 'هاوێنەی سینەمایی، ڕووناککردنەوەی ستۆدیۆ و پەخشی ڕاستەوخۆ.',
       fullDesc:
-        'رووماڵی بۆنە و فێستیڤاڵەکان، دۆکیۆمێنتاری کۆمپانیاکان و وێنەگرتنی مەیدانی بە نوێترین کامێرای سینەمایی و سیستەمی جێگیرکردنی پێشکەوتوو.',
-      deliverables: ['رووماڵی ڕاستەوخۆ بە چەندین کامێرا', 'وێنەگرتنی ئاسمانی بە درۆن (Drone)', 'مۆنتاژی پرۆفێشناڵ و ورد'],
+        'رووماڵی بۆنە و کۆنفرانسە گەورەکان و وێنەگرتنی مەیدانی بە نوێترین کامێرای سینەمایی و سیستەمی پەخشی ڕاستەوخۆی پێشکەوتوو.',
+      deliverables: ['رووماڵی ڕاستەوخۆ بە چەندین کامێرا', 'پەخشی تەلەفزیۆنی و دیجیتاڵی', 'مۆنتاژی پرۆفێشناڵ و خێرا'],
     },
   },
   'srv-podcast': {
