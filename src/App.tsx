@@ -524,20 +524,20 @@ export default function App() {
               }}
             />
 
-            {/* Subtle top/bottom fade & soft radial spotlight so citadel shines brightly */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/70 via-transparent to-[#070605]/90" />
+            {/* Subtle top/bottom fade & targeted center radial scrim for crystal-clear text */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/70 via-transparent to-[#070605]/95" />
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse at center, rgba(7,6,5,0.45) 0%, rgba(7,6,5,0.16) 55%, rgba(7,6,5,0.62) 100%)',
+                  'radial-gradient(ellipse 68% 58% at 50% 50%, rgba(7,6,5,0.78) 0%, rgba(7,6,5,0.42) 55%, rgba(7,6,5,0.14) 100%)',
               }}
             />
           </div>
 
           {/* ── Top-End Compact Audio & Playback Control Pill ── */}
           <div
-            className="absolute top-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-full border border-[#DDA146]/40 bg-[#0C0A07]/75 backdrop-blur-md px-3.5 py-1.5 shadow-[0_0_20px_rgba(0,0,0,0.45)]"
+            className="absolute top-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-full border border-[#DDA146]/45 bg-[#070605]/80 backdrop-blur-md px-3.5 py-1.5 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
             role="group"
             aria-label={lang === 'en' ? 'Video playback controls' : lang === 'ku' ? 'کۆنتڕۆڵی ڤیدیۆ' : 'أدوات تشغيل الفيديو'}
           >
@@ -581,67 +581,68 @@ export default function App() {
             </button>
           </div>
 
-          {/* ── Centered Hero Content (Matching Reference Image Layout) ── */}
-          <div className="relative z-10 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-20 sm:py-28 flex flex-col items-center text-center space-y-6">
-            {/* Top Studio Pill Badge */}
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/45 bg-[#0C0A07]/75 px-5 py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.45)] backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146]" aria-hidden="true" />
-              <span className="text-[11px] sm:text-xs font-latin font-bold tracking-[0.2em] uppercase text-[#F6DDA7]">
-                {lang === 'en'
-                  ? 'ABC GULF CINEMATIC STUDIOS'
-                  : lang === 'ku'
-                    ? 'ABC GULF CINEMATIC STUDIOS'
-                    : 'ABC GULF CINEMATIC STUDIOS'}
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146]" aria-hidden="true" />
-            </div>
-
-            {/* Two-Tone Centered Headline */}
-            <div className="space-y-3">
-              <h1
-                id="hero-heading"
-                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.2] text-balance tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]"
-              >
-                <span className="block text-white">
-                  {lang === 'en'
-                    ? t.hero.companyName
-                    : lang === 'ku'
-                      ? profile.nameKu || t.hero.companyName
-                      : profile.nameAr}
+          {/* ── Centered Hero Content (High Contrast & Cinematic Polish) ── */}
+          <div className="relative z-10 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 flex flex-col items-center text-center">
+            <div className="w-full max-w-4xl rounded-3xl bg-[#070605]/40 backdrop-blur-[3px] border border-[#DDA146]/20 px-5 py-8 sm:px-10 sm:py-11 shadow-[0_12px_60px_rgba(0,0,0,0.65)] flex flex-col items-center space-y-6">
+              {/* Top Channel Pill Badge */}
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/55 bg-[#070605]/85 px-5 py-2 shadow-[0_4px_24px_rgba(221,161,70,0.2)] backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146]" aria-hidden="true" />
+                <span className="text-[11px] sm:text-xs font-latin font-bold tracking-[0.16em] uppercase text-[#F9E4B0]">
+                  ABC GULF CHANNEL FOR ARTISTIC PRODUCTION
                 </span>
-                <span className="gold-text-gradient block mt-2 text-2xl sm:text-4xl lg:text-5xl">
-                  {lang === 'en'
-                    ? 'Turning Ideas Into Unforgettable Visuals'
-                    : lang === 'ku'
-                      ? 'بیرۆکەکان دەگۆڕین بۆ ئەزموونی بینراوی لەبیرنەکراو'
-                      : 'نحوّل الأفكار إلى تجارب بصرية لا تُنسى'}
-                </span>
-              </h1>
-            </div>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146]" aria-hidden="true" />
+              </div>
 
-            {/* Clean Centered Tagline */}
-            <p className="text-sm sm:text-lg text-[#F3F4F6] leading-relaxed max-w-2xl font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
-              {t.hero.tagline}
-            </p>
+              {/* Two-Tone Centered Headline */}
+              <div className="space-y-3">
+                <h1
+                  id="hero-heading"
+                  className="text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.22] text-balance tracking-tight"
+                >
+                  <span className="block text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+                    {lang === 'en'
+                      ? t.hero.companyName
+                      : lang === 'ku'
+                        ? profile.nameKu || t.hero.companyName
+                        : profile.nameAr}
+                  </span>
+                  <span className="block mt-3 text-2xl sm:text-4xl lg:text-[2.75rem] bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#DDA146] bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+                    {lang === 'en'
+                      ? 'Turning Ideas Into Unforgettable Visuals'
+                      : lang === 'ku'
+                        ? 'بیرۆکەکان دەگۆڕین بۆ ئەزموونی بینراوی لەبیرنەکراو'
+                        : 'نحوّل الأفكار إلى تجارب بصرية لا تُنسى'}
+                  </span>
+                </h1>
+              </div>
 
-            {/* Centered Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
-              <button
-                type="button"
-                onClick={() => navigateToSection('services')}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-7 py-3.5 text-sm font-extrabold transition-all shadow-[0_0_28px_rgba(221,161,70,0.45)] whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                <span>{t.hero.ctaServices}</span>
-                <DirectionalChevron className="w-4 h-4" />
-              </button>
+              {/* Subtle Gold Divider Accent */}
+              <div className="w-28 h-[2px] bg-gradient-to-r from-transparent via-[#DDA146] to-transparent opacity-80" aria-hidden="true" />
 
-              <button
-                type="button"
-                onClick={() => navigateToSection('contact')}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-[#0C0A07]/80 hover:border-[#DDA146] hover:bg-[#14110C] backdrop-blur-md px-6 py-3.5 text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 shadow-lg cursor-pointer"
-              >
-                <span>{t.nav.contact}</span>
-              </button>
+              {/* Clean Centered Tagline */}
+              <p className="text-base sm:text-lg text-[#F9FAFB] leading-relaxed max-w-2xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                {t.hero.tagline}
+              </p>
+
+              {/* Centered Action Buttons */}
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('services')}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-sm font-extrabold transition-all shadow-[0_0_28px_rgba(221,161,70,0.45)] whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  <span>{t.hero.ctaServices}</span>
+                  <DirectionalChevron className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('contact')}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-[#070605]/85 hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 backdrop-blur-md px-6 py-3.5 text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 shadow-lg cursor-pointer"
+                >
+                  <span>{t.nav.contact}</span>
+                </button>
+              </div>
             </div>
           </div>
 
