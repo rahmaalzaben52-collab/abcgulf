@@ -39,6 +39,7 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
+import { HeroImage3D } from './components/HeroImage3D';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -429,14 +430,11 @@ export default function App() {
             accessible play/mute controls (44×44 px min touch targets).
         ═══════════════════════════════════════════════════════════════ */}
         <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
-          {/* Pure, Unobstructed Hero Image (Zero overlays or additions) */}
-          <div className="w-full bg-[#070605]">
-            <img
-              src="/images/hero-erbil-broadcast.jpg"
-              alt={lang === 'en' ? profile.nameEn : profile.nameAr}
-              className="w-full h-auto max-h-[82vh] object-cover object-center block"
-            />
-          </div>
+          {/* Pure, Unobstructed 3D-Motion Hero Image */}
+          <HeroImage3D
+            src="/images/hero-erbil-broadcast.jpg"
+            alt={lang === 'en' ? profile.nameEn : profile.nameAr}
+          />
 
           <div className="gold-laser-ribbon" />
 
