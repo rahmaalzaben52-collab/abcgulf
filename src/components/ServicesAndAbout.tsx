@@ -104,7 +104,7 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-stretch">
             <div className="lg:col-span-6 relative rounded-2xl overflow-hidden gold-card-frame bg-[#120F0A] min-h-[300px] lg:min-h-[440px] group">
               <img
-                src="/images/studio-stage.jpg"
+                src="/images/about-abc-studio.jpg"
                 alt={
                   lang === 'en'
                     ? 'Abc Gulf Productions Broadcast & Cinema Soundstage Studio'
