@@ -678,69 +678,35 @@ export default function App() {
         {/* Luminous Gold Laser Ribbon Divider */}
         <div className="gold-laser-ribbon" />
 
-        {/* Signature 3 Floating Gold-Framed Cards (From Middle of Reference Image) */}
-        <section aria-label="Erbil Cinema Heritage Showcase" className="relative z-10 py-10 sm:py-14 bg-[#070605]">
+        {/* Signature 4 Floating Gold-Framed Video Cards (Pure Visuals, No Captions) */}
+        <section aria-label="Erbil Cinema Heritage Video Showcase" className="relative z-10 py-10 sm:py-14 bg-[#070605]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {/* Card 1: Warm colonnade */}
-              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)]">
-                <div className="aspect-[16/10] overflow-hidden bg-black">
-                  <img
-                    src="/images/card-hallway.jpg"
-                    alt="Cinema Soundstage & Studio Lighting"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+              {[
+                { src: '/videos/card-erbil-hawler.mp4', title: 'Erbil Hawler', offset: '' },
+                { src: '/videos/card-erbil-iraq-places.mp4', title: 'Erbil Heritage', offset: 'lg:-translate-y-2' },
+                { src: '/videos/card-erbil-korek-snow.mp4', title: 'Korek Snow', offset: 'lg:-translate-y-2' },
+                { src: '/videos/card-erbil-alpine.mp4', title: 'Erbil Alpine', offset: '' },
+              ].map((video) => (
+                <div
+                  key={video.src}
+                  className={`group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)] ${video.offset}`}
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-black">
+                    <video
+                      src={video.src}
+                      aria-label={video.title}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      style={{ filter: 'contrast(1.08) saturate(1.15) brightness(1.03)' }}
+                    />
+                  </div>
                 </div>
-                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
-                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
-                    {lang === 'en'
-                      ? 'Cinema Soundstages & Studio Lighting'
-                      : lang === 'ku'
-                        ? 'ستۆدیۆکانی وێنەگرتن و ڕووناککردنەوەی سینەمایی'
-                        : 'استوديوهات التصوير والإضاءة السينمائية'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 2: Ancient Erbil Citadel Fortress */}
-              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)] md:-translate-y-3">
-                <div className="aspect-[16/10] overflow-hidden bg-black">
-                  <img
-                    src="/images/card-citadel.jpg"
-                    alt="Erbil Citadel Heritage"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
-                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
-                    {lang === 'en'
-                      ? 'Authentic Production from the Heart of Erbil'
-                      : lang === 'ku'
-                        ? 'بەرهەمهێنانی ڕەسەن لە دڵی قەڵای هەولێرەوە'
-                        : 'أصالة الإنتاج من قلب قلعة أربيل'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 3: Erbil Historic Clock Tower & Fountains */}
-              <div className="group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)]">
-                <div className="aspect-[16/10] overflow-hidden bg-black">
-                  <img
-                    src="/images/card-clocktower.jpg"
-                    alt="Erbil Clock Square & Gulf Media Coverage"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="p-4 bg-gradient-to-t from-[#0E0C09] via-[#0E0C09]/95 to-[#0E0C09]/80 border-t border-[#DDA146]/30">
-                  <p className="text-xs sm:text-sm font-bold text-[#F6DDA7]">
-                    {lang === 'en'
-                      ? 'Regional Media Coverage — Kurdistan & The Gulf'
-                      : lang === 'ku'
-                        ? 'ڕووماڵی میدیایی گەورە لە کوردستان و کەنداو'
-                        : 'تغطيات كبرى في كوردستان ودول الخليج'}
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
