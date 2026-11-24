@@ -683,10 +683,10 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
               {[
-                { src: '/videos/card-erbil-hawler.mp4', title: 'Erbil Hawler', offset: '' },
-                { src: '/videos/card-erbil-iraq-places.mp4', title: 'Erbil Heritage', offset: 'lg:-translate-y-2' },
-                { src: '/videos/card-erbil-korek-snow.mp4', title: 'Korek Snow', offset: 'lg:-translate-y-2' },
                 { src: '/videos/card-erbil-alpine.mp4', title: 'Erbil Alpine', offset: '' },
+                { src: '/videos/card-erbil-korek-snow.mp4', title: 'Korek Snow', offset: 'lg:-translate-y-3' },
+                { src: '/videos/card-erbil-hawler.mp4', title: 'Erbil Hawler', offset: 'lg:-translate-y-3' },
+                { src: '/videos/card-erbil-iraq-places.mp4', title: 'Erbil Heritage', offset: '' },
               ].map((video) => (
                 <div
                   key={video.src}
@@ -700,8 +700,9 @@ export default function App() {
                       muted
                       loop
                       playsInline
-                      preload="metadata"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      disablePictureInPicture
+                      preload="auto"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none"
                       style={{ filter: 'contrast(1.08) saturate(1.15) brightness(1.03)' }}
                     />
                   </div>
