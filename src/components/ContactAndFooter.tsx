@@ -127,10 +127,10 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
                       <Phone className="w-5 h-5 text-[#DDA146]" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div
                         dir="ltr"
-                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
+                        className="text-sm sm:text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
                       >
                         {profile.contact.phone}
                       </div>
@@ -140,15 +140,15 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
 
                   <a
                     href={`mailto:${profile.contact.email}`}
-                    className="flex items-center gap-4 group"
+                    className="flex items-center gap-3 sm:gap-4 group min-w-0"
                   >
                     <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
                       <Mail className="w-5 h-5 text-[#DDA146]" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div
                         dir="ltr"
-                        className="text-base font-bold font-code text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
+                        className="text-xs sm:text-base font-bold font-code break-all text-[#F8F9FA] group-hover:text-[#DDA146] transition-colors rtl:text-right ltr:text-left"
                       >
                         {profile.contact.email}
                       </div>
@@ -156,12 +156,12 @@ export const ContactAndFooter: React.FC<ContactAndFooterProps> = ({
                     </div>
                   </a>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                     <div className="w-11 h-11 rounded-full border border-[#DDA146]/50 bg-[#DDA146]/10 flex items-center justify-center shrink-0">
                       <MapPin className="w-5 h-5 text-[#DDA146]" />
                     </div>
-                    <div>
-                      <div dir="ltr" className="text-base font-bold text-[#F8F9FA] rtl:text-right ltr:text-left">
+                    <div className="min-w-0 flex-1">
+                      <div dir="ltr" className="text-sm sm:text-base font-bold text-[#F8F9FA] rtl:text-right ltr:text-left">
                         {displayLocation}
                       </div>
                       <div className="text-xs text-[#9CA3AF]">{t.locationHint}</div>
