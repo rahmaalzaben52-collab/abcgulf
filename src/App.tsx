@@ -39,7 +39,6 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
-import { HeroStudio3D } from './components/HeroStudio3D';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -429,114 +428,84 @@ export default function App() {
             IntersectionObserver auto-pause, prefers-reduced-motion safe,
             accessible play/mute controls (44×44 px min touch targets).
         ═══════════════════════════════════════════════════════════════ */}
-        <section
-          id="hero"
-          aria-labelledby="hero-heading"
-          className="relative overflow-hidden bg-[#070605] min-h-[620px] sm:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center"
-        >
-          {/* ── Subtle Warm Studio Spotlight Backdrop behind 3D Camera ── */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
+          {/* Pure, Unobstructed Hero Image (Zero overlays or additions) */}
+          <div className="w-full bg-[#070605]">
             <img
-              src="/images/studio-stage.jpg"
-              alt=""
-              className="w-full h-full object-cover object-center opacity-35"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/85 via-[#070605]/40 to-[#070605]" />
-            <div className="absolute inset-0 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#070605] via-[#070605]/85 via-45% to-transparent" />
-            <div className="absolute top-1/3 end-1/4 w-[420px] h-[420px] rounded-full bg-[#DDA146]/15 blur-3xl" />
-          </div>
-
-          {/* ── Interactive 3D Cinema Camera Rig (Drag to Rotate 360°) ── */}
-          <div className="absolute inset-0 z-10">
-            <HeroStudio3D
-              lang={lang}
-              isAdmin={isAdmin}
-              customModelName={profile.customModelName}
-              pendingModelBuffer={pendingModelBuffer}
-              onModelLoaded={handleModelLoaded}
-              onUploadFileRequest={handleUpload3DFile}
+              src="/images/hero-erbil-broadcast.jpg"
+              alt={lang === 'en' ? profile.nameEn : profile.nameAr}
+              className="w-full h-auto max-h-[82vh] object-cover object-center block"
             />
           </div>
 
-          {/* ── Split Hero Content (Aligned to Start Side, 3D Camera on End Side) ── */}
-          <div className="relative z-20 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 pointer-events-none">
-            <div className="lg:w-[50%] xl:w-[48%] flex flex-col items-start text-start space-y-6">
-              {/* Small Upper Company Line */}
-              <div className="space-y-2">
-                <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase text-[#E5E7EB]">
-                  {lang === 'en'
-                    ? 'ABC GULF CHANNEL FOR ARTISTIC PRODUCTION'
-                    : lang === 'ku'
-                      ? profile.nameKu || t.hero.companyName
-                      : profile.nameAr}
-                </p>
+          <div className="gold-laser-ribbon" />
 
-                {/* Main Gold Display Headline */}
-                <h1
-                  id="hero-heading"
-                  className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.12] tracking-tight"
-                >
-                  <span className="block bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#C88A2E] bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]">
-                    {lang === 'en'
-                      ? 'VISUAL STORIES'
-                      : lang === 'ku'
-                        ? 'چیرۆکی بینراوی ناوازە'
-                        : 'قصص بصرية استثنائية'}
-                  </span>
-                </h1>
-              </div>
+          {/* Clean Company Name & Information Below the Image */}
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center flex flex-col items-center space-y-5">
+            <div className="space-y-2">
+              <h1
+                id="hero-heading"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#DDA146] bg-clip-text text-transparent"
+              >
+                {lang === 'en'
+                  ? t.hero.companyName
+                  : lang === 'ku'
+                    ? profile.nameKu || t.hero.companyName
+                    : profile.nameAr}
+              </h1>
 
-              {/* Tagline with Vertical Gold Accent Bar */}
-              <p className="border-s-2 border-[#DDA146] ps-4 text-sm sm:text-base lg:text-lg text-[#D1D5DB] leading-relaxed max-w-lg font-normal">
-                {t.hero.tagline}
+              <p className="text-xs sm:text-sm font-latin font-bold tracking-[0.18em] uppercase text-[#DDA146]">
+                {lang === 'en' ? profile.nameAr : 'ABC GULF CHANNEL FOR ARTISTIC PRODUCTION'}
               </p>
+            </div>
 
-              {/* Pill-Shaped Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2 pointer-events-auto">
-                <button
-                  type="button"
-                  onClick={() => navigateToSection('services')}
-                  className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-xs sm:text-sm font-extrabold transition-all shadow-[0_0_25px_rgba(221,161,70,0.35)] whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <span>{t.hero.ctaServices}</span>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                </button>
+            <p className="text-sm sm:text-base lg:text-lg text-[#D1D5DB] leading-relaxed max-w-2xl">
+              {t.hero.tagline}
+            </p>
 
-                <button
-                  type="button"
-                  onClick={() => navigateToSection('contact')}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#DDA146]/65 bg-[#0C0A07]/85 hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 backdrop-blur-md px-7 py-3.5 text-xs sm:text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <span>{t.nav.contact}</span>
-                  <DirectionalChevron className="w-4 h-4 text-[#DDA146]" />
-                </button>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-1">
+              <button
+                type="button"
+                onClick={() => navigateToSection('services')}
+                className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-xs sm:text-sm font-extrabold transition-all shadow-[0_0_24px_rgba(221,161,70,0.35)] whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>{t.hero.ctaServices}</span>
+                <Play className="w-3.5 h-3.5 fill-current" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigateToSection('contact')}
+                className="inline-flex items-center gap-2 rounded-full border border-[#DDA146]/65 bg-[#0C0A07] hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 px-7 py-3.5 text-xs sm:text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>{t.nav.contact}</span>
+                <DirectionalChevron className="w-4 h-4 text-[#DDA146]" />
+              </button>
+            </div>
+
+            {/* Key Info Highlights */}
+            <div className="pt-5 border-t border-[#DDA146]/20 w-full flex flex-wrap items-center justify-center gap-6 text-xs text-[#C5BBAA]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
+                <span>
+                  {lang === 'en'
+                    ? profile.contact.locationEn
+                    : lang === 'ku'
+                      ? profile.contact.locationKu || profile.contact.locationAr
+                      : profile.contact.locationAr}
+                </span>
               </div>
-
-              {/* 3D Interaction Hint + Scroll Down Indicator */}
-              <div className="pt-6 flex flex-wrap items-center gap-6 pointer-events-auto">
-                <button
-                  type="button"
-                  onClick={() => navigateToSection('services')}
-                  aria-label={lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
-                  className="inline-flex items-center gap-3 text-xs font-medium text-[#A9AFBE] hover:text-[#F3C067] transition-colors cursor-pointer"
-                >
-                  <span className="w-4 h-7 rounded-full border border-[#DDA146]/60 flex items-start justify-center p-1">
-                    <span className="w-1 h-1.5 rounded-full bg-[#DDA146] animate-bounce" />
-                  </span>
-                  <span>
-                    {lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
-                  </span>
-                </button>
-
-                <span className="hidden lg:inline-flex items-center gap-2 text-xs text-[#DDA146]/90 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] animate-pulse" />
-                  <span>
-                    {lang === 'en'
-                      ? 'Drag to rotate 3D camera'
-                      : lang === 'ku'
-                        ? 'ڕابکێشە بۆ سووڕانەوەی کامێرای 3D'
-                        : 'اسحب لتدوير الكاميرا 3D'}
-                  </span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
+                <span>
+                  {lang === 'en' ? 'Cinema Soundstage 4K / 6K' : lang === 'ku' ? 'ستۆدیۆی سینەمایی 4K / 6K' : 'استوديوهات إنتاج سينمائي 4K/6K'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
+                <span>
+                  {lang === 'en' ? 'Official Certified Accreditations' : lang === 'ku' ? 'مۆڵەتە فەرمییە پەسەندکراوەکان' : 'تراخيص رسمية معتمدة'}
                 </span>
               </div>
             </div>
