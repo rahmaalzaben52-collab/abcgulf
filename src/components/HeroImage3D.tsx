@@ -2,53 +2,71 @@ import React, { useEffect, useRef } from 'react';
 
 interface HeroImage3DProps {
   src: string;
+  baseSrc?: string;
   alt: string;
 }
 
+interface FloatingLayerSpec {
+  id: string;
+  cx: number; // %
+  cy: number; // %
+  rx: number; // %
+  ry: number; // %
+  ampX: number; // px
+  ampY: number; // px
+  ampRot: number; // deg
+  speed: number;
+  phase: number;
+  parallax: number;
+}
+
+const FLOATING_CLOUDS_AND_CAMERAS: FloatingLayerSpec[] = [
+  { id: 'cam-top-left', cx: 20.5, cy: 19.5, rx: 17.5, ry: 19.5, ampX: 7, ampY: 8, ampRot: 1.1, speed: 0.75, phase: 0.0, parallax: 16 },
+  { id: 'cam-low-left', cx: 32.8, cy: 39.0, rx: 8.2, ry: 9.2, ampX: 5, ampY: 6, ampRot: 0.9, speed: 0.95, phase: 1.4, parallax: 10 },
+  { id: 'cam-mid-left', cx: 41.8, cy: 30.5, rx: 9.6, ry: 10.2, ampX: 6, ampY: 7, ampRot: 1.0, speed: 0.85, phase: 2.7, parallax: 12 },
+  { id: 'cam-mid-right', cx: 70.0, cy: 25.8, rx: 9.6, ry: 10.8, ampX: 6, ampY: 6, ampRot: 1.0, speed: 0.8, phase: 3.9, parallax: 12 },
+  { id: 'dish-top-right', cx: 84.2, cy: 20.0, rx: 13.2, ry: 18.8, ampX: 5, ampY: 8, ampRot: 0.8, speed: 0.68, phase: 5.1, parallax: 15 },
+  { id: 'cam-far-right', cx: 92.2, cy: 39.8, rx: 8.4, ry: 9.4, ampX: 5, ampY: 6, ampRot: 1.1, speed: 0.92, phase: 2.1, parallax: 10 },
+];
+
 /**
- * Renders the hero image inside a GPU-composited 3D perspective stage
- * with continuous subtle orbital 3D motion and interactive pointer tilt.
+ * Keeps the city, Erbil Citadel, minaret, and ground 100% static
+ * while animating only the floating clouds, sky cameras, and satellite dish in 3D space.
  */
-export const HeroImage3D: React.FC<HeroImage3DProps> = ({ src, alt }) => {
+export const HeroImage3D: React.FC<HeroImage3DProps> = ({
+  src,
+  baseSrc = '/images/hero-erbil-base.jpg',
+  alt,
+}) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const planeRef = useRef<HTMLDivElement | null>(null);
-  const sheenRef = useRef<HTMLDivElement | null>(null);
+  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const container = containerRef.current;
-    const plane = planeRef.current;
-    const sheen = sheenRef.current;
-    if (!container || !plane) return;
+    if (!container) return;
 
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
-    let pointerActive = false;
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let smoothPX = 0;
+    let smoothPY = 0;
     let rafId = 0;
     const startTime = performance.now();
 
-    const updatePointer = (clientX: number, clientY: number) => {
+    const handlePointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
-      const nx = ((clientX - rect.left) / rect.width) * 2 - 1; // -1 to 1
-      const ny = ((clientY - rect.top) / rect.height) * 2 - 1; // -1 to 1
-      targetX = Math.max(-1, Math.min(1, nx));
-      targetY = Math.max(-1, Math.min(1, ny));
-      pointerActive = true;
-    };
-
-    const handlePointerMove = (e: PointerEvent) => {
-      updatePointer(e.clientX, e.clientY);
+      pointerX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+      pointerY = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
     };
 
     const handlePointerLeave = () => {
-      pointerActive = false;
+      pointerX = 0;
+      pointerY = 0;
     };
 
     container.addEventListener('pointermove', handlePointerMove, { passive: true });
@@ -56,28 +74,21 @@ export const HeroImage3D: React.FC<HeroImage3DProps> = ({ src, alt }) => {
 
     const tick = (now: number) => {
       const t = (now - startTime) * 0.001;
+      smoothPX += (pointerX - smoothPX) * 0.05;
+      smoothPY += (pointerY - smoothPY) * 0.05;
 
-      if (!pointerActive) {
-        // Gentle continuous 3D orbital sway when idle
-        targetX = Math.sin(t * 0.55) * 0.42;
-        targetY = Math.cos(t * 0.42) * 0.35;
-      }
+      FLOATING_CLOUDS_AND_CAMERAS.forEach((spec, idx) => {
+        const el = layerRefs.current[idx];
+        if (!el) return;
 
-      currentX += (targetX - currentX) * 0.06;
-      currentY += (targetY - currentY) * 0.06;
+        const dx = Math.sin(t * spec.speed + spec.phase) * spec.ampX - smoothPX * spec.parallax;
+        const dy = Math.cos(t * (spec.speed * 0.85) + spec.phase) * spec.ampY - smoothPY * (spec.parallax * 0.7);
+        const rotZ = Math.sin(t * (spec.speed * 0.6) + spec.phase) * spec.ampRot;
+        const rotY = smoothPX * 3.5;
+        const rotX = -smoothPY * 2.5;
 
-      const rotateY = currentX * 6.5;
-      const rotateX = -currentY * 4.5;
-      const translateX = -currentX * 14;
-      const translateY = -currentY * 10;
-
-      plane.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(3)}deg) rotateY(${rotateY.toFixed(3)}deg) translate3d(${translateX.toFixed(2)}px, ${translateY.toFixed(2)}px, 0) scale(1.08)`;
-
-      if (sheen) {
-        const lx = 50 + currentX * 28;
-        const ly = 45 + currentY * 22;
-        sheen.style.background = `radial-gradient(circle at ${lx.toFixed(1)}% ${ly.toFixed(1)}%, rgba(243,192,103,0.16) 0%, transparent 55%)`;
-      }
+        el.style.transform = `perspective(1000px) translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg)`;
+      });
 
       rafId = window.requestAnimationFrame(tick);
     };
@@ -94,31 +105,45 @@ export const HeroImage3D: React.FC<HeroImage3DProps> = ({ src, alt }) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-[#070605] select-none"
-      style={{ perspective: '1200px' }}
+      className="relative w-full max-h-[82vh] overflow-hidden bg-[#070605] flex items-center justify-center select-none"
     >
-      <div
-        ref={planeRef}
-        className="w-full will-change-transform"
-        style={{
-          transform: 'perspective(1200px) scale(1.08)',
-          transformStyle: 'preserve-3d',
-        }}
-      >
+      {/* Exact 16:9 stage so percentage masks align 1:1 with base image */}
+      <div className="relative w-full aspect-[16/9]">
+        {/* Static Base Image: Erbil Citadel, Minaret, City & Foreground Stay Still */}
         <img
-          src={src}
+          src={baseSrc}
           alt={alt}
           draggable={false}
-          className="w-full h-auto max-h-[82vh] object-cover object-center block"
+          className="w-full h-full object-cover block"
         />
-      </div>
 
-      {/* Subtle dynamic 3D specular light reflection (non-blocking) */}
-      <div
-        ref={sheenRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 mix-blend-soft-light transition-opacity duration-300"
-      />
+        {/* Independent Floating 3D Cloud + Camera Layers */}
+        {FLOATING_CLOUDS_AND_CAMERAS.map((spec, idx) => {
+          const mask = `radial-gradient(ellipse ${spec.rx}% ${spec.ry}% at ${spec.cx}% ${spec.cy}%, #000 58%, rgba(0,0,0,0.6) 76%, transparent 96%)`;
+          return (
+            <div
+              key={spec.id}
+              ref={(el) => {
+                layerRefs.current[idx] = el;
+              }}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 will-change-transform"
+              style={{
+                transformOrigin: `${spec.cx}% ${spec.cy}%`,
+                WebkitMaskImage: mask,
+                maskImage: mask,
+              }}
+            >
+              <img
+                src={src}
+                alt=""
+                draggable={false}
+                className="w-full h-full object-cover block"
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
