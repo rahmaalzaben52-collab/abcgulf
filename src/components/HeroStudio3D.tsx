@@ -603,34 +603,32 @@ export const HeroStudio3D: React.FC<HeroStudio3DProps> = ({
         />
       )}
 
-      {/* Clean minimal control bar (Auto-rotate & admin upload) without any camera presets or hide button */}
-      <div className="absolute bottom-4 inset-x-4 lg:inset-x-auto lg:end-8 z-25 flex items-center justify-end max-w-[94%] mx-auto pointer-events-auto">
-        <div className="flex items-center gap-1 rounded-xl bg-[#14161D]/95 border border-white/12 px-2 py-1.5 shadow-2xl">
-          {isAdmin && (
-            <>
+      {/* Clean minimal control bar (Admin upload & restore) */}
+      {isAdmin && (
+        <div className="absolute bottom-4 inset-x-4 lg:inset-x-auto lg:end-8 z-25 flex items-center justify-end max-w-[94%] mx-auto pointer-events-auto">
+          <div className="flex items-center gap-1 rounded-xl bg-[#14161D]/95 border border-white/12 px-2 py-1.5 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium bg-[#DFAF5A]/15 text-[#F6DDA7] border border-[#DFAF5A]/35 hover:bg-[#DFAF5A]/25 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>{dockCopy.upload}</span>
+            </button>
+
+            {customModelName && (
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium bg-[#DFAF5A]/15 text-[#F6DDA7] border border-[#DFAF5A]/35 hover:bg-[#DFAF5A]/25 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                onClick={() => restoreDefaultRigRef.current?.()}
+                aria-label={dockCopy.restore}
+                className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-[#C5C9D3] hover:text-white hover:bg-white/6 whitespace-nowrap shrink-0 cursor-pointer"
               >
-                <Upload className="w-3.5 h-3.5" />
-                <span>{dockCopy.upload}</span>
+                <RotateCcw className="w-3.5 h-3.5" />
               </button>
-
-              {customModelName && (
-                <button
-                  type="button"
-                  onClick={() => restoreDefaultRigRef.current?.()}
-                  aria-label={dockCopy.restore}
-                  className="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-[#C5C9D3] hover:text-white hover:bg-white/6 whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

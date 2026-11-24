@@ -39,6 +39,7 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
+import { HeroStudio3D } from './components/HeroStudio3D';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -433,23 +434,32 @@ export default function App() {
           aria-labelledby="hero-heading"
           className="relative overflow-hidden bg-[#070605] min-h-[620px] sm:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center"
         >
-          {/* ── Cinema Camera Rig & Warm Studio Spotlight Background ── */}
+          {/* ── Subtle Warm Studio Spotlight Backdrop behind 3D Camera ── */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             <img
-              src="/images/hero-cinema-camera.jpg"
-              alt="Cinema camera rig and warm studio lighting"
-              className="w-full h-full object-cover object-right rtl:-scale-x-100 opacity-95"
+              src="/images/studio-stage.jpg"
+              alt=""
+              className="w-full h-full object-cover object-center opacity-35"
             />
-            {/* Mask top 18% smoothly so no baked header elements appear */}
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#070605] via-[#070605]/85 to-transparent" />
-            {/* Mask text side into pure obsidian black while keeping camera & spotlight vivid */}
-            <div className="absolute inset-0 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#070605] via-[#070605] via-42% to-transparent" />
-            {/* Smooth bottom fade into laser ribbon */}
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070605] via-[#070605]/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/85 via-[#070605]/40 to-[#070605]" />
+            <div className="absolute inset-0 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#070605] via-[#070605]/85 via-45% to-transparent" />
+            <div className="absolute top-1/3 end-1/4 w-[420px] h-[420px] rounded-full bg-[#DDA146]/15 blur-3xl" />
           </div>
 
-          {/* ── Split Hero Content (Aligned to Start Side, Camera on End Side) ── */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          {/* ── Interactive 3D Cinema Camera Rig (Drag to Rotate 360°) ── */}
+          <div className="absolute inset-0 z-10">
+            <HeroStudio3D
+              lang={lang}
+              isAdmin={isAdmin}
+              customModelName={profile.customModelName}
+              pendingModelBuffer={pendingModelBuffer}
+              onModelLoaded={handleModelLoaded}
+              onUploadFileRequest={handleUpload3DFile}
+            />
+          </div>
+
+          {/* ── Split Hero Content (Aligned to Start Side, 3D Camera on End Side) ── */}
+          <div className="relative z-20 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 pointer-events-none">
             <div className="lg:w-[50%] xl:w-[48%] flex flex-col items-start text-start space-y-6">
               {/* Small Upper Company Line */}
               <div className="space-y-2">
@@ -482,7 +492,7 @@ export default function App() {
               </p>
 
               {/* Pill-Shaped Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-4 pt-2 pointer-events-auto">
                 <button
                   type="button"
                   onClick={() => navigateToSection('services')}
@@ -502,20 +512,33 @@ export default function App() {
                 </button>
               </div>
 
-              {/* Bottom Scroll Down Indicator */}
-              <button
-                type="button"
-                onClick={() => navigateToSection('services')}
-                aria-label={lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
-                className="pt-8 inline-flex items-center gap-3 text-xs font-medium text-[#A9AFBE] hover:text-[#F3C067] transition-colors cursor-pointer"
-              >
-                <span className="w-4 h-7 rounded-full border border-[#DDA146]/60 flex items-start justify-center p-1">
-                  <span className="w-1 h-1.5 rounded-full bg-[#DDA146] animate-bounce" />
+              {/* 3D Interaction Hint + Scroll Down Indicator */}
+              <div className="pt-6 flex flex-wrap items-center gap-6 pointer-events-auto">
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('services')}
+                  aria-label={lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
+                  className="inline-flex items-center gap-3 text-xs font-medium text-[#A9AFBE] hover:text-[#F3C067] transition-colors cursor-pointer"
+                >
+                  <span className="w-4 h-7 rounded-full border border-[#DDA146]/60 flex items-start justify-center p-1">
+                    <span className="w-1 h-1.5 rounded-full bg-[#DDA146] animate-bounce" />
+                  </span>
+                  <span>
+                    {lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
+                  </span>
+                </button>
+
+                <span className="hidden lg:inline-flex items-center gap-2 text-xs text-[#DDA146]/90 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] animate-pulse" />
+                  <span>
+                    {lang === 'en'
+                      ? 'Drag to rotate 3D camera'
+                      : lang === 'ku'
+                        ? 'ڕابکێشە بۆ سووڕانەوەی کامێرای 3D'
+                        : 'اسحب لتدوير الكاميرا 3D'}
+                  </span>
                 </span>
-                <span>
-                  {lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
-                </span>
-              </button>
+              </div>
             </div>
           </div>
         </section>
