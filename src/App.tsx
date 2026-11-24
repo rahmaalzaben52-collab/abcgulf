@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Award,
   ChevronLeft,
@@ -11,14 +11,11 @@ import {
   Film,
   Globe,
   LogOut,
-  Pause,
   Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Upload,
-  Volume2,
-  VolumeX,
 } from 'lucide-react';
 import {
   deriveAndStoreAdminToken,
@@ -79,13 +76,6 @@ export default function App() {
 
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [customizerOpen, setCustomizerOpen] = useState(false);
-
-  // Video hero state & refs
-  const [heroVideoPlaying, setHeroVideoPlaying] = useState(false);
-  const [heroVideoMuted, setHeroVideoMuted] = useState(true);
-  const [heroVideoReady, setHeroVideoReady] = useState(false);
-  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
-  const heroSectionRef = useRef<HTMLElement | null>(null);
 
   const [pendingModelBuffer, setPendingModelBuffer] = useState<ArrayBuffer | null>(null);
   const [pendingModelName, setPendingModelName] = useState<string | null>(null);
@@ -153,52 +143,6 @@ export default function App() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // UI/UX Pro Max: IntersectionObserver — pause video when hero scrolls out of view
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    const hero = heroSectionRef.current;
-    if (!video || !hero) return;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return; // honour accessibility preference — keep paused
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            video.play().catch(() => {});
-            setHeroVideoPlaying(true);
-          } else {
-            video.pause();
-            setHeroVideoPlaying(false);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, [heroVideoReady]);
-
-  const toggleHeroVideo = () => {
-    const v = heroVideoRef.current;
-    if (!v) return;
-    if (v.paused) {
-      v.play().catch(() => {});
-      setHeroVideoPlaying(true);
-    } else {
-      v.pause();
-      setHeroVideoPlaying(false);
-    }
-  };
-
-  const toggleHeroMute = () => {
-    const v = heroVideoRef.current;
-    if (!v) return;
-    v.muted = !v.muted;
-    setHeroVideoMuted(v.muted);
-  };
 
   // Displayed licenses: cloud/edited data, or DEFAULT_LICENSES if nothing saved yet
   const displayedLicenses =
@@ -485,181 +429,95 @@ export default function App() {
             accessible play/mute controls (44×44 px min touch targets).
         ═══════════════════════════════════════════════════════════════ */}
         <section
-          ref={heroSectionRef}
           id="hero"
           aria-labelledby="hero-heading"
-          className="relative overflow-hidden bg-[#070605] min-h-[680px] sm:min-h-[760px] lg:min-h-[820px] flex flex-col justify-center items-center"
+          className="relative overflow-hidden bg-[#070605] min-h-[620px] sm:min-h-[680px] lg:min-h-[740px] flex flex-col justify-center"
         >
-          {/* ── Bright, Crystal-Clear Video Background Layer ── */}
+          {/* ── Cinema Camera Rig & Warm Studio Spotlight Background ── */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-            {/* Static image fallback shown while video loads */}
             <img
-              src="/images/erbil-cinema-theme.jpg"
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              style={{ opacity: heroVideoReady ? 0 : 0.75, transition: 'opacity 0.8s ease' }}
+              src="/images/hero-cinema-camera.jpg"
+              alt="Cinema camera rig and warm studio lighting"
+              className="w-full h-full object-cover object-right rtl:-scale-x-100 opacity-95"
             />
-
-            {/* High-clarity warm cinema grading matching reference lighting */}
-            <video
-              ref={heroVideoRef}
-              src="/videos/historic-fortress-cinema.mp4"
-              poster="/images/erbil-cinema-theme.jpg"
-              muted
-              loop
-              playsInline
-              preload="auto"
-              onCanPlay={() => {
-                setHeroVideoReady(true);
-                const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (!prefersReduced) {
-                  heroVideoRef.current?.play().catch(() => {});
-                  setHeroVideoPlaying(true);
-                }
-              }}
-              className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700"
-              style={{
-                opacity: heroVideoReady ? 0.94 : 0,
-                filter: 'contrast(1.10) saturate(1.18) brightness(1.08)',
-              }}
-            />
-
-            {/* Subtle top/bottom fade & targeted center radial scrim for crystal-clear text */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/70 via-transparent to-[#070605]/95" />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(ellipse 68% 58% at 50% 50%, rgba(7,6,5,0.78) 0%, rgba(7,6,5,0.42) 55%, rgba(7,6,5,0.14) 100%)',
-              }}
-            />
+            {/* Mask top 18% smoothly so no baked header elements appear */}
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#070605] via-[#070605]/85 to-transparent" />
+            {/* Mask text side into pure obsidian black while keeping camera & spotlight vivid */}
+            <div className="absolute inset-0 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#070605] via-[#070605] via-42% to-transparent" />
+            {/* Smooth bottom fade into laser ribbon */}
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#070605] via-[#070605]/70 to-transparent" />
           </div>
 
-          {/* ── Top-End Compact Audio & Playback Control Pill ── */}
-          <div
-            className="absolute top-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-full border border-[#DDA146]/45 bg-[#070605]/80 backdrop-blur-md px-3.5 py-1.5 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-            role="group"
-            aria-label={lang === 'en' ? 'Video playback controls' : lang === 'ku' ? 'کۆنتڕۆڵی ڤیدیۆ' : 'أدوات تشغيل الفيديو'}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146] animate-pulse" aria-hidden="true" />
-            <span className="text-[11px] font-semibold text-[#F6DDA7] select-none px-1">
-              {heroVideoMuted
-                ? lang === 'en'
-                  ? 'Audio: Muted'
-                  : lang === 'ku'
-                    ? 'دەنگ: بێدەنگ'
-                    : 'الصوت السينمائي: مكتوم'
-                : lang === 'en'
-                  ? 'Audio: On'
-                  : lang === 'ku'
-                    ? 'دەنگ: کراوە'
-                    : 'الصوت السينمائي: مفعل'}
-            </span>
+          {/* ── Split Hero Content (Aligned to Start Side, Camera on End Side) ── */}
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div className="lg:w-[50%] xl:w-[48%] flex flex-col items-start text-start space-y-6">
+              {/* Small Upper Company Line */}
+              <div className="space-y-2">
+                <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase text-[#E5E7EB]">
+                  {lang === 'en'
+                    ? 'ABC GULF CHANNEL FOR ARTISTIC PRODUCTION'
+                    : lang === 'ku'
+                      ? profile.nameKu || t.hero.companyName
+                      : profile.nameAr}
+                </p>
 
-            <button
-              type="button"
-              onClick={toggleHeroVideo}
-              aria-label={heroVideoPlaying
-                ? (lang === 'en' ? 'Pause background video' : lang === 'ku' ? 'وەستاندنی ڤیدیۆ' : 'إيقاف الفيديو')
-                : (lang === 'en' ? 'Play background video' : lang === 'ku' ? 'لێدانی ڤیدیۆ' : 'تشغيل الفيديو')
-              }
-              className="w-9 h-9 flex items-center justify-center rounded-full text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
-            >
-              {heroVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={toggleHeroMute}
-              aria-label={heroVideoMuted
-                ? (lang === 'en' ? 'Unmute video' : lang === 'ku' ? 'دەنگ کردنەوە' : 'تشغيل الصوت')
-                : (lang === 'en' ? 'Mute video' : lang === 'ku' ? 'بێدەنگکردن' : 'كتم الصوت')
-              }
-              className="w-9 h-9 flex items-center justify-center rounded-full text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
-            >
-              {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            </button>
-          </div>
-
-          {/* ── Centered Hero Content (High Contrast & Cinematic Polish) ── */}
-          <div className="relative z-10 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 flex flex-col items-center text-center">
-            <div className="w-full max-w-4xl rounded-3xl bg-[#070605]/40 backdrop-blur-[3px] border border-[#DDA146]/20 px-5 py-8 sm:px-10 sm:py-11 shadow-[0_12px_60px_rgba(0,0,0,0.65)] flex flex-col items-center space-y-6">
-              {/* Top Channel Pill Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/55 bg-[#070605]/85 px-5 py-2 shadow-[0_4px_24px_rgba(221,161,70,0.2)] backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146]" aria-hidden="true" />
-                <span className="text-[11px] sm:text-xs font-latin font-bold tracking-[0.16em] uppercase text-[#F9E4B0]">
-                  ABC GULF CHANNEL FOR ARTISTIC PRODUCTION
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146]" aria-hidden="true" />
-              </div>
-
-              {/* Two-Tone Centered Headline */}
-              <div className="space-y-3">
+                {/* Main Gold Display Headline */}
                 <h1
                   id="hero-heading"
-                  className="text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.22] text-balance tracking-tight"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.12] tracking-tight"
                 >
-                  <span className="block text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+                  <span className="block bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#C88A2E] bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]">
                     {lang === 'en'
-                      ? t.hero.companyName
+                      ? 'VISUAL STORIES'
                       : lang === 'ku'
-                        ? profile.nameKu || t.hero.companyName
-                        : profile.nameAr}
-                  </span>
-                  <span className="block mt-3 text-2xl sm:text-4xl lg:text-[2.75rem] bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#DDA146] bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-                    {lang === 'en'
-                      ? 'Turning Ideas Into Unforgettable Visuals'
-                      : lang === 'ku'
-                        ? 'بیرۆکەکان دەگۆڕین بۆ ئەزموونی بینراوی لەبیرنەکراو'
-                        : 'نحوّل الأفكار إلى تجارب بصرية لا تُنسى'}
+                        ? 'چیرۆکی بینراوی ناوازە'
+                        : 'قصص بصرية استثنائية'}
                   </span>
                 </h1>
               </div>
 
-              {/* Subtle Gold Divider Accent */}
-              <div className="w-28 h-[2px] bg-gradient-to-r from-transparent via-[#DDA146] to-transparent opacity-80" aria-hidden="true" />
-
-              {/* Clean Centered Tagline */}
-              <p className="text-base sm:text-lg text-[#F9FAFB] leading-relaxed max-w-2xl font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              {/* Tagline with Vertical Gold Accent Bar */}
+              <p className="border-s-2 border-[#DDA146] ps-4 text-sm sm:text-base lg:text-lg text-[#D1D5DB] leading-relaxed max-w-lg font-normal">
                 {t.hero.tagline}
               </p>
 
-              {/* Centered Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+              {/* Pill-Shaped Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <button
                   type="button"
                   onClick={() => navigateToSection('services')}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-sm font-extrabold transition-all shadow-[0_0_28px_rgba(221,161,70,0.45)] whitespace-nowrap shrink-0 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-xs sm:text-sm font-extrabold transition-all shadow-[0_0_25px_rgba(221,161,70,0.35)] whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <span>{t.hero.ctaServices}</span>
-                  <DirectionalChevron className="w-4 h-4" />
+                  <Play className="w-3.5 h-3.5 fill-current" />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => navigateToSection('contact')}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-[#070605]/85 hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 backdrop-blur-md px-6 py-3.5 text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 shadow-lg cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#DDA146]/65 bg-[#0C0A07]/85 hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 backdrop-blur-md px-7 py-3.5 text-xs sm:text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <span>{t.nav.contact}</span>
+                  <DirectionalChevron className="w-4 h-4 text-[#DDA146]" />
                 </button>
               </div>
+
+              {/* Bottom Scroll Down Indicator */}
+              <button
+                type="button"
+                onClick={() => navigateToSection('services')}
+                aria-label={lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
+                className="pt-8 inline-flex items-center gap-3 text-xs font-medium text-[#A9AFBE] hover:text-[#F3C067] transition-colors cursor-pointer"
+              >
+                <span className="w-4 h-7 rounded-full border border-[#DDA146]/60 flex items-start justify-center p-1">
+                  <span className="w-1 h-1.5 rounded-full bg-[#DDA146] animate-bounce" />
+                </span>
+                <span>
+                  {lang === 'en' ? 'Scroll Down' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للأسفل'}
+                </span>
+              </button>
             </div>
           </div>
-
-          {/* ── Bottom Center Scroll Indicator ── */}
-          <button
-            type="button"
-            onClick={() => navigateToSection('services')}
-            aria-label={lang === 'en' ? 'Scroll to explore' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للاستكشاف'}
-            className="relative z-10 pb-6 flex flex-col items-center gap-2 text-xs font-medium text-[#E5E7EB]/90 hover:text-[#F6DDA7] transition-colors cursor-pointer drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
-          >
-            <span>
-              {lang === 'en' ? 'Scroll to explore' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للاستكشاف'}
-            </span>
-            <span className="w-5 h-8 rounded-full border-2 border-[#DDA146]/70 flex items-start justify-center p-1 bg-[#070605]/50">
-              <span className="w-1 h-2 rounded-full bg-[#DDA146] animate-bounce" />
-            </span>
-          </button>
         </section>
 
         {/* Luminous Gold Laser Ribbon Divider */}
