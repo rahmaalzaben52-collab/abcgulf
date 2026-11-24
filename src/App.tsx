@@ -488,26 +488,19 @@ export default function App() {
           ref={heroSectionRef}
           id="hero"
           aria-labelledby="hero-heading"
-          className="relative overflow-hidden bg-[#070605] studio-hairline-grid min-h-[640px] sm:min-h-[720px] lg:min-h-[760px] flex items-center"
+          className="relative overflow-hidden bg-[#070605] min-h-[680px] sm:min-h-[760px] lg:min-h-[820px] flex flex-col justify-center items-center"
         >
-          {/* ── Video Background Layer ── */}
+          {/* ── Bright, Crystal-Clear Video Background Layer ── */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             {/* Static image fallback shown while video loads */}
             <img
               src="/images/erbil-cinema-theme.jpg"
               alt=""
-              className="absolute inset-0 w-full h-full object-cover object-top"
-              style={{ opacity: heroVideoReady ? 0 : 0.6, transition: 'opacity 0.8s ease' }}
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              style={{ opacity: heroVideoReady ? 0 : 0.75, transition: 'opacity 0.8s ease' }}
             />
 
-            {/*
-              CSS clarity enhancements applied directly on the <video>:
-              - contrast(1.15)  → punchier colours, deeper blacks
-              - saturate(1.25)  → richer warm amber / golden tones
-              - brightness(1.05)→ lifts mid-tones so dark areas stay visible
-              - opacity 0.75    → allows dark scrims to stack without washing text
-              These are GPU-composited and cost zero extra repaints.
-            */}
+            {/* High-clarity warm cinema grading matching reference lighting */}
             <video
               ref={heroVideoRef}
               src="/videos/historic-fortress-cinema.mp4"
@@ -515,7 +508,7 @@ export default function App() {
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               onCanPlay={() => {
                 setHeroVideoReady(true);
                 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -526,37 +519,43 @@ export default function App() {
               }}
               className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700"
               style={{
-                opacity: heroVideoReady ? 0.78 : 0,
-                filter: 'contrast(1.15) saturate(1.25) brightness(1.05)',
+                opacity: heroVideoReady ? 0.94 : 0,
+                filter: 'contrast(1.10) saturate(1.18) brightness(1.08)',
               }}
             />
 
-            {/* Deep cinematic scrims — maintain >= 7:1 text contrast (WCAG AAA) */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070605] via-[#070605]/75 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/85 via-transparent to-[#070605]" />
-            <div className="absolute inset-0 rtl:bg-gradient-to-l ltr:bg-gradient-to-r from-[#070605] via-[#070605]/85 to-transparent/20" />
-
-            {/* Warm amber atmospheric light flares */}
-            <div className="absolute top-1/4 start-1/3 w-[480px] h-[480px] rounded-full bg-[#DDA146]/12 blur-3xl" />
-            <div className="absolute bottom-1/3 end-1/4 w-[400px] h-[400px] rounded-full bg-[#F3C067]/8 blur-3xl" />
+            {/* Subtle top/bottom fade & soft radial spotlight so citadel shines brightly */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#070605]/70 via-transparent to-[#070605]/90" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, rgba(7,6,5,0.45) 0%, rgba(7,6,5,0.16) 55%, rgba(7,6,5,0.62) 100%)',
+              }}
+            />
           </div>
 
-          {/* ── Cinematic Video Control Dock (bottom-end corner) ──
-              UI/UX Pro Max: 44×44px minimum touch targets, visible focus rings,
-              labelled with aria-label for screen readers.
-          ── */}
+          {/* ── Top-End Compact Audio & Playback Control Pill ── */}
           <div
-            className="absolute bottom-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-2xl border border-[#DDA146]/35 bg-[#0C0A07]/90 backdrop-blur-md px-3 py-2 shadow-[0_0_20px_rgba(221,161,70,0.18)]"
+            className="absolute top-6 end-6 z-20 hidden sm:flex items-center gap-1.5 rounded-full border border-[#DDA146]/40 bg-[#0C0A07]/75 backdrop-blur-md px-3.5 py-1.5 shadow-[0_0_20px_rgba(0,0,0,0.45)]"
             role="group"
             aria-label={lang === 'en' ? 'Video playback controls' : lang === 'ku' ? 'کۆنتڕۆڵی ڤیدیۆ' : 'أدوات تشغيل الفيديو'}
           >
-            {/* Live indicator dot */}
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146] shadow-[0_0_6px_#DDA146] animate-pulse" aria-hidden="true" />
-            <span className="text-[11px] font-code font-semibold text-[#F6DDA7] select-none">
-              {lang === 'en' ? 'Historic Fortress' : lang === 'ku' ? 'قەڵای مێژوویی' : 'القلعة التاريخية'}
+            <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146] animate-pulse" aria-hidden="true" />
+            <span className="text-[11px] font-semibold text-[#F6DDA7] select-none px-1">
+              {heroVideoMuted
+                ? lang === 'en'
+                  ? 'Audio: Muted'
+                  : lang === 'ku'
+                    ? 'دەنگ: بێدەنگ'
+                    : 'الصوت السينمائي: مكتوم'
+                : lang === 'en'
+                  ? 'Audio: On'
+                  : lang === 'ku'
+                    ? 'دەنگ: کراوە'
+                    : 'الصوت السينمائي: مفعل'}
             </span>
 
-            {/* Play / Pause — 44px touch target */}
             <button
               type="button"
               onClick={toggleHeroVideo}
@@ -564,15 +563,11 @@ export default function App() {
                 ? (lang === 'en' ? 'Pause background video' : lang === 'ku' ? 'وەستاندنی ڤیدیۆ' : 'إيقاف الفيديو')
                 : (lang === 'en' ? 'Play background video' : lang === 'ku' ? 'لێدانی ڤیدیۆ' : 'تشغيل الفيديو')
               }
-              className="w-11 h-11 flex items-center justify-center rounded-xl text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
             >
-              {heroVideoPlaying
-                ? <Pause className="w-4 h-4" />
-                : <Play className="w-4 h-4" />
-              }
+              {heroVideoPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
             </button>
 
-            {/* Mute / Unmute — 44px touch target */}
             <button
               type="button"
               onClick={toggleHeroMute}
@@ -580,99 +575,90 @@ export default function App() {
                 ? (lang === 'en' ? 'Unmute video' : lang === 'ku' ? 'دەنگ کردنەوە' : 'تشغيل الصوت')
                 : (lang === 'en' ? 'Mute video' : lang === 'ku' ? 'بێدەنگکردن' : 'كتم الصوت')
               }
-              className="w-11 h-11 flex items-center justify-center rounded-xl text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-[#DDA146] hover:text-[#F3C067] hover:bg-[#DDA146]/15 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146] cursor-pointer"
             >
-              {heroVideoMuted
-                ? <VolumeX className="w-4 h-4" />
-                : <Volume2 className="w-4 h-4" />
-              }
+              {heroVideoMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
             </button>
           </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
-            <div className="lg:w-[58%] xl:w-[54%] flex flex-col justify-center space-y-6">
-              <div className="space-y-4">
-                {/* Cinematic Production Kicker Badge */}
-                <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/40 bg-[#0E0C09]/90 px-3.5 py-1.5 shadow-[0_0_15px_rgba(221,161,70,0.2)] backdrop-blur-md self-start">
-                  <Film className="w-4 h-4 text-[#DDA146]" />
-                  <span className="text-xs font-semibold text-[#F6DDA7]">
-                    {lang === 'en'
-                      ? 'Cinema Soundstage & Media Production'
-                      : lang === 'ku'
-                        ? 'کۆمپانیای بەرهەمهێنانی سینەمایی و تەلەفزیۆنی'
-                        : 'شركة الإنتاج السينمائي والتلفزيوني المعتمدة'}
-                  </span>
-                </div>
+          {/* ── Centered Hero Content (Matching Reference Image Layout) ── */}
+          <div className="relative z-10 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-20 sm:py-28 flex flex-col items-center text-center space-y-6">
+            {/* Top Studio Pill Badge */}
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#DDA146]/45 bg-[#0C0A07]/75 px-5 py-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.45)] backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146]" aria-hidden="true" />
+              <span className="text-[11px] sm:text-xs font-latin font-bold tracking-[0.2em] uppercase text-[#F6DDA7]">
+                {lang === 'en'
+                  ? 'ABC GULF CINEMATIC STUDIOS'
+                  : lang === 'ku'
+                    ? 'ABC GULF CINEMATIC STUDIOS'
+                    : 'ABC GULF CINEMATIC STUDIOS'}
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#DDA146]" aria-hidden="true" />
+            </div>
 
-                <div className="space-y-2">
-                  <h1
-                    id="hero-heading"
-                    className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#F8F9FA] leading-[1.15] text-balance tracking-tight"
-                  >
-                    <span className="gold-text-gradient block">
-                      {lang === 'en'
-                        ? t.hero.companyName
-                        : lang === 'ku'
-                          ? profile.nameKu || t.hero.companyName
-                          : profile.nameAr}
-                    </span>
-                  </h1>
+            {/* Two-Tone Centered Headline */}
+            <div className="space-y-3">
+              <h1
+                id="hero-heading"
+                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.2] text-balance tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)]"
+              >
+                <span className="block text-white">
+                  {lang === 'en'
+                    ? t.hero.companyName
+                    : lang === 'ku'
+                      ? profile.nameKu || t.hero.companyName
+                      : profile.nameAr}
+                </span>
+                <span className="gold-text-gradient block mt-2 text-2xl sm:text-4xl lg:text-5xl">
+                  {lang === 'en'
+                    ? 'Turning Ideas Into Unforgettable Visuals'
+                    : lang === 'ku'
+                      ? 'بیرۆکەکان دەگۆڕین بۆ ئەزموونی بینراوی لەبیرنەکراو'
+                      : 'نحوّل الأفكار إلى تجارب بصرية لا تُنسى'}
+                </span>
+              </h1>
+            </div>
 
-                  <p className="text-sm sm:text-base font-latin tracking-widest text-[#DDA146] font-semibold">
-                    {lang === 'en' ? profile.nameAr : profile.nameEn}
-                  </p>
-                </div>
+            {/* Clean Centered Tagline */}
+            <p className="text-sm sm:text-lg text-[#F3F4F6] leading-relaxed max-w-2xl font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              {t.hero.tagline}
+            </p>
 
-                <p className="text-base sm:text-lg text-[#D1D5DB] leading-relaxed max-w-2xl font-normal">
-                  {t.hero.tagline}
-                </p>
-              </div>
+            {/* Centered Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
+              <button
+                type="button"
+                onClick={() => navigateToSection('services')}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-7 py-3.5 text-sm font-extrabold transition-all shadow-[0_0_28px_rgba(221,161,70,0.45)] whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>{t.hero.ctaServices}</span>
+                <DirectionalChevron className="w-4 h-4" />
+              </button>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  type="button"
-                  onClick={() => navigateToSection('services')}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 text-[#070605] px-7 py-3.5 text-sm font-bold transition-all shadow-[0_0_25px_rgba(221,161,70,0.4)] whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <span>{t.hero.ctaServices}</span>
-                  <DirectionalChevron className="w-4 h-4" />
-                </button>
-
-                <a
-                  href={profile.socials.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#DDA146]/40 bg-[#0E0C09]/90 hover:border-[#DDA146] hover:bg-[#14110C] px-5 py-3.5 text-sm font-semibold text-[#F4F5F7] transition-all whitespace-nowrap shrink-0 shadow-sm"
-                >
-                  <Play className="w-4 h-4 text-[#DDA146] fill-[#DDA146]/30" />
-                  <span>{t.hero.ctaYoutube}</span>
-                </a>
-              </div>
-
-              {/* Trust & Heritage Highlights Row */}
-              <div className="pt-6 border-t border-[#DDA146]/20 flex flex-wrap items-center gap-6 text-xs text-[#C5BBAA]">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
-                  <span>
-                    {lang === 'en' ? 'Erbil Boulevard Headquarters' : lang === 'ku' ? 'بارەگای سەرەکی: هەولێر بۆلیڤارد' : 'المقر: أربيل بوليفارد B2-12-253'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
-                  <span>
-                    {lang === 'en' ? 'Cinema Soundstage 4K / 6K' : lang === 'ku' ? 'ستۆدیۆی سینەمایی 4K / 6K' : 'استوديوهات إنتاج سينمائي 4K/6K'}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#DDA146] shadow-[0_0_8px_#DDA146]" />
-                  <span>
-                    {lang === 'en' ? 'Gulf & Regional Official Accreditations' : lang === 'ku' ? 'مۆڵەتە فەرمییەکانی هەرێم و کەنداو' : 'تراخيص رسمية معتمدة عبر الخليج'}
-                  </span>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => navigateToSection('contact')}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-[#0C0A07]/80 hover:border-[#DDA146] hover:bg-[#14110C] backdrop-blur-md px-6 py-3.5 text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 shadow-lg cursor-pointer"
+              >
+                <span>{t.nav.contact}</span>
+              </button>
             </div>
           </div>
+
+          {/* ── Bottom Center Scroll Indicator ── */}
+          <button
+            type="button"
+            onClick={() => navigateToSection('services')}
+            aria-label={lang === 'en' ? 'Scroll to explore' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للاستكشاف'}
+            className="relative z-10 pb-6 flex flex-col items-center gap-2 text-xs font-medium text-[#E5E7EB]/90 hover:text-[#F6DDA7] transition-colors cursor-pointer drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
+          >
+            <span>
+              {lang === 'en' ? 'Scroll to explore' : lang === 'ku' ? 'بۆ خوارەوە ڕابکێشە' : 'اسحب للاستكشاف'}
+            </span>
+            <span className="w-5 h-8 rounded-full border-2 border-[#DDA146]/70 flex items-start justify-center p-1 bg-[#070605]/50">
+              <span className="w-1 h-2 rounded-full bg-[#DDA146] animate-bounce" />
+            </span>
+          </button>
         </section>
 
         {/* Luminous Gold Laser Ribbon Divider */}
