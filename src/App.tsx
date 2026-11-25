@@ -334,9 +334,8 @@ export default function App() {
               data-testid="lang-btn-ku"
               aria-pressed={lang === 'ku'}
               onClick={() => setLang('ku')}
-              className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                lang === 'ku' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
-              }`}
+              className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${lang === 'ku' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
+                }`}
             >
               کوردی
             </button>
@@ -345,9 +344,8 @@ export default function App() {
               data-testid="lang-btn-ar"
               aria-pressed={lang === 'ar'}
               onClick={() => setLang('ar')}
-              className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                lang === 'ar' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
-              }`}
+              className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${lang === 'ar' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
+                }`}
             >
               العربية
             </button>
@@ -356,9 +354,8 @@ export default function App() {
               data-testid="lang-btn-en"
               aria-pressed={lang === 'en'}
               onClick={() => setLang('en')}
-              className={`px-2 py-0.5 rounded text-xs font-semibold font-latin transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                lang === 'en' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
-              }`}
+              className={`px-2 py-0.5 rounded text-xs font-semibold font-latin transition-colors whitespace-nowrap shrink-0 cursor-pointer ${lang === 'en' ? 'bg-[#DFAF5A] text-[#0B0C10]' : 'text-[#C5C9D3] hover:text-white'
+                }`}
             >
               English
             </button>
@@ -413,12 +410,37 @@ export default function App() {
       )}
 
       <main className="flex-1">
-        <section id="hero" aria-label={lang === 'en' ? profile.nameEn : profile.nameAr} className="bg-[#070605]">
+        <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
           <HeroFramePlayer
             alt={lang === 'en' ? profile.nameEn : profile.nameAr}
             frameCount={120}
             fps={24}
           />
+
+          <div className="gold-laser-ribbon" />
+
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 text-center flex flex-col items-center space-y-4">
+            <div className="space-y-2">
+              <h1
+                id="hero-heading"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#DDA146] bg-clip-text text-transparent"
+              >
+                {lang === 'en'
+                  ? t.hero.companyName
+                  : lang === 'ku'
+                    ? profile.nameKu || t.hero.companyName
+                    : profile.nameAr}
+              </h1>
+
+              <p className="text-xs sm:text-sm font-latin font-bold tracking-[0.18em] uppercase text-[#DDA146]">
+                {lang === 'en' ? profile.nameAr : 'ABC GULF CHANNEL FOR ARTISTIC PRODUCTION'}
+              </p>
+            </div>
+
+            <p className="text-sm sm:text-base lg:text-lg text-[#D1D5DB] leading-relaxed max-w-2xl">
+              {t.hero.tagline}
+            </p>
+          </div>
         </section>
 
         {/* Luminous Gold Laser Ribbon Divider */}

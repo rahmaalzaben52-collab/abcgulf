@@ -146,3 +146,4 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
     </div>
   );
 };
+
