@@ -39,7 +39,6 @@ import {
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
 import { Navbar } from './components/Navbar';
-import { HeroImage3D } from './components/HeroImage3D';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
 import { ContactAndFooter } from './components/ContactAndFooter';
@@ -430,11 +429,24 @@ export default function App() {
             accessible play/mute controls (44×44 px min touch targets).
         ═══════════════════════════════════════════════════════════════ */}
         <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
-          {/* Pure, Unobstructed 3D-Motion Hero Image */}
-          <HeroImage3D
-            src="/images/hero-erbil-broadcast.jpg"
-            alt={lang === 'en' ? profile.nameEn : profile.nameAr}
-          />
+          {/* Pure, Unobstructed Hero Video with Rich Saturated Cinema Colors */}
+          <div className="w-full max-h-[82vh] overflow-hidden bg-[#070605] flex items-center justify-center">
+            <video
+              src="/videos/historic-fortress-cinema.mp4"
+              poster="/images/hero-erbil-base.jpg"
+              aria-label={lang === 'en' ? profile.nameEn : profile.nameAr}
+              autoPlay
+              muted
+              loop
+              playsInline
+              disablePictureInPicture
+              preload="auto"
+              className="w-full h-auto max-h-[82vh] object-cover object-center block pointer-events-none"
+              style={{
+                filter: 'saturate(1.5) contrast(1.14) brightness(1.06)',
+              }}
+            />
+          </div>
 
           <div className="gold-laser-ribbon" />
 
