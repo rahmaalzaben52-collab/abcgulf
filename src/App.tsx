@@ -433,7 +433,7 @@ export default function App() {
           <div className="w-full max-h-[82vh] overflow-hidden bg-[#070605] flex items-center justify-center">
             <video
               src="/videos/historic-fortress-cinema.mp4"
-              poster="/images/hero-erbil-base.jpg"
+              poster="/videos/historic-fortress-poster.jpg"
               aria-label={lang === 'en' ? profile.nameEn : profile.nameAr}
               autoPlay
               muted
