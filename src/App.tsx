@@ -11,7 +11,6 @@ import {
   Film,
   Globe,
   LogOut,
-  Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -38,7 +37,6 @@ import {
   type LicenseRecord,
 } from './utils/siteStore';
 import { getDirection, UI_COPY, type Language } from './utils/i18n';
-import { Navbar } from './components/Navbar';
 import { HeroFramePlayer } from './components/HeroFramePlayer';
 import { ServicesAndAbout } from './components/ServicesAndAbout';
 import { LicensesSection } from './components/LicensesSection';
@@ -368,14 +366,6 @@ export default function App() {
         </div>
       </div>
 
-      <Navbar
-        profile={profile}
-        activeSection={activeSection}
-        lang={lang}
-        onNavigate={navigateToSection}
-        onToggleLanguage={setLang}
-      />
-
       {/* Admin Mode Bar */}
       {isAdmin && (
         <div
@@ -423,135 +413,18 @@ export default function App() {
       )}
 
       <main className="flex-1">
-        {/* ═══════════════════════════════════════════════════════════════
-            Cinematic Heritage Hero — Drone footage of historic fortress
-            UI/UX Pro Max: Dark OLED + Gold accents, 7:1+ contrast text,
-            IntersectionObserver auto-pause, prefers-reduced-motion safe,
-            accessible play/mute controls (44×44 px min touch targets).
-        ═══════════════════════════════════════════════════════════════ */}
-        <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
-          {/* Pure, Unobstructed Instant-Load 24fps WebP Frame Sequence */}
+        <section id="hero" aria-label={lang === 'en' ? profile.nameEn : profile.nameAr} className="bg-[#070605]">
           <HeroFramePlayer
             alt={lang === 'en' ? profile.nameEn : profile.nameAr}
             frameCount={120}
             fps={24}
           />
-
-          <div className="gold-laser-ribbon" />
-
-          {/* Clean Company Name & Information Below the Image */}
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 text-center flex flex-col items-center space-y-5">
-            <div className="space-y-2">
-              <h1
-                id="hero-heading"
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#FFF0C2] via-[#F3C067] to-[#DDA146] bg-clip-text text-transparent"
-              >
-                {lang === 'en'
-                  ? t.hero.companyName
-                  : lang === 'ku'
-                    ? profile.nameKu || t.hero.companyName
-                    : profile.nameAr}
-              </h1>
-
-              <p className="text-xs sm:text-sm font-latin font-bold tracking-[0.18em] uppercase text-[#DDA146]">
-                {lang === 'en' ? profile.nameAr : 'ABC GULF CHANNEL FOR ARTISTIC PRODUCTION'}
-              </p>
-            </div>
-
-            <p className="text-sm sm:text-base lg:text-lg text-[#D1D5DB] leading-relaxed max-w-2xl">
-              {t.hero.tagline}
-            </p>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-1">
-              <button
-                type="button"
-                onClick={() => navigateToSection('services')}
-                className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#DDA146] to-[#F3C067] hover:brightness-110 hover:-translate-y-0.5 text-[#070605] px-7 py-3.5 text-xs sm:text-sm font-extrabold transition-all shadow-[0_0_24px_rgba(221,161,70,0.35)] whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                <span>{t.hero.ctaServices}</span>
-                <Play className="w-3.5 h-3.5 fill-current" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => navigateToSection('contact')}
-                className="inline-flex items-center gap-2 rounded-full border border-[#DDA146]/65 bg-[#0C0A07] hover:border-[#DDA146] hover:bg-[#14110C] hover:-translate-y-0.5 px-7 py-3.5 text-xs sm:text-sm font-bold text-white transition-all whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                <span>{t.nav.contact}</span>
-                <DirectionalChevron className="w-4 h-4 text-[#DDA146]" />
-              </button>
-            </div>
-
-            {/* Key Info Highlights */}
-            <div className="pt-5 border-t border-[#DDA146]/20 w-full flex flex-wrap items-center justify-center gap-6 text-xs text-[#C5BBAA]">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
-                <span>
-                  {lang === 'en'
-                    ? profile.contact.locationEn
-                    : lang === 'ku'
-                      ? profile.contact.locationKu || profile.contact.locationAr
-                      : profile.contact.locationAr}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
-                <span>
-                  {lang === 'en' ? 'Cinema Soundstage 4K / 6K' : lang === 'ku' ? 'ستۆدیۆی سینەمایی 4K / 6K' : 'استوديوهات إنتاج سينمائي 4K/6K'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#DDA146]" />
-                <span>
-                  {lang === 'en' ? 'Official Certified Accreditations' : lang === 'ku' ? 'مۆڵەتە فەرمییە پەسەندکراوەکان' : 'تراخيص رسمية معتمدة'}
-                </span>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* Luminous Gold Laser Ribbon Divider */}
         <div className="gold-laser-ribbon" />
 
-        {/* Signature 4 Floating Gold-Framed Video Cards (Pure Visuals, No Captions) */}
-        <section aria-label="Erbil Cinema Heritage Video Showcase" className="relative z-10 py-10 sm:py-14 bg-[#070605]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-              {[
-                { src: '/videos/card-erbil-alpine.mp4', title: 'Erbil Alpine', offset: '' },
-                { src: '/videos/card-erbil-korek-snow.mp4', title: 'Korek Snow', offset: 'lg:-translate-y-3' },
-                { src: '/videos/card-erbil-hawler.mp4', title: 'Erbil Hawler', offset: 'lg:-translate-y-3' },
-                { src: '/videos/card-erbil-iraq-places.mp4', title: 'Erbil Heritage', offset: '' },
-              ].map((video) => (
-                <div
-                  key={video.src}
-                  className={`group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)] ${video.offset}`}
-                >
-                  <div className="aspect-[4/5] overflow-hidden bg-black">
-                    <video
-                      src={video.src}
-                      aria-label={video.title}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      disablePictureInPicture
-                      preload="auto"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none"
-                      style={{ filter: 'contrast(1.08) saturate(1.15) brightness(1.03)' }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Luminous Gold Laser Ribbon Divider */}
-        <div className="gold-laser-ribbon" />
-
-        {/* UI/UX Pro Max: High-Impact Cinema Production Metrics & Trust Grid */}
+        {/* UI/UX Pro Max: High-Impact Cinema Production Metrics & Trust Grid (Placed Above Video Cards) */}
         <section
           aria-label="Production Accreditations & Scale"
           className="relative py-12 sm:py-16 bg-gradient-to-b from-[#070605] via-[#0B0907] to-[#070605] border-y border-[#DDA146]/20"
@@ -635,6 +508,43 @@ export default function App() {
                       : 'معايير الدقة السينمائية'}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Luminous Gold Laser Ribbon Divider */}
+        <div className="gold-laser-ribbon" />
+
+        {/* Signature 4 Floating Gold-Framed Video Cards (Pure Visuals, No Captions) */}
+        <section aria-label="Erbil Cinema Heritage Video Showcase" className="relative z-10 py-10 sm:py-14 bg-[#070605]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+              {[
+                { src: '/videos/card-erbil-alpine.mp4', title: 'Erbil Alpine', offset: '' },
+                { src: '/videos/card-erbil-korek-snow.mp4', title: 'Korek Snow', offset: 'lg:-translate-y-3' },
+                { src: '/videos/card-erbil-hawler.mp4', title: 'Erbil Hawler', offset: 'lg:-translate-y-3' },
+                { src: '/videos/card-erbil-iraq-places.mp4', title: 'Erbil Heritage', offset: '' },
+              ].map((video) => (
+                <div
+                  key={video.src}
+                  className={`group relative rounded-2xl overflow-hidden gold-card-frame bg-[#0E0C09] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(221,161,70,0.55)] ${video.offset}`}
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-black">
+                    <video
+                      src={video.src}
+                      aria-label={video.title}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      disablePictureInPicture
+                      preload="auto"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                      style={{ filter: 'contrast(1.08) saturate(1.15) brightness(1.03)' }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

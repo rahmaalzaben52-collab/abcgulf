@@ -36,7 +36,7 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
 
     let cancelled = false;
     let isVisible = true;
-    let currentFrame = 0; // 0-indexed (0..frameCount-1)
+    let currentFrame = 0;
     let lastDrawTime = 0;
     let rafId = 0;
     const frameInterval = 1000 / fps;
@@ -54,7 +54,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
       return true;
     };
 
-    // Progressive batch preloader so frame 1..15 load immediately, followed by the rest
     const loadBatch = (start: number, concurrency: number) => {
       if (cancelled || start >= frameCount) return;
       let nextToStart = start;
@@ -126,7 +125,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
       ref={containerRef}
       className="relative w-full max-h-[82vh] overflow-hidden bg-[#070605] flex items-center justify-center"
     >
-      {/* Instant-paint first frame */}
       <img
         src="/hero-frames/frame-001.webp"
         alt={alt}
@@ -137,7 +135,6 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
         }}
       />
 
-      {/* Smooth 24fps Canvas Overlay */}
       <canvas
         ref={canvasRef}
         aria-hidden="true"
