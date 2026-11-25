@@ -143,22 +143,12 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                     : profile.aboutSummary}
               </p>
 
-              <a
-                href="https://www.youtube.com/watch?si=cmOiuPFxhrPYSI3w&v=bFmnpyVmANk&feature=youtu.be"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146] hover:bg-[#17130C] p-5 sm:p-6 flex items-start gap-4 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146]"
-              >
-                <div className="w-10 h-10 rounded-lg bg-[#DDA146]/12 border border-[#DDA146]/30 flex items-center justify-center shrink-0 group-hover:bg-[#DDA146]/20 transition-colors">
+              <div className="rounded-xl border border-[#DDA146]/25 bg-[#120F0A] p-5 sm:p-6 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-[#DDA146]/12 border border-[#DDA146]/30 flex items-center justify-center shrink-0">
                   <Users className="w-5 h-5 text-[#DDA146]" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <h3 className="text-sm font-bold text-[#F3C067] group-hover:text-[#FFF0C2] transition-colors">
-                      {t.about.teamTitle}
-                    </h3>
-                    <Play className="w-3.5 h-3.5 text-[#DDA146] fill-[#DDA146]/30 shrink-0 group-hover:scale-110 transition-transform" />
-                  </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[#F3C067] mb-1.5">{t.about.teamTitle}</h3>
                   <p className="text-sm text-[#A9AFBE] leading-relaxed">
                     {lang === 'en'
                       ? t.about.teamBody
@@ -167,7 +157,7 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                         : profile.teamSummary}
                   </p>
                 </div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
@@ -206,11 +196,9 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                   : idx < 4
                     ? 'md:col-span-6 lg:col-span-4'
                     : 'md:col-span-12 lg:col-span-4';
-              return (
-                <article
-                  key={srv.id}
-                  className={`${colSpanClass} relative rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146]/70 hover:shadow-[0_0_22px_rgba(221,161,70,0.22)] transition-all overflow-hidden flex flex-col select-text`}
-                >
+              const isCommercialLink = srv.id === 'srv-commercials';
+              const cardContent = (
+                <>
                   <div className="relative h-52 sm:h-60 overflow-hidden bg-[#070605]">
                     <StudioArt
                       variant={srv.artVariant}
@@ -220,6 +208,11 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#120F0A] via-[#120F0A]/35 to-transparent"
                     />
+                    {isCommercialLink && (
+                      <div className="absolute bottom-3 end-3 w-9 h-9 rounded-full bg-[#DDA146] text-[#070605] flex items-center justify-center shadow-[0_0_16px_rgba(221,161,70,0.5)] group-hover:scale-110 transition-transform">
+                        <Play className="w-4 h-4 fill-current" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-6 flex-1 flex flex-col justify-between gap-4">
@@ -237,6 +230,29 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                       {srv.deliverables.join(' · ')}
                     </div>
                   </div>
+                </>
+              );
+
+              if (isCommercialLink) {
+                return (
+                  <a
+                    key={srv.id}
+                    href="https://www.youtube.com/watch?si=cmOiuPFxhrPYSI3w&v=bFmnpyVmANk&feature=youtu.be"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${colSpanClass} group relative rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146] hover:shadow-[0_0_22px_rgba(221,161,70,0.28)] transition-all overflow-hidden flex flex-col cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146]`}
+                  >
+                    {cardContent}
+                  </a>
+                );
+              }
+
+              return (
+                <article
+                  key={srv.id}
+                  className={`${colSpanClass} relative rounded-2xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146]/70 hover:shadow-[0_0_22px_rgba(221,161,70,0.22)] transition-all overflow-hidden flex flex-col select-text`}
+                >
+                  {cardContent}
                 </article>
               );
             })}
