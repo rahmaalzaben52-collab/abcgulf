@@ -59,39 +59,6 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
 
   return (
     <>
-      {/* Strip 1: Editorial Expertise Strip (Non-interactive showcase) */}
-      <section aria-label={t.expertiseStripTitle} className="border-y border-[#DDA146]/20 bg-[#0C0A07]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <span className="h-px flex-1 max-w-[140px] bg-gradient-to-l from-[#DDA146]/55 to-transparent" />
-            <h2 className="text-base sm:text-lg font-bold tracking-wide text-[#F3C067] text-center">
-              {t.expertiseStripTitle}
-            </h2>
-            <span className="h-px flex-1 max-w-[140px] bg-gradient-to-r from-[#DDA146]/55 to-transparent" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x rtl:divide-x-reverse divide-[#DDA146]/15">
-            {localizedServices.map((srv) => {
-              const Icon = SERVICE_ICONS[srv.id] || Video;
-              return (
-                <div
-                  key={srv.id}
-                  className="flex flex-col items-start text-start px-5 py-4"
-                >
-                  <div className="flex items-center mb-3">
-                    <Icon className="w-5 h-5 text-[#DDA146]" />
-                  </div>
-                  <h3 className="text-sm font-bold text-[#F4F5F7] leading-snug mb-1.5">
-                    {srv.title}
-                  </h3>
-                  <p className="text-xs text-[#9CA3AF] leading-relaxed">{srv.shortDesc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* About Company & Team Split */}
       <section id="about" aria-labelledby="about-heading" className="py-20 sm:py-28 bg-[#070605] relative overflow-hidden">
         {/* Warm glow background accent */}
