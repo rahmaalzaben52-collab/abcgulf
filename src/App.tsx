@@ -413,8 +413,8 @@ export default function App() {
         <section id="hero" aria-labelledby="hero-heading" className="bg-[#070605]">
           <HeroFramePlayer
             alt={lang === 'en' ? profile.nameEn : profile.nameAr}
-            frameCount={120}
-            fps={24}
+            frameCount={60}
+            fps={15}
           />
 
           <div className="gold-laser-ribbon" />

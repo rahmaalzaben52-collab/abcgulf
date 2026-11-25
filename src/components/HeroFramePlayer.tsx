@@ -15,8 +15,8 @@ const formatFrameUrl = (index: number) =>
  */
 export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
   alt,
-  frameCount = 120,
-  fps = 24,
+  frameCount = 60,
+  fps = 15,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -86,7 +86,7 @@ export const HeroFramePlayer: React.FC<HeroFramePlayerProps> = ({
       startNext();
     };
 
-    loadBatch(0, 6);
+    loadBatch(0, 12);
 
     const observer = new IntersectionObserver(
       (entries) => {
