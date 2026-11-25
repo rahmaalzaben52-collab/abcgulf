@@ -143,12 +143,22 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                     : profile.aboutSummary}
               </p>
 
-              <div className="rounded-xl border border-[#DDA146]/25 bg-[#120F0A] p-5 sm:p-6 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-[#DDA146]/12 border border-[#DDA146]/30 flex items-center justify-center shrink-0">
+              <a
+                href="https://www.youtube.com/watch?si=cmOiuPFxhrPYSI3w&v=bFmnpyVmANk&feature=youtu.be"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-xl border border-[#DDA146]/25 bg-[#120F0A] hover:border-[#DDA146] hover:bg-[#17130C] p-5 sm:p-6 flex items-start gap-4 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDA146]"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#DDA146]/12 border border-[#DDA146]/30 flex items-center justify-center shrink-0 group-hover:bg-[#DDA146]/20 transition-colors">
                   <Users className="w-5 h-5 text-[#DDA146]" />
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold text-[#F3C067] mb-1.5">{t.about.teamTitle}</h3>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <h3 className="text-sm font-bold text-[#F3C067] group-hover:text-[#FFF0C2] transition-colors">
+                      {t.about.teamTitle}
+                    </h3>
+                    <Play className="w-3.5 h-3.5 text-[#DDA146] fill-[#DDA146]/30 shrink-0 group-hover:scale-110 transition-transform" />
+                  </div>
                   <p className="text-sm text-[#A9AFBE] leading-relaxed">
                     {lang === 'en'
                       ? t.about.teamBody
@@ -157,7 +167,7 @@ export const ServicesAndAbout: React.FC<ServicesAndAboutProps> = ({
                         : profile.teamSummary}
                   </p>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
